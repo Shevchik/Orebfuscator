@@ -19,28 +19,28 @@ package com.lishid.orebfuscator.internal;
 import java.util.zip.Deflater;
 
 public interface IPacket56 {
-    public void setPacket(Object packet);
+	public void setPacket(Object packet);
 
-    public int getPacketChunkNumber();
+	public int getPacketChunkNumber();
 
-    public int[] getX();
+	public int[] getX();
 
-    public int[] getZ();
+	public int[] getZ();
 
-    public int[] getChunkMask();
+	public int[] getChunkMask();
 
-    public int[] getExtraMask();
+	public int[] getExtraMask();
 
-    public Object getFieldData(String field);
+	public Object getFieldData(String field);
 
-    public void setFieldData(String field, Object data);
+	public void setFieldData(String field, Object data);
 
-    public String getInflatedBuffers();
+	public String getInflatedBuffers();
 
-    public String getBuildBuffer();
+	public String getBuildBuffer();
 
-    public String getOutputBuffer();
+	public String getOutputBuffer();
 
-    public void compress(Deflater deflater);
+	public void compress(Deflater deflater);
 
 }

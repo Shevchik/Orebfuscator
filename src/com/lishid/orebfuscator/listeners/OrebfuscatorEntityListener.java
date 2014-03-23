@@ -19,17 +19,17 @@ package com.lishid.orebfuscator.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityExplodeEvent;
 
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 
 public class OrebfuscatorEntityListener implements Listener {
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onEntityExplode(EntityExplodeEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onEntityExplode(EntityExplodeEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
 
-        BlockUpdate.Update(event.blockList());
-    }
+		BlockUpdate.Update(event.blockList());
+	}
 }

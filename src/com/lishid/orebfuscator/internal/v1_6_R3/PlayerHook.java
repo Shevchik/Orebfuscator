@@ -16,80 +16,17 @@
 
 package com.lishid.orebfuscator.internal.v1_6_R3;
 
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.Map;
-import java.util.List;
+import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
-import com.lishid.orebfuscator.Orebfuscator;
 import com.lishid.orebfuscator.internal.IPlayerHook;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
-import org.bukkit.entity.Player;
-
-//Volatile
-import net.minecraft.server.v1_6_R3.*;
-import org.bukkit.craftbukkit.v1_6_R3.entity.*;
-
 public class PlayerHook implements IPlayerHook {
-    @SuppressWarnings("unchecked")
-    public void HookNM(Player p) {
-        CraftPlayer player = (CraftPlayer) p;
-        // Update NetworkManager's lists
-        NetworkManager networkManager = (NetworkManager) player.getHandle().playerConnection.networkManager;
 
-        Field[] networkFields = networkManager.getClass().getDeclaredFields();
-        for (Field field : networkFields) {
-            try {
-                if (List.class.isAssignableFrom(field.getType())) {
-                    List<Packet> list = new NetworkQueue(p);
-                    field.setAccessible(true);
-                    List<Packet> oldList = (List<Packet>) field.get(networkManager);
-                    // Move packets to new list
-                    synchronized (ReflectionHelper.getPrivateField(networkManager, "h")) {
-                        list.addAll(oldList);
-                        oldList.clear();
-                    }
-                    // Replace with new list
-                    field.set(networkManager, Collections.synchronizedList(list));
-                }
-            }
-            catch (Exception e) {
-                Orebfuscator.log(e);
-            }
-        }
-
-        hookPacket();
-    }
-
-    static boolean hookPacket = false;
-
-    @SuppressWarnings("unchecked")
-    private void hookPacket() {
-        if (hookPacket)
-            return;
-
-        hookPacket = true;
-        Packet.l.a(14, Packet14Orebfuscator.class);
-        // Use reflection to add into a and c
-        Field[] packetFields = Packet.class.getDeclaredFields();
-        for (Field field : packetFields) {
-            try {
-                if (Map.class.isAssignableFrom(field.getType())) {
-                    field.setAccessible(true);
-                    @SuppressWarnings({ "rawtypes" })
-                    Map packets = (Map) field.get(null);
-                    packets.put(Packet14Orebfuscator.class, 14);
-                }
-            }
-            catch (Exception e) {
-                Orebfuscator.log(e);
-            }
-        }
-    }
-
-    public void HookChunkQueue(Player p) {
-        CraftPlayer player = (CraftPlayer) p;
-        ReflectionHelper.setPrivateFinal(player.getHandle(), "chunkCoordIntPairQueue", new ChunkQueue(player, player.getHandle().chunkCoordIntPairQueue));
-    }
+	@Override
+	public void HookChunkQueue(Player p) {
+		CraftPlayer player = (CraftPlayer) p;
+		ReflectionHelper.setPrivateFinal(player.getHandle(), "field_71129_f", new ChunkQueue(player, player.getHandle().chunkCoordIntPairQueue));
+	}
 }

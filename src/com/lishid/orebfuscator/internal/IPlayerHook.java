@@ -19,7 +19,5 @@ package com.lishid.orebfuscator.internal;
 import org.bukkit.entity.Player;
 
 public interface IPlayerHook {
-    public void HookNM(Player p);
-
-    public void HookChunkQueue(Player p);
+	public void HookChunkQueue(Player p);
 }

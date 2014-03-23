@@ -19,77 +19,78 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 import java.io.DataInput;
 import java.io.DataOutput;
 
+import net.minecraft.server.v1_6_R3.NBTCompressedStreamTools;
+//Volatile
+import net.minecraft.server.v1_6_R3.NBTTagCompound;
+
 import com.lishid.orebfuscator.internal.INBT;
 
-//Volatile
-import net.minecraft.server.v1_6_R3.*;
-
 public class NBT implements INBT {
-    NBTTagCompound nbt = new NBTTagCompound();
+	NBTTagCompound nbt = new NBTTagCompound();
 
-    @Override
-    public void reset() {
-        nbt = new NBTTagCompound();
-    }
+	@Override
+	public void reset() {
+		nbt = new NBTTagCompound();
+	}
 
-    @Override
-    public void setInt(String tag, int value) {
-        nbt.setInt(tag, value);
-    }
+	@Override
+	public void setInt(String tag, int value) {
+		nbt.setInt(tag, value);
+	}
 
-    @Override
-    public void setLong(String tag, long value) {
-        nbt.setLong(tag, value);
-    }
+	@Override
+	public void setLong(String tag, long value) {
+		nbt.setLong(tag, value);
+	}
 
-    @Override
-    public void setBoolean(String tag, boolean value) {
-        nbt.setBoolean(tag, value);
-    }
+	@Override
+	public void setBoolean(String tag, boolean value) {
+		nbt.setBoolean(tag, value);
+	}
 
-    @Override
-    public void setByteArray(String tag, byte[] value) {
-        nbt.setByteArray(tag, value);
-    }
+	@Override
+	public void setByteArray(String tag, byte[] value) {
+		nbt.setByteArray(tag, value);
+	}
 
-    @Override
-    public void setIntArray(String tag, int[] value) {
-        nbt.setIntArray(tag, value);
-    }
+	@Override
+	public void setIntArray(String tag, int[] value) {
+		nbt.setIntArray(tag, value);
+	}
 
-    @Override
-    public int getInt(String tag) {
-        return nbt.getInt(tag);
-    }
+	@Override
+	public int getInt(String tag) {
+		return nbt.getInt(tag);
+	}
 
-    @Override
-    public long getLong(String tag) {
-        return nbt.getLong(tag);
-    }
+	@Override
+	public long getLong(String tag) {
+		return nbt.getLong(tag);
+	}
 
-    @Override
-    public boolean getBoolean(String tag) {
-        return nbt.getBoolean(tag);
-    }
+	@Override
+	public boolean getBoolean(String tag) {
+		return nbt.getBoolean(tag);
+	}
 
-    @Override
-    public byte[] getByteArray(String tag) {
-        return nbt.getByteArray(tag);
-    }
+	@Override
+	public byte[] getByteArray(String tag) {
+		return nbt.getByteArray(tag);
+	}
 
-    @Override
-    public int[] getIntArray(String tag) {
-        return nbt.getIntArray(tag);
-    }
+	@Override
+	public int[] getIntArray(String tag) {
+		return nbt.getIntArray(tag);
+	}
 
-    @Override
-    public void Read(DataInput stream) {
-        nbt = NBTCompressedStreamTools.a(stream);
-    }
+	@Override
+	public void Read(DataInput stream) {
+		nbt = NBTCompressedStreamTools.a(stream);
+	}
 
-    @Override
-    public void Write(DataOutput stream) {
-        NBTCompressedStreamTools.a(nbt, stream);
-    }
+	@Override
+	public void Write(DataOutput stream) {
+		NBTCompressedStreamTools.a(nbt, stream);
+	}
 
 }

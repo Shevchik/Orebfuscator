@@ -30,90 +30,90 @@ import com.lishid.orebfuscator.obfuscation.Calculations;
 import com.lishid.orebfuscator.utils.OrebfuscatorAsyncQueue;
 
 public class ChunkProcessingThread extends Thread {
-    private static OrebfuscatorAsyncQueue<ChunkProcessingOrder> queue = new OrebfuscatorAsyncQueue<ChunkProcessingThread.ChunkProcessingOrder>();
+	private static OrebfuscatorAsyncQueue<ChunkProcessingOrder> queue = new OrebfuscatorAsyncQueue<ChunkProcessingThread.ChunkProcessingOrder>();
 
-    private static LinkedList<ChunkProcessingThread> threads = new LinkedList<ChunkProcessingThread>();
+	private static LinkedList<ChunkProcessingThread> threads = new LinkedList<ChunkProcessingThread>();
 
-    static ThreadLocal<Deflater> localDeflater = new ThreadLocal<Deflater>() {
-        @Override
-        protected Deflater initialValue() {
-            return new Deflater(OrebfuscatorConfig.CompressionLevel);
-        }
-    };
+	static ThreadLocal<Deflater> localDeflater = new ThreadLocal<Deflater>() {
+		@Override
+		protected Deflater initialValue() {
+			return new Deflater(OrebfuscatorConfig.CompressionLevel);
+		}
+	};
 
-    static class ChunkProcessingOrder {
-        IPacket56 packet;
-        Player player;
-        IChunkQueue output;
+	static class ChunkProcessingOrder {
+		IPacket56 packet;
+		Player player;
+		IChunkQueue output;
 
-        public ChunkProcessingOrder(IPacket56 packet, Player player, IChunkQueue output) {
-            this.packet = packet;
-            this.player = player;
-            this.output = output;
-        }
-    }
+		public ChunkProcessingOrder(IPacket56 packet, Player player, IChunkQueue output) {
+			this.packet = packet;
+			this.player = player;
+			this.output = output;
+		}
+	}
 
-    public synchronized static void KillAll() {
-        for (ChunkProcessingThread thread : threads) {
-            thread.kill.set(true);
-            thread.interrupt();
-        }
-        threads.clear();
-        queue.clear();
-    }
+	public synchronized static void KillAll() {
+		for (ChunkProcessingThread thread : threads) {
+			thread.kill.set(true);
+			thread.interrupt();
+		}
+		threads.clear();
+		queue.clear();
+	}
 
-    public synchronized static void SyncThreads() {
-        // Return as soon as possible
-        if (threads.size() == OrebfuscatorConfig.ProcessingThreads) {
-            return;
-        }
+	public synchronized static void SyncThreads() {
+		// Return as soon as possible
+		if (threads.size() == OrebfuscatorConfig.ProcessingThreads) {
+			return;
+		}
 
-        // Less threads? Kill one
-        else if (threads.size() > OrebfuscatorConfig.ProcessingThreads) {
-            threads.getLast().kill.set(true);
-            threads.getLast().interrupt();
-            threads.removeLast();
-            return;
-        }
+		// Less threads? Kill one
+				else if (threads.size() > OrebfuscatorConfig.ProcessingThreads) {
+					threads.getLast().kill.set(true);
+					threads.getLast().interrupt();
+					threads.removeLast();
+					return;
+				}
 
-        // More threads? Start new one
-        else {
-            ChunkProcessingThread thread = new ChunkProcessingThread();
-            thread.setName("Orebfuscator Processing Thread");
-            try {
-                thread.setPriority(OrebfuscatorConfig.OrebfuscatorPriority);
-            }
-            catch (Exception e) {
-                thread.setPriority(Thread.MIN_PRIORITY);
-            }
-            thread.start();
-            threads.add(thread);
-        }
-    }
+		// More threads? Start new one
+				else {
+					ChunkProcessingThread thread = new ChunkProcessingThread();
+					thread.setName("Orebfuscator Processing Thread");
+					try {
+						thread.setPriority(OrebfuscatorConfig.OrebfuscatorPriority);
+					}
+					catch (Exception e) {
+						thread.setPriority(Thread.MIN_PRIORITY);
+					}
+					thread.start();
+					threads.add(thread);
+				}
+	}
 
-    public static void Queue(IPacket56 packet, Player player, IChunkQueue output) {
-        SyncThreads();
-        queue.queue(new ChunkProcessingOrder(packet, player, output));
-    }
+	public static void Queue(IPacket56 packet, Player player, IChunkQueue output) {
+		SyncThreads();
+		queue.queue(new ChunkProcessingOrder(packet, player, output));
+	}
 
-    AtomicBoolean kill = new AtomicBoolean(false);
+	AtomicBoolean kill = new AtomicBoolean(false);
 
-    @Override
-    public void run() {
-        while (!Thread.interrupted() && !kill.get()) {
-            try {
-                ChunkProcessingOrder order = queue.dequeue();
-                Calculations.Obfuscate(order.packet, order.player);
-                order.packet.compress(localDeflater.get());
-                order.output.FinishedProcessing(order.packet);
-                Thread.sleep(1);
-            }
-            catch (InterruptedException e) {
-                // If interrupted then exit
-            }
-            catch (Exception e) {
-                Orebfuscator.log(e);
-            }
-        }
-    }
+	@Override
+	public void run() {
+		while (!Thread.interrupted() && !kill.get()) {
+			try {
+				ChunkProcessingOrder order = queue.dequeue();
+				Calculations.Obfuscate(order.packet, order.player);
+				order.packet.compress(localDeflater.get());
+				order.output.FinishedProcessing(order.packet);
+				Thread.sleep(1);
+			}
+			catch (InterruptedException e) {
+				// If interrupted then exit
+			}
+			catch (Exception e) {
+				Orebfuscator.log(e);
+			}
+		}
+	}
 }

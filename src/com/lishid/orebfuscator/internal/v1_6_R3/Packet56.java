@@ -18,98 +18,101 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 
 import java.util.zip.Deflater;
 
+//Volatile
+import net.minecraft.server.v1_6_R3.Packet56MapChunkBulk;
+
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
 import com.lishid.orebfuscator.internal.IPacket56;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
-//Volatile
-import net.minecraft.server.v1_6_R3.*;
-
 public class Packet56 implements IPacket56 {
-    Packet56MapChunkBulk packet;
+	Packet56MapChunkBulk packet;
 
-    @Override
-    public void setPacket(Object packet) {
-        if (packet instanceof Packet56MapChunkBulk) {
-            this.packet = (Packet56MapChunkBulk) packet;
-        }
-        else {
-            InternalAccessor.Instance.PrintError();
-        }
-    }
+	@Override
+	public void setPacket(Object packet) {
+		if (packet instanceof Packet56MapChunkBulk) {
+			this.packet = (Packet56MapChunkBulk) packet;
+		}
+		else {
+			InternalAccessor.Instance.PrintError();
+		}
+	}
 
-    @Override
-    public int getPacketChunkNumber() {
-        return packet.d();
-    }
+	@Override
+	public int getPacketChunkNumber() {
+		return packet.d();
+	}
 
-    @Override
-    public int[] getX() {
-        return (int[]) ReflectionHelper.getPrivateField(packet, "c");
-    }
+	@Override
+	public int[] getX() {
+		return (int[]) ReflectionHelper.getPrivateField(packet, "field_73589_c");
+	}
 
-    @Override
-    public int[] getZ() {
-        return (int[]) ReflectionHelper.getPrivateField(packet, "d");
-    }
+	@Override
+	public int[] getZ() {
+		return (int[]) ReflectionHelper.getPrivateField(packet, "field_73586_d");
+	}
 
-    @Override
-    public int[] getChunkMask() {
-        return packet.a;
-    }
+	@Override
+	public int[] getChunkMask() {
+		return packet.a;
+	}
 
-    @Override
-    public int[] getExtraMask() {
-        return packet.b;
-    }
+	@Override
+	public int[] getExtraMask() {
+		return packet.b;
+	}
 
-    @Override
-    public Object getFieldData(String field) {
-        return ReflectionHelper.getPrivateField(Packet56MapChunkBulk.class, packet, field);
-    }
+	@Override
+	public Object getFieldData(String field) {
+		return ReflectionHelper.getPrivateField(Packet56MapChunkBulk.class, packet, field);
+	}
 
-    @Override
-    public void setFieldData(String field, Object data) {
-        ReflectionHelper.setPrivateField(Packet56MapChunkBulk.class, packet, field, data);
-    }
+	@Override
+	public void setFieldData(String field, Object data) {
+		ReflectionHelper.setPrivateField(Packet56MapChunkBulk.class, packet, field, data);
+	}
 
-    public String getInflatedBuffers() {
-        return "inflatedBuffers";
-    }
+	@Override
+	public String getInflatedBuffers() {
+		return "field_73584_f";
+	}
 
-    public String getBuildBuffer() {
-        return "buildBuffer";
-    }
+	@Override
+	public String getBuildBuffer() {
+		return "field_73591_h";
+	}
 
-    public String getOutputBuffer() {
-        return "buffer";
-    }
+	@Override
+	public String getOutputBuffer() {
+		return "field_73587_e";
+	}
 
-    @Override
-    public void compress(Deflater deflater) {
-        if (getFieldData(getOutputBuffer()) != null) {
-            return;
-        }
+	@Override
+	public void compress(Deflater deflater) {
+		if (getFieldData(getOutputBuffer()) != null) {
+			return;
+		}
 
-        byte[] buildBuffer = (byte[]) getFieldData(getBuildBuffer());
+		byte[] buildBuffer = (byte[]) getFieldData(getBuildBuffer());
 
-        deflater.reset();
-        deflater.setInput(buildBuffer);
-        deflater.finish();
+		deflater.reset();
+		deflater.setInput(buildBuffer);
+		deflater.finish();
 
-        byte[] buffer = new byte[buildBuffer.length + 100];
+		byte[] buffer = new byte[buildBuffer.length + 100];
 
-        ReflectionHelper.setPrivateField(packet, "buffer", buffer);
-        int size = deflater.deflate(buffer);
-        ReflectionHelper.setPrivateField(packet, "size", size);
+		ReflectionHelper.setPrivateField(packet, "field_73587_e", buffer);
+		int size = deflater.deflate(buffer);
+		ReflectionHelper.setPrivateField(packet, "field_73585_g", size);
 
-        // Free memory
-        ReflectionHelper.setPrivateField(packet, "buildBuffer", null);
-        ReflectionHelper.setPrivateField(packet, "inflatedBuffers", null);
+		// Free memory
+		ReflectionHelper.setPrivateField(packet, "field_73591_h", null);
+		ReflectionHelper.setPrivateField(packet, "field_73584_f", null);
 
-        if (OrebfuscatorCommandExecutor.DebugMode) {
-            System.out.println("Packet size: " + size);
-        }
-    }
+		if (OrebfuscatorCommandExecutor.DebugMode) {
+			System.out.println("Packet size: " + size);
+		}
+	}
 }

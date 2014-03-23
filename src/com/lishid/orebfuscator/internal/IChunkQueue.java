@@ -17,5 +17,5 @@
 package com.lishid.orebfuscator.internal;
 
 public interface IChunkQueue {
-    public void FinishedProcessing(IPacket56 packet);
+	public void FinishedProcessing(IPacket56 packet);
 }

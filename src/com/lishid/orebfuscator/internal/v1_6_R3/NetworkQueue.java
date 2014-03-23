@@ -18,31 +18,31 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 
 import java.util.ArrayList;
 
+//Volatile
+import net.minecraft.server.v1_6_R3.Packet;
+
 import org.bukkit.entity.Player;
 
 import com.lishid.orebfuscator.internal.IPacket51;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.obfuscation.Calculations;
 
-//Volatile
-import net.minecraft.server.v1_6_R3.*;
-
 public class NetworkQueue extends ArrayList<Packet> {
-    private static final long serialVersionUID = 4252847662044263527L;
-    private Player player;
+	private static final long serialVersionUID = 4252847662044263527L;
+	private Player player;
 
-    public NetworkQueue(Player player) {
-        this.player = player;
-    }
+	public NetworkQueue(Player player) {
+		this.player = player;
+	}
 
-    @Override
-    public boolean add(Packet packet) {
-        if (packet.n() == 51) {
-            IPacket51 packet51 = InternalAccessor.Instance.newPacket51();
-            packet51.setPacket(packet);
-            Calculations.Obfuscate(packet51, this.player);
-        }
+	@Override
+	public boolean add(Packet packet) {
+		if (packet.n() == 51) {
+			IPacket51 packet51 = InternalAccessor.Instance.newPacket51();
+			packet51.setPacket(packet);
+			Calculations.Obfuscate(packet51, this.player);
+		}
 
-        return super.add(packet);
-    }
+		return super.add(packet);
+	}
 }

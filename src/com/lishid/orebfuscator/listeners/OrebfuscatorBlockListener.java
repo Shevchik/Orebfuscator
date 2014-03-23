@@ -21,90 +21,89 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.hithack.BlockHitManager;
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 
 public class OrebfuscatorBlockListener implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onBlockBreak(BlockBreakEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
 
-        BlockUpdate.Update(event.getBlock());
-        BlockHitManager.breakBlock(event.getPlayer(), event.getBlock());
-    }
+		BlockUpdate.Update(event.getBlock());
+	}
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockDamage(BlockDamageEvent event) {
-        if (event.isCancelled() || !OrebfuscatorConfig.UpdateOnDamage) {
-            return;
-        }
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onBlockDamage(BlockDamageEvent event) {
+		if (event.isCancelled() || !OrebfuscatorConfig.UpdateOnDamage) {
+			return;
+		}
 
-        if (!BlockUpdate.needsUpdate(event.getBlock())) {
-            return;
-        }
+		if (!BlockUpdate.needsUpdate(event.getBlock())) {
+			return;
+		}
 
-        if (!BlockHitManager.hitBlock(event.getPlayer(), event.getBlock())) {
-            return;
-        }
+		BlockUpdate.Update(event.getBlock());
+	}
 
-        BlockUpdate.Update(event.getBlock());
-    }
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onBlockPhysics(BlockPhysicsEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockPhysics(BlockPhysicsEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
+		if (event.getBlock().getType() != Material.SAND && event.getBlock().getType() != Material.GRAVEL) {
+			return;
+		}
 
-        if (event.getBlock().getType() != Material.SAND && event.getBlock().getType() != Material.GRAVEL) {
-            return;
-        }
+		if (!applyphysics(event.getBlock())) {
+			return;
+		}
 
-        if (!applyphysics(event.getBlock())) {
-            return;
-        }
+		BlockUpdate.Update(event.getBlock());
+	}
 
-        BlockUpdate.Update(event.getBlock());
-    }
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockPistonExtend(BlockPistonExtendEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
+		for (Block b : event.getBlocks()) {
+			BlockUpdate.Update(b);
+		}
+	}
 
-        for (Block b : event.getBlocks()) {
-            BlockUpdate.Update(b);
-        }
-    }
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
+		BlockUpdate.Update(event.getBlock());
+	}
 
-        BlockUpdate.Update(event.getBlock());
-    }
+	@SuppressWarnings("deprecation")
+	private boolean applyphysics(Block block) {
+		// See net.minecraft.server.v1_4_5.BlockSand.canFall(World world, int i, int j, int k)
 
-    private boolean applyphysics(Block block) {
-        // See net.minecraft.server.v1_4_5.BlockSand.canFall(World world, int i, int j, int k)
+		int blockID = block.getRelative(0, -1, 0).getTypeId();
 
-        int blockID = block.getRelative(0, -1, 0).getTypeId();
+		int air = Material.AIR.getId();
+		int fire = Material.FIRE.getId();
+		int water = Material.WATER.getId();
+		int water2 = Material.STATIONARY_WATER.getId();
+		int lava = Material.LAVA.getId();
+		int lava2 = Material.STATIONARY_LAVA.getId();
 
-        int air = Material.AIR.getId();
-        int fire = Material.FIRE.getId();
-        int water = Material.WATER.getId();
-        int water2 = Material.STATIONARY_WATER.getId();
-        int lava = Material.LAVA.getId();
-        int lava2 = Material.STATIONARY_LAVA.getId();
-
-        return (blockID == air || blockID == fire || blockID == water || blockID == water2 || blockID == lava || blockID == lava2);
-    }
+		return (blockID == air || blockID == fire || blockID == water || blockID == water2 || blockID == lava || blockID == lava2);
+	}
 }

@@ -21,27 +21,23 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.lishid.orebfuscator.Orebfuscator;
 import com.lishid.orebfuscator.internal.IPlayerHook;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 
 public class OrebfuscatorPlayerHook implements Listener {
-    private static IPlayerHook playerHook;
+	private static IPlayerHook playerHook;
 
-    private static IPlayerHook getPlayerHook() {
-        if (playerHook == null) {
-            playerHook = InternalAccessor.Instance.newPlayerHook();
-        }
+	private static IPlayerHook getPlayerHook() {
+		if (playerHook == null) {
+			playerHook = InternalAccessor.Instance.newPlayerHook();
+		}
 
-        return playerHook;
-    }
+		return playerHook;
+	}
 
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerJoin(final PlayerJoinEvent event) {
-        IPlayerHook playerHook = getPlayerHook();
-        if (!Orebfuscator.usePL) {
-            playerHook.HookNM(event.getPlayer());
-        }
-        playerHook.HookChunkQueue(event.getPlayer());
-    }
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerJoin(final PlayerJoinEvent event) {
+		IPlayerHook playerHook = getPlayerHook();
+		playerHook.HookChunkQueue(event.getPlayer());
+	}
 }

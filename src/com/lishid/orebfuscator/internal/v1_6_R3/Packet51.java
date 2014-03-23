@@ -18,65 +18,65 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 
 import java.util.zip.Deflater;
 
+//Volatile
+import net.minecraft.server.v1_6_R3.Packet51MapChunk;
+
 import com.lishid.orebfuscator.internal.IPacket51;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
-//Volatile
-import net.minecraft.server.v1_6_R3.*;
-
 public class Packet51 implements IPacket51 {
-    private static Class<? extends Object> packetClass = Packet51MapChunk.class;
+	private static Class<? extends Object> packetClass = Packet51MapChunk.class;
 
-    Packet51MapChunk packet;
+	Packet51MapChunk packet;
 
-    @Override
-    public void setPacket(Object packet) {
-        if (packet instanceof Packet51MapChunk) {
-            this.packet = (Packet51MapChunk) packet;
-        }
-        else {
-            InternalAccessor.Instance.PrintError();
-        }
-    }
+	@Override
+	public void setPacket(Object packet) {
+		if (packet instanceof Packet51MapChunk) {
+			this.packet = (Packet51MapChunk) packet;
+		}
+		else {
+			InternalAccessor.Instance.PrintError();
+		}
+	}
 
-    @Override
-    public int getX() {
-        return packet.a;
-    }
+	@Override
+	public int getX() {
+		return packet.a;
+	}
 
-    @Override
-    public int getZ() {
-        return packet.b;
-    }
+	@Override
+	public int getZ() {
+		return packet.b;
+	}
 
-    @Override
-    public int getChunkMask() {
-        return packet.c;
-    }
+	@Override
+	public int getChunkMask() {
+		return packet.c;
+	}
 
-    @Override
-    public int getExtraMask() {
-        return packet.d;
-    }
+	@Override
+	public int getExtraMask() {
+		return packet.d;
+	}
 
-    @Override
-    public byte[] getBuffer() {
-        return (byte[]) ReflectionHelper.getPrivateField(packetClass, packet, "inflatedBuffer");
-    }
+	@Override
+	public byte[] getBuffer() {
+		return (byte[]) ReflectionHelper.getPrivateField(packetClass, packet, "field_73596_g");
+	}
 
-    private byte[] getOutputBuffer() {
-        return (byte[]) ReflectionHelper.getPrivateField(packetClass, packet, "buffer");
-    }
+	private byte[] getOutputBuffer() {
+		return (byte[]) ReflectionHelper.getPrivateField(packetClass, packet, "field_73595_f");
+	}
 
-    @Override
-    public void compress(Deflater deflater) {
-        byte[] chunkInflatedBuffer = getBuffer();
-        byte[] chunkBuffer = getOutputBuffer();
+	@Override
+	public void compress(Deflater deflater) {
+		byte[] chunkInflatedBuffer = getBuffer();
+		byte[] chunkBuffer = getOutputBuffer();
 
-        deflater.reset();
-        deflater.setInput(chunkInflatedBuffer, 0, chunkInflatedBuffer.length);
-        deflater.finish();
-        ReflectionHelper.setPrivateField(packetClass, packet, "size", deflater.deflate(chunkBuffer));
-    }
+		deflater.reset();
+		deflater.setInput(chunkInflatedBuffer, 0, chunkInflatedBuffer.length);
+		deflater.finish();
+		ReflectionHelper.setPrivateField(packetClass, packet, "field_73602_h", deflater.deflate(chunkBuffer));
+	}
 }

@@ -21,9 +21,9 @@ import java.io.DataOutputStream;
 import java.io.File;
 
 public interface IChunkCache {
-    public void clearCache();
+	public void clearCache();
 
-    public DataInputStream getInputStream(File folder, int x, int z);
+	public DataInputStream getInputStream(File folder, int x, int z);
 
-    public DataOutputStream getOutputStream(File folder, int x, int z);
+	public DataOutputStream getOutputStream(File folder, int x, int z);
 }
