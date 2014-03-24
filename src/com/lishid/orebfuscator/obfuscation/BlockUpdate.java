@@ -16,7 +16,7 @@
 
 package com.lishid.orebfuscator.obfuscation;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.World;
@@ -48,14 +48,9 @@ public class BlockUpdate {
 			return;
 		}
 
-		HashSet<Block> updateBlocks = GetAjacentBlocks(block.getWorld(), new HashSet<Block>(), block, OrebfuscatorConfig.UpdateRadius);
+		List<Block> updateBlocks = GetAjacentBlocks(block.getWorld(), new ArrayList<Block>(), block, OrebfuscatorConfig.UpdateRadius);
 
-		World world = block.getWorld();
-		IMinecraftWorldServer worldServer = getWorldServer();
-
-		for (Block nearbyBlock : updateBlocks) {
-			worldServer.Notify(world, nearbyBlock.getX(), nearbyBlock.getY(), nearbyBlock.getZ());
-		}
+		sendBlockUpdates(updateBlocks);
 	}
 
 	public static void Update(List<Block> blocks) {
@@ -63,22 +58,17 @@ public class BlockUpdate {
 			return;
 		}
 
-		HashSet<Block> updateBlocks = new HashSet<Block>();
+		List<Block> updateBlocks = new ArrayList<Block>(20);
 		for (Block block : blocks) {
 			if (needsUpdate(block)) {
-				updateBlocks.addAll(GetAjacentBlocks(block.getWorld(), new HashSet<Block>(), block, OrebfuscatorConfig.UpdateRadius));
+				updateBlocks.addAll(GetAjacentBlocks(block.getWorld(), new ArrayList<Block>(), block, OrebfuscatorConfig.UpdateRadius));
 			}
 		}
 
-		World world = blocks.get(0).getWorld();
-		IMinecraftWorldServer worldServer = getWorldServer();
-
-		for (Block nearbyBlock : updateBlocks) {
-			worldServer.Notify(world, nearbyBlock.getX(), nearbyBlock.getY(), nearbyBlock.getZ());
-		}
+		sendBlockUpdates(updateBlocks);
 	}
 
-	public static HashSet<Block> GetAjacentBlocks(World world, HashSet<Block> allBlocks, Block block, int countdown) {
+	public static List<Block> GetAjacentBlocks(World world, List<Block> allBlocks, Block block, int countdown) {
 		if (block == null) {
 			return allBlocks;
 		}
@@ -100,9 +90,18 @@ public class BlockUpdate {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void AddBlockCheck(HashSet<Block> allBlocks, Block block) {
+	public static void AddBlockCheck(List<Block> allBlocks, Block block) {
 		if ((OrebfuscatorConfig.isObfuscated((byte) block.getTypeId(), block.getWorld().getEnvironment() == Environment.NETHER) || OrebfuscatorConfig.isDarknessObfuscated((byte) block.getTypeId()))) {
 			allBlocks.add(block);
 		}
 	}
+	
+	private static void sendBlockUpdates(List<Block> blocks) {
+		World world = blocks.get(0).getWorld();
+		IMinecraftWorldServer worldServer = getWorldServer();
+		for (Block block : blocks) {
+			worldServer.Notify(world, block.getX(), block.getY(), block.getZ());
+		}
+	}
+
 }
