@@ -14,25 +14,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.lishid.orebfuscator.internal.v1_6_R3;
+package com.lishid.orebfuscator.internal;
 
-//Volatile
-import net.minecraft.server.v1_6_R3.WorldServer;
+import org.bukkit.block.Block;
 
-import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
-
-import com.lishid.orebfuscator.internal.IMinecraftWorldServer;
-import com.lishid.orebfuscator.internal.InternalAccessor;
-
-public class MinecraftWorldServer implements IMinecraftWorldServer {
-	@Override
-	public void Notify(Object world, int x, int y, int z) {
-		if (world instanceof CraftWorld) {
-			WorldServer server = ((CraftWorld) world).getHandle();
-			server.notify(x, y, z);
-		}
-		else {
-			InternalAccessor.Instance.PrintError();
-		}
-	}
+public interface IChangeBlockPacket {
+	public void notify(Block block);
 }

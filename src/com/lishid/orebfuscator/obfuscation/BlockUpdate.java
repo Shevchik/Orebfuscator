@@ -24,18 +24,18 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.internal.IMinecraftWorldServer;
+import com.lishid.orebfuscator.internal.IChangeBlockPacket;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 
 public class BlockUpdate {
-	private static IMinecraftWorldServer worldServerAccessor;
+	private static IChangeBlockPacket changeBlockPacket;
 
-	private static IMinecraftWorldServer getWorldServer() {
-		if (worldServerAccessor == null) {
-			worldServerAccessor = InternalAccessor.Instance.newMinecraftWorldServer();
+	private static IChangeBlockPacket getBlockChangePacket() {
+		if (changeBlockPacket == null) {
+			changeBlockPacket = InternalAccessor.Instance.newChangeBlockPacket();
 		}
 
-		return worldServerAccessor;
+		return changeBlockPacket;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -97,13 +97,9 @@ public class BlockUpdate {
 	}
 	
 	private static void sendBlockUpdates(List<Block> blocks) {
-		if (blocks.size() == 0) {
-			return;
-		}
-		World world = blocks.get(0).getWorld();
-		IMinecraftWorldServer worldServer = getWorldServer();
+		IChangeBlockPacket changeBlock = getBlockChangePacket();
 		for (Block block : blocks) {
-			worldServer.Notify(world, block.getX(), block.getY(), block.getZ());
+			changeBlock.notify(block);
 		}
 	}
 

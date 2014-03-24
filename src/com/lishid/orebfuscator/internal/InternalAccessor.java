@@ -69,8 +69,8 @@ public class InternalAccessor {
 		return (IBlockAccess) createObject(IBlockAccess.class, "BlockAccess");
 	}
 
-	public IMinecraftWorldServer newMinecraftWorldServer() {
-		return (IMinecraftWorldServer) createObject(IMinecraftWorldServer.class, "MinecraftWorldServer");
+	public IChangeBlockPacket newChangeBlockPacket() {
+		return (IChangeBlockPacket) createObject(IChangeBlockPacket.class, "ChangeBlockPacket");
 	}
 
 	private Object createObject(Class<? extends Object> assignableClass, String className) {
