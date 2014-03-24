@@ -18,10 +18,6 @@ package com.lishid.orebfuscator.obfuscation;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
 import java.util.zip.Deflater;
 
 import org.bukkit.World.Environment;
@@ -51,25 +47,7 @@ public class Calculations {
 		}
 	};
 
-	private static WeakHashMap<Player, Map<ChunkAddress, Set<MinecraftBlock>>> signsMap = new WeakHashMap<Player, Map<ChunkAddress,Set<MinecraftBlock>>>();
-
-	private static Map<ChunkAddress, Set<MinecraftBlock>> getPlayerSignsMap(Player player) {
-		Map<ChunkAddress, Set<MinecraftBlock>> map = signsMap.get(player);
-		if(map == null){
-			map = new HashMap<ChunkAddress, Set<MinecraftBlock>>();
-			signsMap.put(player, map);
-		}
-		return map;
-	}
-
-	public static Set<MinecraftBlock> getSignsList(Player player, int chunkX, int chunkZ) {
-		Map<ChunkAddress, Set<MinecraftBlock>> map = getPlayerSignsMap(player);
-		ChunkAddress address = new ChunkAddress(chunkX, chunkZ);
-		return map.get(address);
-	}
-
 	public static void Obfuscate(Object packet, Player player) {
-		// Assuming that NoLagg will pass a Packet51
 		IPacket51 packet51 = InternalAccessor.Instance.newPacket51();
 		packet51.setPacket(packet);
 		Calculations.Obfuscate(packet51, player);
@@ -364,14 +342,6 @@ public class Calculations {
 								}
 							}
 
-							// Check if the block should be obfuscated because of the darkness
-							if (!obfuscate && OrebfuscatorConfig.DarknessHideBlocks && OrebfuscatorConfig.isDarknessObfuscated(data)) {
-								if (!areAjacentBlocksBright(info, startX + x, (i << 4) + y, startZ + z, 1)) {
-									// Hide block, setting it to air
-									info.buffer[index] = 0;
-								}
-							}
-
 							tempIndex++;
 						}
 					}
@@ -421,7 +391,7 @@ public class Calculations {
 	public static void buildCacheMap() {
 		for (int i = 0; i < 256; i++) {
 			cacheMap[i] = (byte) i;
-			if (OrebfuscatorConfig.isBlockTransparent((short) i) && !isBlockSpecialObfuscated(64, (byte) i)) {
+			if (OrebfuscatorConfig.isBlockTransparent((short) i)) {
 				cacheMap[i] = 0;
 			}
 		}
@@ -431,13 +401,6 @@ public class Calculations {
 		for (int i = 0; i < length; i++) {
 			data[i] = cacheMap[(data[i] + 256) % 256];
 		}
-	}
-
-	private static boolean isBlockSpecialObfuscated(int y, byte id) {
-		if (OrebfuscatorConfig.DarknessHideBlocks && OrebfuscatorConfig.isDarknessObfuscated(id)) {
-			return true;
-		}
-		return false;
 	}
 
 	private static void RepaintChunkToBuffer(byte[] data, ChunkInfo info) {
@@ -452,9 +415,7 @@ public class Calculations {
 		for (int i = 0; i < length; i++) {
 			if (data[i] == 0 && original[start + i] != 0) {
 				if (OrebfuscatorConfig.isBlockTransparent(original[start + i])) {
-					if (!isBlockSpecialObfuscated(0, original[start + i])) {
-						data[i] = original[start + i];
-					}
+					data[i] = original[start + i];
 				}
 			}
 		}

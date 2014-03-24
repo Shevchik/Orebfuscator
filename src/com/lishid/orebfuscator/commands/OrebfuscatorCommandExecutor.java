@@ -114,11 +114,7 @@ public class OrebfuscatorCommandExecutor {
 			}
 
 			else if (args.length > 1) {
-				if (args[1].equalsIgnoreCase("darknesshide")) {
-					OrebfuscatorConfig.setDarknessHideBlocks(data);
-					Orebfuscator.message(sender, "Darkness obfuscation " + (data ? "enabled" : "disabled") + ".");
-				}
-				else if (args[1].equalsIgnoreCase("cache")) {
+				if (args[1].equalsIgnoreCase("cache")) {
 					OrebfuscatorConfig.setUseCache(data);
 					Orebfuscator.message(sender, "Cache " + (data ? "enabled" : "disabled") + ".");
 				}

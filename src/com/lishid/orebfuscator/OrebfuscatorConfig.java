@@ -45,9 +45,6 @@ public class OrebfuscatorConfig {
 	public static int CompressionLevel = 1;
 	public static int ProcessingThreads = AvailableProcessors - 1;
 
-	// Darkness
-	public static boolean DarknessHideBlocks = false;
-
 	// Caching
 	public static boolean UseCache = true;
 	public static int MaxLoadedCacheFiles = 64;
@@ -61,7 +58,6 @@ public class OrebfuscatorConfig {
 	// Utilities
 	private static boolean[] ObfuscateBlocks = new boolean[4096];
 	private static boolean[] NetherObfuscateBlocks = new boolean[4096];
-	private static boolean[] DarknessBlocks = new boolean[4096];
 	private static Integer[] RandomBlocks = new Integer[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129 };
 	private static Integer[] NetherRandomBlocks = new Integer[] { 13, 87, 88, 112, 153 };
 	private static Integer[] RandomBlocks2 = RandomBlocks;
@@ -126,14 +122,6 @@ public class OrebfuscatorConfig {
 		}
 
 		return ObfuscateBlocks[id];
-	}
-
-	public static boolean isDarknessObfuscated(short id) {
-		if (id < 0) {
-			id += 256;
-		}
-
-		return DarknessBlocks[id];
 	}
 
 	public static boolean isWorldDisabled(String name) {
@@ -203,11 +191,6 @@ public class OrebfuscatorConfig {
 	public static void setAirGeneratorMaxChance(int data) {
 		setData("Integers.AirGeneratorMaxChance", data);
 		AirGeneratorMaxChance = data;
-	}
-
-	public static void setDarknessHideBlocks(boolean data) {
-		setData("Booleans.DarknessHideBlocks", data);
-		DarknessHideBlocks = data;
 	}
 
 	public static void setAntiTexturePackAndFreecam(boolean data) {
@@ -299,12 +282,6 @@ public class OrebfuscatorConfig {
 		}
 	}
 
-	private static void setBlockValues(boolean[] boolArray, List<Integer> blocks) {
-		for (int i = 0; i < boolArray.length; i++) {
-			boolArray[i] = blocks.contains(i);
-		}
-	}
-
 	public static void load() {
 
 		// Version check
@@ -333,7 +310,6 @@ public class OrebfuscatorConfig {
 		OrebfuscatorPriority = clamp(getInt("Integers.OrebfuscatorPriority", OrebfuscatorPriority), Thread.MIN_PRIORITY, Thread.MAX_PRIORITY);
 		CompressionLevel = clamp(getInt("Integers.CompressionLevel", CompressionLevel), 1, 9);
 		UpdateOnDamage = getBoolean("Booleans.UpdateOnDamage", UpdateOnDamage);
-		DarknessHideBlocks = getBoolean("Booleans.DarknessHideBlocks", DarknessHideBlocks);
 		UseCache = getBoolean("Booleans.UseCache", UseCache);
 		AntiTexturePackAndFreecam = getBoolean("Booleans.AntiTexturePackAndFreecam", AntiTexturePackAndFreecam);
 		Enabled = getBoolean("Booleans.Enabled", Enabled);
@@ -341,7 +317,6 @@ public class OrebfuscatorConfig {
 		// Read block lists
 		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", Arrays.asList(new Integer[] { 14, 15, 16, 21, 54, 56, 73, 74, 129, 130 })), false);
 		setBlockValues(NetherObfuscateBlocks, getIntList("Lists.NetherObfuscateBlocks", Arrays.asList(new Integer[] { 87, 153 })), false);
-		setBlockValues(DarknessBlocks, getIntList("Lists.DarknessBlocks", Arrays.asList(new Integer[] { 52, 54 })));
 
 		// Disable worlds
 		DisabledWorlds = getStringList("Lists.DisabledWorlds", DisabledWorlds);
