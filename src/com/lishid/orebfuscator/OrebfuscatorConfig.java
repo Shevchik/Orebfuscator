@@ -55,7 +55,7 @@ public class OrebfuscatorConfig {
 	public static File CacheFolder = new File(Bukkit.getServer().getWorldContainer(), CacheLocation);
 
 	// AntiTexturePackAndFreecam
-	public static boolean AntiTexturePackAndFreecam = true;
+	public static boolean AntiTexturePackAndFreecam = false;
 	public static int AirGeneratorMaxChance = 43;
 
 	// Utilities
