@@ -29,7 +29,6 @@ public class ObfuscatedCachedChunk {
 	int x;
 	int z;
 	public byte[] data;
-	public int[] proximityList;
 	public long hash = 0L;
 	private boolean loaded = false;
 
@@ -53,7 +52,6 @@ public class ObfuscatedCachedChunk {
 
 	public void free() {
 		data = null;
-		proximityList = null;
 	}
 
 	public long getHash() {
@@ -91,7 +89,6 @@ public class ObfuscatedCachedChunk {
 
 				// Get Data
 				data = nbt.getByteArray("Data");
-				proximityList = nbt.getIntArray("ProximityList");
 				loaded = true;
 			}
 		}

@@ -228,17 +228,8 @@ public class Calculations {
 			cache.Read();
 
 			long storedHash = cache.getHash();
-			int[] proximityList = cache.proximityList;
 
 			if (storedHash == hash && cache.data != null) {
-				// Decrypt chest list
-				if (proximityList != null) {
-					for (int i = 0; i < proximityList.length; i += 3) {
-						Block b = CalculationsUtil.getBlockAt(info.player.getWorld(), proximityList[i], proximityList[i + 1], proximityList[i + 2]);
-						proximityBlocks.add(b);
-					}
-				}
-
 				// Caching done, de-sanitize buffer
 				RepaintChunkToBuffer(cache.data, info);
 
