@@ -31,11 +31,12 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.lishid.orebfuscator.internal.IChangeBlockPacket;
 
 public class ChangeBlockPacket implements IChangeBlockPacket {
+	
+	ProtocolManager manager = ProtocolLibrary.getProtocolManager();
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public void notify(Block block) {
-		ProtocolManager manager = ProtocolLibrary.getProtocolManager();
 		PacketContainer updatePacket = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
 		StructureModifier<Integer> integers = updatePacket.getIntegers();
 		integers.write(0, block.getX());
