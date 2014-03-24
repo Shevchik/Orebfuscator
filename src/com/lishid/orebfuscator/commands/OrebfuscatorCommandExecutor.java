@@ -118,14 +118,6 @@ public class OrebfuscatorCommandExecutor {
 					OrebfuscatorConfig.setDarknessHideBlocks(data);
 					Orebfuscator.message(sender, "Darkness obfuscation " + (data ? "enabled" : "disabled") + ".");
 				}
-				else if (args[1].equalsIgnoreCase("op")) {
-					OrebfuscatorConfig.setNoObfuscationForOps(data);
-					Orebfuscator.message(sender, "Ops No-Obfuscation " + (data ? "enabled" : "disabled") + ".");
-				}
-				else if (args[1].equalsIgnoreCase("perms") || args[1].equalsIgnoreCase("permissions")) {
-					OrebfuscatorConfig.setNoObfuscationForPermission(data);
-					Orebfuscator.message(sender, "Permissions No-Obfuscation " + (data ? "enabled" : "disabled") + ".");
-				}
 				else if (args[1].equalsIgnoreCase("cache")) {
 					OrebfuscatorConfig.setUseCache(data);
 					Orebfuscator.message(sender, "Cache " + (data ? "enabled" : "disabled") + ".");
@@ -133,10 +125,6 @@ public class OrebfuscatorCommandExecutor {
 				else if (args[1].equalsIgnoreCase("axr")) {
 					OrebfuscatorConfig.setAntiTexturePackAndFreecam(data);
 					Orebfuscator.message(sender, "AntiTexturePackAndFreecam " + (data ? "enabled" : "disabled") + ".");
-				}
-				else if (args[1].equalsIgnoreCase("notification")) {
-					OrebfuscatorConfig.setLoginNotification(data);
-					Orebfuscator.message(sender, "Login Notification " + (data ? "enabled" : "disabled") + ".");
 				}
 				else if (args[1].equalsIgnoreCase("world") && args.length > 2) {
 					OrebfuscatorConfig.setDisabledWorlds(args[2], !data);

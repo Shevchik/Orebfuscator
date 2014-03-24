@@ -32,7 +32,6 @@ import com.lishid.orebfuscator.hook.ProtocolLibHook;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.listeners.OrebfuscatorBlockListener;
 import com.lishid.orebfuscator.listeners.OrebfuscatorEntityListener;
-import com.lishid.orebfuscator.listeners.OrebfuscatorPlayerListener;
 
 /**
  * Orebfuscator Anti X-RAY
@@ -64,7 +63,6 @@ public class Orebfuscator extends JavaPlugin {
 		OrebfuscatorConfig.load();
 
 		// Orebfuscator events
-		pm.registerEvents(new OrebfuscatorPlayerListener(), this);
 		pm.registerEvents(new OrebfuscatorEntityListener(), this);
 		pm.registerEvents(new OrebfuscatorBlockListener(), this);
 

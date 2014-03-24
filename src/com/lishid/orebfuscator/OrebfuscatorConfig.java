@@ -25,8 +25,6 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
-
 import com.lishid.orebfuscator.cache.ObfuscatedDataCache;
 import com.lishid.orebfuscator.internal.IBlockAccess;
 import com.lishid.orebfuscator.internal.InternalAccessor;
@@ -59,15 +57,6 @@ public class OrebfuscatorConfig {
 	// AntiTexturePackAndFreecam
 	public static boolean AntiTexturePackAndFreecam = true;
 	public static int AirGeneratorMaxChance = 43;
-
-	// Misc
-	public static boolean NoObfuscationForOps = false;
-	public static boolean NoObfuscationForPermission = false;
-	public static boolean LoginNotification = true;
-
-	// Anti Hit Hack
-	public static int AntiHitHackDecrementFactor = 1000;
-	public static int AntiHitHackMaxViolation = 15;
 
 	// Utilities
 	private static boolean[] ObfuscateBlocks = new boolean[256];
@@ -222,21 +211,6 @@ public class OrebfuscatorConfig {
 		DarknessHideBlocks = data;
 	}
 
-	public static void setNoObfuscationForOps(boolean data) {
-		setData("Booleans.NoObfuscationForOps", data);
-		NoObfuscationForOps = data;
-	}
-
-	public static void setNoObfuscationForPermission(boolean data) {
-		setData("Booleans.NoObfuscationForPermission", data);
-		NoObfuscationForPermission = data;
-	}
-
-	public static void setLoginNotification(boolean data) {
-		setData("Booleans.LoginNotification", data);
-		LoginNotification = data;
-	}
-
 	public static void setAntiTexturePackAndFreecam(boolean data) {
 		setData("Booleans.AntiTexturePackAndFreecam", data);
 		AntiTexturePackAndFreecam = data;
@@ -378,10 +352,7 @@ public class OrebfuscatorConfig {
 		CompressionLevel = clamp(getInt("Integers.CompressionLevel", CompressionLevel), 1, 9);
 		UpdateOnDamage = getBoolean("Booleans.UpdateOnDamage", UpdateOnDamage);
 		DarknessHideBlocks = getBoolean("Booleans.DarknessHideBlocks", DarknessHideBlocks);
-		NoObfuscationForOps = getBoolean("Booleans.NoObfuscationForOps", NoObfuscationForOps);
-		NoObfuscationForPermission = getBoolean("Booleans.NoObfuscationForPermission", NoObfuscationForPermission);
 		UseCache = getBoolean("Booleans.UseCache", UseCache);
-		LoginNotification = getBoolean("Booleans.LoginNotification", LoginNotification);
 		AntiTexturePackAndFreecam = getBoolean("Booleans.AntiTexturePackAndFreecam", AntiTexturePackAndFreecam);
 		Enabled = getBoolean("Booleans.Enabled", Enabled);
 
@@ -420,34 +391,6 @@ public class OrebfuscatorConfig {
 
 	public static void save() {
 		Orebfuscator.instance.saveConfig();
-	}
-
-	public static boolean obfuscateForPlayer(Player player) {
-		return !(playerBypassOp(player) || playerBypassPerms(player));
-	}
-
-	public static boolean playerBypassOp(Player player) {
-		boolean ret = false;
-		try {
-			ret = OrebfuscatorConfig.NoObfuscationForOps && player.isOp();
-		}
-		catch (Exception e) {
-			Orebfuscator.log("Error while obtaining Operator status for player" + player.getName() + ": " + e.getMessage());
-			e.printStackTrace();
-		}
-		return ret;
-	}
-
-	public static boolean playerBypassPerms(Player player) {
-		boolean ret = false;
-		try {
-			ret = OrebfuscatorConfig.NoObfuscationForPermission && player.hasPermission("Orebfuscator.deobfuscate");
-		}
-		catch (Exception e) {
-			Orebfuscator.log("Error while obtaining permissions for player" + player.getName() + ": " + e.getMessage());
-			e.printStackTrace();
-		}
-		return ret;
 	}
 
 	private static FileConfiguration getConfig() {

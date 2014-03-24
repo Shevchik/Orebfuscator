@@ -204,10 +204,7 @@ public class Calculations {
 		}
 
 		// Obfuscate
-		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName()) && // World not enabled
-				OrebfuscatorConfig.obfuscateForPlayer(info.player) && // Should the player have obfuscation?
-				OrebfuscatorConfig.Enabled) // Plugin enabled
-		{
+		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName()) && OrebfuscatorConfig.Enabled) {
 			byte[] obfuscated = Obfuscate(info, original);
 			// Copy the data out of the buffer
 			System.arraycopy(obfuscated, 0, original, info.startIndex, info.blockSize);
