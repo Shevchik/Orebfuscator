@@ -17,11 +17,9 @@
 package com.lishid.orebfuscator.obfuscation;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.zip.Deflater;
 
 import org.bukkit.World.Environment;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import com.lishid.orebfuscator.Orebfuscator;
@@ -195,8 +193,6 @@ public class Calculations {
 		ObfuscatedCachedChunk cache = null;
 		// Hash used to check cache consistency
 		long hash = 0L;
-		// Blocks kept track for ProximityHider
-		ArrayList<Block> proximityBlocks = new ArrayList<Block>();
 		// Start with caching false
 		info.useCache = false;
 
@@ -348,17 +344,7 @@ public class Calculations {
 
 		// If cache is still allowed
 		if (info.useCache) {
-			// Save cache
-			int[] proximityList = new int[proximityBlocks.size() * 3];
-			for (int i = 0; i < proximityBlocks.size(); i++) {
-				Block b = proximityBlocks.get(i);
-				if (b != null) {
-					proximityList[i * 3] = b.getX();
-					proximityList[i * 3 + 1] = b.getY();
-					proximityList[i * 3 + 2] = b.getZ();
-				}
-			}
-			cache.Write(hash, info.buffer, proximityList);
+			cache.Write(hash, info.buffer);
 		}
 
 		// Free memory taken by cache quickly

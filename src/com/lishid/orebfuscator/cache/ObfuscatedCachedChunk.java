@@ -47,7 +47,7 @@ public class ObfuscatedCachedChunk {
 	}
 
 	public void Invalidate() {
-		Write(0L, new byte[0], new int[0]);
+		Write(0L, new byte[0]);
 	}
 
 	public void free() {
@@ -99,7 +99,7 @@ public class ObfuscatedCachedChunk {
 		}
 	}
 
-	public void Write(long hash, byte[] data, int[] proximityList) {
+	public void Write(long hash, byte[] data) {
 		try {
 			INBT nbt = nbtAccessor.get();
 			nbt.reset();
@@ -114,7 +114,6 @@ public class ObfuscatedCachedChunk {
 
 			// Set data
 			nbt.setByteArray("Data", data);
-			nbt.setIntArray("ProximityList", proximityList);
 
 			DataOutputStream stream = ObfuscatedDataCache.getOutputStream(path, x, z);
 
