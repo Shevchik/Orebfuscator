@@ -97,6 +97,9 @@ public class BlockUpdate {
 	}
 	
 	private static void sendBlockUpdates(List<Block> blocks) {
+		if (blocks.size() == 0) {
+			return;
+		}
 		World world = blocks.get(0).getWorld();
 		IMinecraftWorldServer worldServer = getWorldServer();
 		for (Block block : blocks) {
