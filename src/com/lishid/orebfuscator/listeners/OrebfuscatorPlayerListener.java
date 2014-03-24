@@ -45,15 +45,4 @@ public class OrebfuscatorPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.useInteractedBlock() == Result.DENY) {
-			return;
-		}
-
-		if (event.getItem() != null && event.getItem().getType() != null && (event.getMaterial() == Material.DIRT || event.getMaterial() == Material.GRASS) && ((event.getItem().getType() == Material.WOOD_HOE) || (event.getItem().getType() == Material.IRON_HOE) || (event.getItem().getType() == Material.GOLD_HOE) || (event.getItem().getType() == Material.DIAMOND_HOE))) {
-			BlockUpdate.Update(event.getClickedBlock());
-		}
-	}
-
 }
