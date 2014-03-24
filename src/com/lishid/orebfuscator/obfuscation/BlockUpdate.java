@@ -91,7 +91,7 @@ public class BlockUpdate {
 
 	@SuppressWarnings("deprecation")
 	public static void AddBlockCheck(List<Block> allBlocks, Block block) {
-		if ((OrebfuscatorConfig.isObfuscated((byte) block.getTypeId(), block.getWorld().getEnvironment() == Environment.NETHER) || OrebfuscatorConfig.isDarknessObfuscated((byte) block.getTypeId()))) {
+		if ((OrebfuscatorConfig.isObfuscated(block.getTypeId(), block.getWorld().getEnvironment() == Environment.NETHER) || OrebfuscatorConfig.isDarknessObfuscated((byte) block.getTypeId()))) {
 			allBlocks.add(block);
 		}
 	}

@@ -59,10 +59,9 @@ public class OrebfuscatorConfig {
 	public static int AirGeneratorMaxChance = 43;
 
 	// Utilities
-	private static boolean[] ObfuscateBlocks = new boolean[256];
-	private static boolean[] NetherObfuscateBlocks = new boolean[256];
-	private static boolean[] DarknessBlocks = new boolean[256];
-	private static boolean[] ProximityHiderBlocks = new boolean[256];
+	private static boolean[] ObfuscateBlocks = new boolean[4096];
+	private static boolean[] NetherObfuscateBlocks = new boolean[4096];
+	private static boolean[] DarknessBlocks = new boolean[4096];
 	private static Integer[] RandomBlocks = new Integer[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129 };
 	private static Integer[] NetherRandomBlocks = new Integer[] { 13, 87, 88, 112, 153 };
 	private static Integer[] RandomBlocks2 = RandomBlocks;
@@ -81,7 +80,7 @@ public class OrebfuscatorConfig {
 	}
 
 	public static IBlockAccess blockAccess;
-	private static boolean[] TransparentBlocks = new boolean[256];
+	private static boolean[] TransparentBlocks = new boolean[4096];
 	private static boolean TransparentCached = false;
 
 	public static boolean isBlockTransparent(short id) {
@@ -108,7 +107,7 @@ public class OrebfuscatorConfig {
 		TransparentCached = true;
 	}
 
-	public static boolean isObfuscated(short id, boolean nether) {
+	public static boolean isObfuscated(int id, boolean nether) {
 		if (id < 0) {
 			id += 256;
 		}
@@ -311,23 +310,6 @@ public class OrebfuscatorConfig {
 		// Version check
 		int version = getInt("ConfigVersion", CONFIG_VERSION);
 		if (version < CONFIG_VERSION) {
-			// Orebfuscator.log("Configuration out of date. Recreating new configuration file.");
-			// File configFile = new File(Orebfuscator.instance.getDataFolder(), "config.yml");
-			// File destination = new File(Orebfuscator.instance.getDataFolder(), "config_old.yml");
-			// if (destination.exists())
-			// {
-			// try
-			// {
-			// destination.delete();
-			// }
-			// catch (Exception e)
-			// {
-			// Orebfuscator.log(e);
-			// }
-			// }
-			// configFile.renameTo(destination);
-			// reload();
-
 			ObfuscatedDataCache.ClearCache();
 			setData("ConfigVersion", CONFIG_VERSION);
 		}
@@ -360,7 +342,6 @@ public class OrebfuscatorConfig {
 		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", Arrays.asList(new Integer[] { 14, 15, 16, 21, 54, 56, 73, 74, 129, 130 })), false);
 		setBlockValues(NetherObfuscateBlocks, getIntList("Lists.NetherObfuscateBlocks", Arrays.asList(new Integer[] { 87, 153 })), false);
 		setBlockValues(DarknessBlocks, getIntList("Lists.DarknessBlocks", Arrays.asList(new Integer[] { 52, 54 })));
-		setBlockValues(ProximityHiderBlocks, getIntList("Lists.ProximityHiderBlocks", Arrays.asList(new Integer[] { 23, 52, 54, 56, 58, 61, 62, 116, 129, 130, 145, 146 })));
 
 		// Disable worlds
 		DisabledWorlds = getStringList("Lists.DisabledWorlds", DisabledWorlds);
