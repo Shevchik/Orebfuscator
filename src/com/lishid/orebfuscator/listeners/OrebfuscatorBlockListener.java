@@ -32,18 +32,14 @@ import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 
 public class OrebfuscatorBlockListener implements Listener {
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if (event.isCancelled()) {
-			return;
-		}
-
 		BlockUpdate.Update(event.getBlock());
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockDamage(BlockDamageEvent event) {
-		if (event.isCancelled() || !OrebfuscatorConfig.UpdateOnDamage) {
+		if (OrebfuscatorConfig.UpdateOnDamage) {
 			return;
 		}
 
@@ -54,12 +50,8 @@ public class OrebfuscatorBlockListener implements Listener {
 		BlockUpdate.Update(event.getBlock());
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (event.getBlock().getType() != Material.SAND && event.getBlock().getType() != Material.GRAVEL) {
 			return;
 		}
@@ -71,20 +63,16 @@ public class OrebfuscatorBlockListener implements Listener {
 		BlockUpdate.Update(event.getBlock());
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
-		if (event.isCancelled()) {
-			return;
-		}
-
 		for (Block b : event.getBlocks()) {
 			BlockUpdate.Update(b);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-		if (event.isCancelled()) {
+		if (!event.isSticky()) {
 			return;
 		}
 
@@ -93,8 +81,6 @@ public class OrebfuscatorBlockListener implements Listener {
 
 	@SuppressWarnings("deprecation")
 	private boolean applyphysics(Block block) {
-		// See net.minecraft.server.v1_4_5.BlockSand.canFall(World world, int i, int j, int k)
-
 		int blockID = block.getRelative(0, -1, 0).getTypeId();
 
 		int air = Material.AIR.getId();
