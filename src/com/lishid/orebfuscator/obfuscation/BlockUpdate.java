@@ -24,15 +24,15 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.internal.IChangeBlockPacket;
+import com.lishid.orebfuscator.internal.INotify;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 
 public class BlockUpdate {
-	private static IChangeBlockPacket changeBlockPacket;
+	private static INotify changeBlockPacket;
 
-	private static IChangeBlockPacket getBlockChangePacket() {
+	private static INotify getBlockChangePacket() {
 		if (changeBlockPacket == null) {
-			changeBlockPacket = InternalAccessor.Instance.newChangeBlockPacket();
+			changeBlockPacket = InternalAccessor.Instance.newNotify();
 		}
 
 		return changeBlockPacket;
@@ -97,7 +97,7 @@ public class BlockUpdate {
 	}
 
 	private static void sendBlockUpdates(HashSet<Block> blocks) {
-		IChangeBlockPacket changeBlock = getBlockChangePacket();
+		INotify changeBlock = getBlockChangePacket();
 		for (Block block : blocks) {
 			changeBlock.notify(block);
 		}

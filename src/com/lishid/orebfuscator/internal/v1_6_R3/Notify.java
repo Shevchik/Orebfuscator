@@ -14,10 +14,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.lishid.orebfuscator.internal;
+package com.lishid.orebfuscator.internal.v1_6_R3;
 
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.lishid.orebfuscator.internal.INotify;
 
-public interface IChangeBlockPacket {
-	public void notify(Block block);
+public class Notify implements INotify {
+
+	ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+
+	@Override
+	public void notify(Block block) {
+		((CraftWorld) block.getWorld()).getHandle().notify(block.getX(), block.getY(), block.getZ());
+	}
+
 }

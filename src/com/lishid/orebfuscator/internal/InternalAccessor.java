@@ -69,8 +69,8 @@ public class InternalAccessor {
 		return (IBlockAccess) createObject(IBlockAccess.class, "BlockAccess");
 	}
 
-	public IChangeBlockPacket newChangeBlockPacket() {
-		return (IChangeBlockPacket) createObject(IChangeBlockPacket.class, "ChangeBlockPacket");
+	public INotify newNotify() {
+		return (INotify) createObject(INotify.class, "Notify");
 	}
 
 	private Object createObject(Class<? extends Object> assignableClass, String className) {
