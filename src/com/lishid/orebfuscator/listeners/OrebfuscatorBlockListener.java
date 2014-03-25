@@ -39,7 +39,7 @@ public class OrebfuscatorBlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockDamage(BlockDamageEvent event) {
-		if (OrebfuscatorConfig.UpdateOnDamage) {
+		if (!OrebfuscatorConfig.UpdateOnDamage) {
 			return;
 		}
 
