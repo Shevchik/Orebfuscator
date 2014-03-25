@@ -16,7 +16,7 @@
 
 package com.lishid.orebfuscator.obfuscation;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.World;
@@ -40,7 +40,7 @@ public class BlockUpdate {
 
 	@SuppressWarnings("deprecation")
 	public static boolean needsUpdate(Block block) {
-		return !OrebfuscatorConfig.isBlockTransparent((short) block.getTypeId());
+		return !OrebfuscatorConfig.isBlockTransparent(block.getTypeId());
 	}
 
 	public static void Update(Block block) {
@@ -48,7 +48,7 @@ public class BlockUpdate {
 			return;
 		}
 
-		List<Block> updateBlocks = GetAjacentBlocks(block.getWorld(), new ArrayList<Block>(), block, OrebfuscatorConfig.UpdateRadius);
+		HashSet<Block> updateBlocks = GetAjacentBlocks(block.getWorld(), new HashSet<Block>(20), block, OrebfuscatorConfig.UpdateRadius);
 
 		sendBlockUpdates(updateBlocks);
 	}
@@ -58,17 +58,17 @@ public class BlockUpdate {
 			return;
 		}
 
-		List<Block> updateBlocks = new ArrayList<Block>(20);
+		HashSet<Block> updateBlocks = new HashSet<Block>(20);
 		for (Block block : blocks) {
 			if (needsUpdate(block)) {
-				updateBlocks.addAll(GetAjacentBlocks(block.getWorld(), new ArrayList<Block>(), block, OrebfuscatorConfig.UpdateRadius));
+				updateBlocks.addAll(GetAjacentBlocks(block.getWorld(), new HashSet<Block>(20), block, OrebfuscatorConfig.UpdateRadius));
 			}
 		}
 
 		sendBlockUpdates(updateBlocks);
 	}
 
-	public static List<Block> GetAjacentBlocks(World world, List<Block> allBlocks, Block block, int countdown) {
+	public static HashSet<Block> GetAjacentBlocks(World world, HashSet<Block> allBlocks, Block block, int countdown) {
 		if (block == null) {
 			return allBlocks;
 		}
@@ -90,13 +90,13 @@ public class BlockUpdate {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void AddBlockCheck(List<Block> allBlocks, Block block) {
+	public static void AddBlockCheck(HashSet<Block> allBlocks, Block block) {
 		if ((OrebfuscatorConfig.isObfuscated(block.getTypeId(), block.getWorld().getEnvironment() == Environment.NETHER))) {
 			allBlocks.add(block);
 		}
 	}
 	
-	private static void sendBlockUpdates(List<Block> blocks) {
+	private static void sendBlockUpdates(HashSet<Block> blocks) {
 		IChangeBlockPacket changeBlock = getBlockChangePacket();
 		for (Block block : blocks) {
 			changeBlock.notify(block);

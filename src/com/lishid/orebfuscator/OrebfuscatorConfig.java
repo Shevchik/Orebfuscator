@@ -79,7 +79,7 @@ public class OrebfuscatorConfig {
 	private static boolean[] TransparentBlocks = new boolean[4096];
 	private static boolean TransparentCached = false;
 
-	public static boolean isBlockTransparent(short id) {
+	public static boolean isBlockTransparent(int i) {
 		if (blockAccess == null) {
 			blockAccess = InternalAccessor.Instance.newBlockAccess();
 		}
@@ -89,11 +89,11 @@ public class OrebfuscatorConfig {
 			generateTransparentBlocks();
 		}
 
-		if (id < 0) {
-			id += 256;
+		if (i < 0) {
+			i += 256;
 		}
 
-		return TransparentBlocks[id];
+		return TransparentBlocks[i];
 	}
 
 	private static void generateTransparentBlocks() {
