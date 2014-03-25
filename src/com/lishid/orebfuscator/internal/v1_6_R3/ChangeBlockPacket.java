@@ -31,7 +31,7 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.lishid.orebfuscator.internal.IChangeBlockPacket;
 
 public class ChangeBlockPacket implements IChangeBlockPacket {
-	
+
 	ProtocolManager manager = ProtocolLibrary.getProtocolManager();
 
 	@SuppressWarnings("deprecation")
@@ -50,9 +50,9 @@ public class ChangeBlockPacket implements IChangeBlockPacket {
 				Chunk blockChunk = block.getChunk();
 				int vd = Bukkit.getViewDistance();
 				if (
-					Math.abs(playerChunk.getX() - blockChunk.getX()) <= vd &&
-					Math.abs(playerChunk.getZ() - blockChunk.getZ()) <= vd 
-				) {
+						Math.abs(playerChunk.getX() - blockChunk.getX()) <= vd &&
+						Math.abs(playerChunk.getZ() - blockChunk.getZ()) <= vd
+						) {
 					try {
 						manager.sendServerPacket(player, updatePacket, true);
 					} catch (InvocationTargetException e) {

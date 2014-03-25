@@ -69,26 +69,26 @@ public class ChunkProcessingThread extends Thread {
 		}
 
 		// Less threads? Kill one
-				else if (threads.size() > OrebfuscatorConfig.ProcessingThreads) {
-					threads.getLast().kill.set(true);
-					threads.getLast().interrupt();
-					threads.removeLast();
-					return;
-				}
+		else if (threads.size() > OrebfuscatorConfig.ProcessingThreads) {
+			threads.getLast().kill.set(true);
+			threads.getLast().interrupt();
+			threads.removeLast();
+			return;
+		}
 
 		// More threads? Start new one
-				else {
-					ChunkProcessingThread thread = new ChunkProcessingThread();
-					thread.setName("Orebfuscator Processing Thread");
-					try {
-						thread.setPriority(OrebfuscatorConfig.OrebfuscatorPriority);
-					}
-					catch (Exception e) {
-						thread.setPriority(Thread.MIN_PRIORITY);
-					}
-					thread.start();
-					threads.add(thread);
-				}
+		else {
+			ChunkProcessingThread thread = new ChunkProcessingThread();
+			thread.setName("Orebfuscator Processing Thread");
+			try {
+				thread.setPriority(OrebfuscatorConfig.OrebfuscatorPriority);
+			}
+			catch (Exception e) {
+				thread.setPriority(Thread.MIN_PRIORITY);
+			}
+			thread.start();
+			threads.add(thread);
+		}
 	}
 
 	public static void Queue(IPacket56 packet, Player player, IChunkQueue output) {

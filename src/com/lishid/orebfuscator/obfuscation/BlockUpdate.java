@@ -95,7 +95,7 @@ public class BlockUpdate {
 			allBlocks.add(block);
 		}
 	}
-	
+
 	private static void sendBlockUpdates(HashSet<Block> blocks) {
 		IChangeBlockPacket changeBlock = getBlockChangePacket();
 		for (Block block : blocks) {

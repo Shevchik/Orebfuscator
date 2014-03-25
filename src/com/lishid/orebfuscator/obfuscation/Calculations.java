@@ -276,9 +276,9 @@ public class Calculations {
 
 							// byte extra = 0;
 							// if (useExtraData)
-								// {
-								// if (tempIndex % 2 == 0)
-									// extra = (byte) (info.data[extraIndexStart + indexExtraStart + (tempIndex >> 1)] & 0x0F);
+							// {
+							// if (tempIndex % 2 == 0)
+							// extra = (byte) (info.data[extraIndexStart + indexExtraStart + (tempIndex >> 1)] & 0x0F);
 							// else
 							// extra = (byte) (info.data[extraIndexStart + indexExtraStart + (tempIndex >> 1)] >> 4);
 							// }
