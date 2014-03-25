@@ -288,14 +288,9 @@ public class Calculations {
 
 							// Check if the block should be obfuscated for the default engine modes
 							if (OrebfuscatorConfig.isObfuscated(data, isNether)) {
-								if (initialRadius == 0) {
+								// Check if any nearby blocks are transparent
+								if (!areAjacentBlocksTransparent(info, data, startX + x, blockY, startZ + z, initialRadius)) {
 									obfuscate = true;
-								}
-								else {
-									// Check if any nearby blocks are transparent
-									if (!areAjacentBlocksTransparent(info, data, startX + x, blockY, startZ + z, initialRadius)) {
-										obfuscate = true;
-									}
 								}
 							}
 

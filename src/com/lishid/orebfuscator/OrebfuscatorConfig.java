@@ -176,6 +176,9 @@ public class OrebfuscatorConfig {
 	}
 
 	public static void setInitialRadius(int data) {
+		if (data < 1) {
+			data = 1;
+		}
 		setData("Integers.InitialRadius", data);
 		InitialRadius = data;
 	}
@@ -294,10 +297,7 @@ public class OrebfuscatorConfig {
 			Orebfuscator.log("EngineMode must be 1 or 2.");
 		}
 
-		InitialRadius = clamp(getInt("Integers.InitialRadius", InitialRadius), 0, 2);
-		if (InitialRadius == 0) {
-			Orebfuscator.log("Warning, InitialRadius is 0. This will cause all exposed blocks to be obfuscated.");
-		}
+		InitialRadius = clamp(getInt("Integers.InitialRadius", InitialRadius), 1, 2);
 
 		UpdateRadius = clamp(getInt("Integers.UpdateRadius", UpdateRadius), 1, 5);
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, AvailableProcessors);
