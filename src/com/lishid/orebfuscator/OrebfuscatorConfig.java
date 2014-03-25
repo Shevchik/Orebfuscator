@@ -20,11 +20,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+
 import com.lishid.orebfuscator.cache.ObfuscatedDataCache;
 import com.lishid.orebfuscator.internal.IBlockAccess;
 import com.lishid.orebfuscator.internal.InternalAccessor;
@@ -61,7 +63,7 @@ public class OrebfuscatorConfig {
 	private static Integer[] RandomBlocks = new Integer[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129 };
 	private static Integer[] NetherRandomBlocks = new Integer[] { 13, 87, 88, 112, 153 };
 	private static Integer[] RandomBlocks2 = RandomBlocks;
-	private static List<String> DisabledWorlds = new ArrayList<String>();
+	private static HashSet<String> DisabledWorlds = new HashSet<String>();
 
 	public static File getCacheFolder() {
 		// Try to make the folder
@@ -125,12 +127,7 @@ public class OrebfuscatorConfig {
 	}
 
 	public static boolean isWorldDisabled(String name) {
-		for (String world : DisabledWorlds) {
-			if (world.equalsIgnoreCase(name)) {
-				return true;
-			}
-		}
-		return false;
+		return DisabledWorlds.contains(name);
 	}
 
 	public static String getDisabledWorlds() {
@@ -319,7 +316,7 @@ public class OrebfuscatorConfig {
 		setBlockValues(NetherObfuscateBlocks, getIntList("Lists.NetherObfuscateBlocks", Arrays.asList(new Integer[] { 87, 153 })), false);
 
 		// Disable worlds
-		DisabledWorlds = getStringList("Lists.DisabledWorlds", DisabledWorlds);
+		DisabledWorlds = new HashSet<String>(getStringList("Lists.DisabledWorlds", new ArrayList<String>(DisabledWorlds)));
 
 		// Read the cache location
 		CacheLocation = getString("Strings.CacheLocation", CacheLocation);
