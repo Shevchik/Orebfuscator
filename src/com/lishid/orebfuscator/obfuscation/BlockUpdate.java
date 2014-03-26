@@ -41,11 +41,6 @@ public class BlockUpdate {
 		return manager;
 	}
 
-	@SuppressWarnings("deprecation")
-	public static boolean needsUpdate(Block block) {
-		return !OrebfuscatorConfig.isBlockTransparent(block.getTypeId());
-	}
-
 	public static void Update(Player player, Block block) {
 		HashSet<Block> updateBlocks = GetAjacentBlocks(block.getWorld(), new HashSet<Block>(20), block, OrebfuscatorConfig.UpdateRadius);
 		
