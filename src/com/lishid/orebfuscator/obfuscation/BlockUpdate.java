@@ -16,26 +16,29 @@
 
 package com.lishid.orebfuscator.obfuscation;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
-import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.reflect.StructureModifier;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.internal.INotify;
-import com.lishid.orebfuscator.internal.InternalAccessor;
 
 public class BlockUpdate {
-	private static INotify changeBlockPacket;
-
-	private static INotify getBlockChangePacket() {
-		if (changeBlockPacket == null) {
-			changeBlockPacket = InternalAccessor.Instance.newNotify();
+	
+	private static ProtocolManager manager;
+	private static ProtocolManager getProtocolManager() {
+		if (manager == null) {
+			manager = ProtocolLibrary.getProtocolManager();
 		}
-
-		return changeBlockPacket;
+		return manager;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -43,29 +46,10 @@ public class BlockUpdate {
 		return !OrebfuscatorConfig.isBlockTransparent(block.getTypeId());
 	}
 
-	public static void Update(Block block) {
-		if (!needsUpdate(block)) {
-			return;
-		}
-
+	public static void Update(Player player, Block block) {
 		HashSet<Block> updateBlocks = GetAjacentBlocks(block.getWorld(), new HashSet<Block>(20), block, OrebfuscatorConfig.UpdateRadius);
-
-		sendBlockUpdates(updateBlocks);
-	}
-
-	public static void Update(List<Block> blocks) {
-		if (blocks.size() <= 0) {
-			return;
-		}
-
-		HashSet<Block> updateBlocks = new HashSet<Block>(20);
-		for (Block block : blocks) {
-			if (needsUpdate(block)) {
-				updateBlocks.addAll(GetAjacentBlocks(block.getWorld(), new HashSet<Block>(20), block, OrebfuscatorConfig.UpdateRadius));
-			}
-		}
-
-		sendBlockUpdates(updateBlocks);
+		
+		sendBlockUpdates(player, updateBlocks);
 	}
 
 	public static HashSet<Block> GetAjacentBlocks(World world, HashSet<Block> allBlocks, Block block, int countdown) {
@@ -96,10 +80,21 @@ public class BlockUpdate {
 		}
 	}
 
-	private static void sendBlockUpdates(HashSet<Block> blocks) {
-		INotify changeBlock = getBlockChangePacket();
+	@SuppressWarnings("deprecation")
+	private static void sendBlockUpdates(Player player, HashSet<Block> blocks) {
 		for (Block block : blocks) {
-			changeBlock.notify(block);
+			PacketContainer packet = getProtocolManager().createPacket(PacketType.Play.Server.BLOCK_CHANGE);
+			StructureModifier<Integer> ints = packet.getIntegers();
+			ints.write(0, block.getX());
+			ints.write(1, block.getY());
+			ints.write(2, block.getZ());
+			ints.write(3, block.getTypeId());
+			ints.write(4, (int) block.getData());
+			try {
+				getProtocolManager().sendServerPacket(player, packet, false);
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

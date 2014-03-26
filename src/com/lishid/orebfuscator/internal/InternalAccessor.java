@@ -69,10 +69,6 @@ public class InternalAccessor {
 		return (IBlockAccess) createObject(IBlockAccess.class, "BlockAccess");
 	}
 
-	public INotify newNotify() {
-		return (INotify) createObject(INotify.class, "Notify");
-	}
-
 	private Object createObject(Class<? extends Object> assignableClass, String className) {
 		try {
 			Class<?> internalClass = Class.forName("com.lishid.orebfuscator.internal." + version + "." + className);

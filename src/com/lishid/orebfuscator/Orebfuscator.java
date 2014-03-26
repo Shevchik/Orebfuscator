@@ -30,8 +30,7 @@ import com.lishid.orebfuscator.hook.ChunkProcessingThread;
 import com.lishid.orebfuscator.hook.OrebfuscatorPlayerHook;
 import com.lishid.orebfuscator.hook.ProtocolLibHook;
 import com.lishid.orebfuscator.internal.InternalAccessor;
-import com.lishid.orebfuscator.listeners.OrebfuscatorBlockListener;
-import com.lishid.orebfuscator.listeners.OrebfuscatorEntityListener;
+import com.lishid.orebfuscator.listeners.BlockChangeListener;
 
 /**
  * Orebfuscator Anti X-RAY
@@ -63,12 +62,11 @@ public class Orebfuscator extends JavaPlugin {
 		OrebfuscatorConfig.load();
 
 		// Orebfuscator events
-		pm.registerEvents(new OrebfuscatorEntityListener(), this);
-		pm.registerEvents(new OrebfuscatorBlockListener(), this);
+		new BlockChangeListener().register(this);
 
+		// Hooks
 		pm.registerEvents(new OrebfuscatorPlayerHook(), this);
-
-		(new ProtocolLibHook()).register(this);
+		new ProtocolLibHook().register(this);
 	}
 
 	@Override
