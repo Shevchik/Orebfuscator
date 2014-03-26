@@ -245,8 +245,7 @@ public class Calculations {
 		int maxChance = OrebfuscatorConfig.AirGeneratorMaxChance;
 		int incrementMax = maxChance;
 
-		int randomBlocksLength = OrebfuscatorConfig.getRandomBlocks(false, isNether).length;
-		boolean randomAlternate = false;
+		int randomBlocksLength = OrebfuscatorConfig.getRandomBlocks(isNether).length;
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
 		int dataIndexModifier = 0;
@@ -296,7 +295,6 @@ public class Calculations {
 
 							// Check if the block is obfuscated
 							if (obfuscate) {
-								randomIncrement2 = OrebfuscatorConfig.random(incrementMax);// CalculationsUtil.increment(randomIncrement2, incrementMax);
 
 								if (engineMode == 1) {
 									// Engine mode 1, replace with stone
@@ -304,14 +302,12 @@ public class Calculations {
 								}
 								else if (engineMode == 2) {
 									// Ending mode 2, replace with random block
-									if (randomBlocksLength > 1) {
-										randomIncrement = CalculationsUtil.increment(randomIncrement, randomBlocksLength);
-									}
-									info.buffer[index] = OrebfuscatorConfig.getRandomBlock(randomIncrement, randomAlternate, isNether);
-									randomAlternate = !randomAlternate;
+									randomIncrement = CalculationsUtil.increment(randomIncrement, randomBlocksLength);
+									info.buffer[index] = OrebfuscatorConfig.getRandomBlock(randomIncrement, isNether);
 								}
 								// Anti texturepack and freecam
 								if (OrebfuscatorConfig.AntiTexturePackAndFreecam) {
+									randomIncrement2 = OrebfuscatorConfig.random(incrementMax);
 									// Add random air blocks
 									if (randomIncrement2 == 0) {
 										ramdomCave = 1 + OrebfuscatorConfig.random(3);

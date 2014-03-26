@@ -62,7 +62,6 @@ public class OrebfuscatorConfig {
 	private static boolean[] NetherObfuscateBlocks = new boolean[4096];
 	private static Integer[] RandomBlocks = new Integer[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129 };
 	private static Integer[] NetherRandomBlocks = new Integer[] { 13, 87, 88, 112, 153 };
-	private static Integer[] RandomBlocks2 = RandomBlocks;
 	private static HashSet<String> DisabledWorlds = new HashSet<String>();
 
 	public static File getCacheFolder() {
@@ -138,24 +137,23 @@ public class OrebfuscatorConfig {
 		return retval.length() > 1 ? retval.substring(0, retval.length() - 2) : retval;
 	}
 
-	public static byte getRandomBlock(int index, boolean alternate, boolean nether) {
+	public static byte getRandomBlock(int index, boolean nether) {
 		if (nether) {
-			return (byte) (int) (NetherRandomBlocks[index]);
+			return (byte) (int) NetherRandomBlocks[index];
 		}
-		return (byte) (int) (alternate ? RandomBlocks2[index] : RandomBlocks[index]);
+		return (byte) (int) RandomBlocks[index];
 	}
 
-	public static Integer[] getRandomBlocks(boolean alternate, boolean nether) {
+	public static Integer[] getRandomBlocks(boolean nether) {
 		if (nether) {
 			return NetherRandomBlocks;
 		}
-		return (alternate ? RandomBlocks2 : RandomBlocks);
+		return (RandomBlocks);
 	}
 
 	public static void shuffleRandomBlocks() {
 		synchronized (RandomBlocks) {
 			Collections.shuffle(Arrays.asList(RandomBlocks));
-			Collections.shuffle(Arrays.asList(RandomBlocks2));
 		}
 	}
 
@@ -332,7 +330,6 @@ public class OrebfuscatorConfig {
 				RandomBlocks[i] = 1;
 			}
 		}
-		RandomBlocks2 = RandomBlocks;
 
 		save();
 	}
