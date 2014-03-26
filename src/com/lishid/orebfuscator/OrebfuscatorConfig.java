@@ -101,10 +101,6 @@ public class OrebfuscatorConfig {
 	}
 
 	public static boolean isObfuscated(int id, boolean nether) {
-		if (id < 0) {
-			id += 256;
-		}
-
 		// Nether case
 		if (nether) {
 			if (id == 87) {
