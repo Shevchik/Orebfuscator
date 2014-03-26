@@ -236,19 +236,14 @@ public class Calculations {
 
 		// Track of pseudo-randomly assigned randomBlock
 		int randomIncrement = 0;
-		int randomIncrement2 = 0;
-		int ramdomCave = 0;
 
 		int engineMode = OrebfuscatorConfig.EngineMode;
-		int maxChance = OrebfuscatorConfig.AirGeneratorMaxChance;
-		int incrementMax = maxChance;
 
 		int randomBlocksLength = OrebfuscatorConfig.getRandomBlocks(isNether).length;
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
 		int dataIndexModifier = 0;
-		// int extraIndexModifier = 0;
-		// int extraIndexStart = totalChunks * (4096 + 2048 + 2048 + 2048);
+
 		int startX = info.chunkX << 4;
 		int startZ = info.chunkZ << 4;
 
@@ -256,29 +251,16 @@ public class Calculations {
 			// If the bitmask indicates this chunk is sent...
 			if ((info.chunkMask & 1 << i) != 0) {
 				int indexDataStart = dataIndexModifier * 4096;
-				// boolean useExtraData = (info.chunkExtra & 1 << i) > 0;
-				// int indexExtraStart = extraIndexModifier * 2048;
-
 				int tempIndex = 0;
 
 				OrebfuscatorConfig.shuffleRandomBlocks();
 				for (int y = 0; y < 16; y++) {
 					for (int z = 0; z < 16; z++) {
-						incrementMax = (maxChance + OrebfuscatorConfig.random(maxChance)) / 2;
 						for (int x = 0; x < 16; x++) {
 
 							int index = indexDataStart + tempIndex;
 							byte data = info.data[info.startIndex + index];
 							int blockY = (i << 4) + y;
-
-							// byte extra = 0;
-							// if (useExtraData)
-							// {
-							// if (tempIndex % 2 == 0)
-							// extra = (byte) (info.data[extraIndexStart + indexExtraStart + (tempIndex >> 1)] & 0x0F);
-							// else
-							// extra = (byte) (info.data[extraIndexStart + indexExtraStart + (tempIndex >> 1)] >> 4);
-							// }
 
 							// Obfuscate block if needed
 							if (OrebfuscatorConfig.isObfuscated(data, isNether) && !areAjacentBlocksTransparent(info, data, startX + x, blockY, startZ + z, initialRadius)) {
@@ -290,19 +272,6 @@ public class Calculations {
 									randomIncrement = CalculationsUtil.increment(randomIncrement, randomBlocksLength);
 									info.buffer[index] = OrebfuscatorConfig.getRandomBlock(randomIncrement, isNether);
 								}
-								// Anti texturepack and freecam
-								if (OrebfuscatorConfig.AntiTexturePackAndFreecam) {
-									randomIncrement2 = OrebfuscatorConfig.random(incrementMax);
-									// Add random air blocks
-									if (randomIncrement2 == 0) {
-										ramdomCave = 1 + OrebfuscatorConfig.random(3);
-									}
-
-									if (ramdomCave > 0) {
-										info.buffer[index] = 0;
-										ramdomCave--;
-									}
-								}
 							}
 
 							tempIndex++;
@@ -311,10 +280,6 @@ public class Calculations {
 				}
 
 				dataIndexModifier++;
-				// if(useExtraData)
-				// {
-				// extraIndexModifier++;
-				// }
 			}
 		}
 

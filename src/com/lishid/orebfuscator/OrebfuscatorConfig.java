@@ -53,10 +53,6 @@ public class OrebfuscatorConfig {
 	public static String CacheLocation = "orebfuscator_cache";
 	public static File CacheFolder = new File(Bukkit.getServer().getWorldContainer(), CacheLocation);
 
-	// AntiTexturePackAndFreecam
-	public static boolean AntiTexturePackAndFreecam = false;
-	public static int AirGeneratorMaxChance = 43;
-
 	// Utilities
 	private static boolean[] ObfuscateBlocks = new boolean[4096];
 	private static boolean[] NetherObfuscateBlocks = new boolean[4096];
@@ -186,16 +182,6 @@ public class OrebfuscatorConfig {
 		ProcessingThreads = data;
 	}
 
-	public static void setAirGeneratorMaxChance(int data) {
-		setData("Integers.AirGeneratorMaxChance", data);
-		AirGeneratorMaxChance = data;
-	}
-
-	public static void setAntiTexturePackAndFreecam(boolean data) {
-		setData("Booleans.AntiTexturePackAndFreecam", data);
-		AntiTexturePackAndFreecam = data;
-	}
-
 	public static void setUseCache(boolean data) {
 		setData("Booleans.UseCache", data);
 		UseCache = data;
@@ -301,12 +287,10 @@ public class OrebfuscatorConfig {
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, AvailableProcessors);
 		MaxLoadedCacheFiles = clamp(getInt("Integers.MaxLoadedCacheFiles", MaxLoadedCacheFiles), 16, 128);
 
-		AirGeneratorMaxChance = clamp(getInt("Integers.AirGeneratorMaxChance", AirGeneratorMaxChance), 40, 100);
 		OrebfuscatorPriority = clamp(getInt("Integers.OrebfuscatorPriority", OrebfuscatorPriority), Thread.MIN_PRIORITY, Thread.MAX_PRIORITY);
 		CompressionLevel = clamp(getInt("Integers.CompressionLevel", CompressionLevel), 1, 9);
 		UpdateOnDamage = getBoolean("Booleans.UpdateOnDamage", UpdateOnDamage);
 		UseCache = getBoolean("Booleans.UseCache", UseCache);
-		AntiTexturePackAndFreecam = getBoolean("Booleans.AntiTexturePackAndFreecam", AntiTexturePackAndFreecam);
 		Enabled = getBoolean("Booleans.Enabled", Enabled);
 
 		// Read block lists

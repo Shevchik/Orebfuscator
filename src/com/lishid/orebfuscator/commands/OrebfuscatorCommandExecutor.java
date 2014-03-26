@@ -86,20 +86,6 @@ public class OrebfuscatorCommandExecutor {
 			return true;
 		}
 
-		else if (args[0].equalsIgnoreCase("airgen") && args.length > 1) {
-			int airgen = OrebfuscatorConfig.AirGeneratorMaxChance;
-			try {
-				airgen = new Integer(args[1]);
-			}
-			catch (NumberFormatException e) {
-				Orebfuscator.message(sender, args[1] + " is not a number!");
-				return true;
-			}
-			OrebfuscatorConfig.setAirGeneratorMaxChance(airgen);
-			Orebfuscator.message(sender, "AirGeneratorMaxChance set to: " + airgen);
-			return true;
-		}
-
 		else if (args[0].equalsIgnoreCase("enable") || args[0].equalsIgnoreCase("disable")) {
 			boolean data = args[0].equalsIgnoreCase("enable");
 
@@ -117,10 +103,6 @@ public class OrebfuscatorCommandExecutor {
 				if (args[1].equalsIgnoreCase("cache")) {
 					OrebfuscatorConfig.setUseCache(data);
 					Orebfuscator.message(sender, "Cache " + (data ? "enabled" : "disabled") + ".");
-				}
-				else if (args[1].equalsIgnoreCase("axr")) {
-					OrebfuscatorConfig.setAntiTexturePackAndFreecam(data);
-					Orebfuscator.message(sender, "AntiTexturePackAndFreecam " + (data ? "enabled" : "disabled") + ".");
 				}
 				else if (args[1].equalsIgnoreCase("world") && args.length > 2) {
 					OrebfuscatorConfig.setDisabledWorlds(args[2], !data);
