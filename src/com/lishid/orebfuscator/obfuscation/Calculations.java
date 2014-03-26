@@ -186,6 +186,7 @@ public class Calculations {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static byte[] Obfuscate(ChunkInfo info) {
 		boolean isNether = info.world.getEnvironment() == Environment.NETHER;
 		// Used for caching
@@ -260,13 +261,32 @@ public class Calculations {
 				for (int y = 0; y < 16; y++) {
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
-							int typeID = info.data[info.startIndex + currentTypeIndex];
-							int blockY = (i << 4) + y;
-							
 							boolean usesExtra = ((info.extraMask & 1 << i) != 0);
+
+							int blockY = (i << 4) + y;
+							int typeID = info.world.getBlockTypeIdAt(startX + x, blockY, startZ + z);
+							
+							/*int typeIDinfo.data[info.startIndex + currentTypeIndex];
+							
 							if (usesExtra) {
 								byte extended = info.data[info.startIndex + currentExtendedIndex];
-							}
+	                            byte extra = 0;
+	                            int extraint = 0;
+								if (currentTypeIndex % 2 == 0) {
+									extra = (byte) (extended & 0x0F);
+								} else {
+									extra = (byte) (extended >> 4);
+								}
+								if (extra != 0) {
+									if (extra > 0) {
+										extra -= 16;
+									}
+									if (typeID > 0) {
+										typeID -= 256;
+									}
+									typeID += (17 + extra) *256;
+								}
+							}*/
 
 							// Obfuscate block if needed
 							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, typeID, startX + x, blockY, startZ + z, initialRadius)) {
