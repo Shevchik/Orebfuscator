@@ -242,7 +242,7 @@ public class Calculations {
 		int randomBlocksLength = OrebfuscatorConfig.getRandomBlocks(isNether).length;
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
-		int dataIndexModifier = 0;
+		int currentTypeIndex = 0;
 
 		int startX = info.chunkX << 4;
 		int startZ = info.chunkZ << 4;
@@ -250,36 +250,30 @@ public class Calculations {
 		for (int i = 0; i < 16; i++) {
 			// If the bitmask indicates this chunk is sent...
 			if ((info.chunkMask & 1 << i) != 0) {
-				int indexDataStart = dataIndexModifier * 4096;
-				int tempIndex = 0;
 
 				OrebfuscatorConfig.shuffleRandomBlocks();
 				for (int y = 0; y < 16; y++) {
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
-
-							int index = indexDataStart + tempIndex;
-							byte data = info.data[info.startIndex + index];
+							byte data = info.data[info.startIndex + currentTypeIndex];
 							int blockY = (i << 4) + y;
 
 							// Obfuscate block if needed
 							if (OrebfuscatorConfig.isObfuscated(data, isNether) && !areAjacentBlocksTransparent(info, data, startX + x, blockY, startZ + z, initialRadius)) {
 								if (engineMode == 1) {
 									// Engine mode 1, replace with stone
-									info.buffer[index] = (byte) (isNether ? 87 : 1);
+									info.buffer[currentTypeIndex] = (byte) (isNether ? 87 : 1);
 								} else if (engineMode == 2) {
 									// Ending mode 2, replace with random block
 									randomIncrement = CalculationsUtil.increment(randomIncrement, randomBlocksLength);
-									info.buffer[index] = OrebfuscatorConfig.getRandomBlock(randomIncrement, isNether);
+									info.buffer[currentTypeIndex] = OrebfuscatorConfig.getRandomBlock(randomIncrement, isNether);
 								}
 							}
 
-							tempIndex++;
+							currentTypeIndex++;
 						}
 					}
 				}
-
-				dataIndexModifier++;
 			}
 		}
 
