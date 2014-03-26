@@ -238,8 +238,6 @@ public class Calculations {
 		int randomIncrement = 0;
 		int randomIncrement2 = 0;
 		int ramdomCave = 0;
-		// Track of whether a block should be obfuscated or not
-		boolean obfuscate = false;
 
 		int engineMode = OrebfuscatorConfig.EngineMode;
 		int maxChance = OrebfuscatorConfig.AirGeneratorMaxChance;
@@ -282,25 +280,12 @@ public class Calculations {
 							// extra = (byte) (info.data[extraIndexStart + indexExtraStart + (tempIndex >> 1)] >> 4);
 							// }
 
-							// Initialize data
-							obfuscate = false;
-
-							// Check if the block should be obfuscated for the default engine modes
-							if (OrebfuscatorConfig.isObfuscated(data, isNether)) {
-								// Check if any nearby blocks are transparent
-								if (!areAjacentBlocksTransparent(info, data, startX + x, blockY, startZ + z, initialRadius)) {
-									obfuscate = true;
-								}
-							}
-
-							// Check if the block is obfuscated
-							if (obfuscate) {
-
+							// Obfuscate block if needed
+							if (OrebfuscatorConfig.isObfuscated(data, isNether) && !areAjacentBlocksTransparent(info, data, startX + x, blockY, startZ + z, initialRadius)) {
 								if (engineMode == 1) {
 									// Engine mode 1, replace with stone
 									info.buffer[index] = (byte) (isNether ? 87 : 1);
-								}
-								else if (engineMode == 2) {
+								} else if (engineMode == 2) {
 									// Ending mode 2, replace with random block
 									randomIncrement = CalculationsUtil.increment(randomIncrement, randomBlocksLength);
 									info.buffer[index] = OrebfuscatorConfig.getRandomBlock(randomIncrement, isNether);
