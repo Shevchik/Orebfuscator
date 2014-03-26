@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lishid.orebfuscator.cache.ObfuscatedDataCache;
@@ -44,20 +43,12 @@ public class Orebfuscator extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		// Get plugin manager
-		PluginManager pm = getServer().getPluginManager();
-
-		// Version check
-		boolean success = InternalAccessor.Initialize(this.getServer());
-
-		if (!success) {
-			Orebfuscator.log("Your version of CraftBukkit is not supported.");
-			Orebfuscator.log("Please look for an updated version of Orebfuscator.");
-			pm.disablePlugin(this);
-			return;
-		}
-
+		// Assign static instance
 		instance = this;
+
+		// Set NMS version
+		InternalAccessor.Initialize(getServer());
+
 		// Load configurations
 		OrebfuscatorConfig.load();
 
@@ -65,7 +56,7 @@ public class Orebfuscator extends JavaPlugin {
 		new BlockChangeListener().register(this);
 
 		// Hooks
-		pm.registerEvents(new OrebfuscatorPlayerHook(), this);
+		getServer().getPluginManager().registerEvents(new OrebfuscatorPlayerHook(), this);
 		new ProtocolLibHook().register(this);
 	}
 
@@ -73,7 +64,7 @@ public class Orebfuscator extends JavaPlugin {
 	public void onDisable() {
 		ObfuscatedDataCache.clearCache();
 		ChunkProcessingThread.KillAll();
-		getServer().getScheduler().cancelAllTasks();
+		getServer().shutdown();
 	}
 
 	@Override

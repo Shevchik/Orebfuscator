@@ -27,18 +27,10 @@ public class InternalAccessor {
 	/*
 	 * Returns false if version not supported
 	 */
-	public static boolean Initialize(Server server) {
+	public static void Initialize(Server server) {
 		Instance = new InternalAccessor();
 		String packageName = server.getClass().getPackage().getName();
 		Instance.version = packageName.substring(packageName.lastIndexOf('.') + 1);
-
-		try {
-			Class.forName("com.lishid.orebfuscator.internal." + Instance.version + ".PlayerHook");
-			return true;
-		}
-		catch (Exception e) {
-			return false;
-		}
 	}
 
 	public void PrintError() {
