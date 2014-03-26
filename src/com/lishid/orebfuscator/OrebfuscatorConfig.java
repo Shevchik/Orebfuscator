@@ -328,7 +328,7 @@ public class OrebfuscatorConfig {
 		// Validate RandomBlocks
 		for (int i = 0; i < RandomBlocks.length; i++) {
 			// Don't want people to put chests and other stuff that lags the hell out of players.
-			if (RandomBlocks[i] == null || OrebfuscatorConfig.isBlockTransparent((short) (int) RandomBlocks[i])) {
+			if (RandomBlocks[i] == null || OrebfuscatorConfig.isBlockTransparent(RandomBlocks[i])) {
 				RandomBlocks[i] = 1;
 			}
 		}
