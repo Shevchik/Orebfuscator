@@ -133,11 +133,11 @@ public class OrebfuscatorConfig {
 		return retval.length() > 1 ? retval.substring(0, retval.length() - 2) : retval;
 	}
 
-	public static byte getRandomBlock(int index, boolean nether) {
+	public static int getRandomBlockID(int index, boolean nether) {
 		if (nether) {
-			return (byte) (int) NetherRandomBlocks[index];
+			return (int) NetherRandomBlocks[index];
 		}
-		return (byte) (int) RandomBlocks[index];
+		return (int) RandomBlocks[index];
 	}
 
 	public static Integer[] getRandomBlocks(boolean nether) {

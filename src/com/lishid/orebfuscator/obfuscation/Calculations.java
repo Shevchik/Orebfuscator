@@ -22,7 +22,6 @@ import java.util.zip.Deflater;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 
-import com.lishid.orebfuscator.Orebfuscator;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.cache.ObfuscatedCachedChunk;
 import com.lishid.orebfuscator.internal.IPacket51;
@@ -243,6 +242,12 @@ public class Calculations {
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
 		int currentTypeIndex = 0;
+		int currentExtendedIndex = 0;
+		for (int i = 0; i < 16; i++) {
+			if ((info.chunkMask & 1 << i) != 0) {
+				currentExtendedIndex += 4096 + 2048 + 2048 + 2048;
+			}
+		}
 
 		int startX = info.chunkX << 4;
 		int startZ = info.chunkZ << 4;
@@ -255,21 +260,32 @@ public class Calculations {
 				for (int y = 0; y < 16; y++) {
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
-							byte data = info.data[info.startIndex + currentTypeIndex];
+							int typeID = info.data[info.startIndex + currentTypeIndex];
 							int blockY = (i << 4) + y;
+							
+							boolean usesExtra = ((info.extraMask & 1 << i) != 0);
+							if (usesExtra) {
+								byte extended = info.data[info.startIndex + currentExtendedIndex];
+							}
 
 							// Obfuscate block if needed
-							if (OrebfuscatorConfig.isObfuscated(data, isNether) && !areAjacentBlocksTransparent(info, data, startX + x, blockY, startZ + z, initialRadius)) {
+							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, typeID, startX + x, blockY, startZ + z, initialRadius)) {
 								if (engineMode == 1) {
 									// Engine mode 1, replace with stone
 									info.buffer[currentTypeIndex] = (byte) (isNether ? 87 : 1);
 								} else if (engineMode == 2) {
 									// Ending mode 2, replace with random block
 									randomIncrement = CalculationsUtil.increment(randomIncrement, randomBlocksLength);
-									info.buffer[currentTypeIndex] = OrebfuscatorConfig.getRandomBlock(randomIncrement, isNether);
+									int randomBlockID = OrebfuscatorConfig.getRandomBlockID(randomIncrement, isNether);
+									info.buffer[currentTypeIndex] = (byte) randomBlockID;
 								}
 							}
 
+							if (usesExtra) {
+								if (currentTypeIndex % 2 == 1) {
+									currentExtendedIndex++;
+								}
+							}
 							currentTypeIndex++;
 						}
 					}
@@ -334,38 +350,18 @@ public class Calculations {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static boolean areAjacentBlocksTransparent(ChunkInfo info, byte currentBlockID, int x, int y, int z, int countdown) {
-		byte id = 0;
-		boolean foundID = false;
-
+	public static boolean areAjacentBlocksTransparent(ChunkInfo info, int currentBlockID, int x, int y, int z, int countdown) {
 		if (y >= info.world.getMaxHeight() || y < 0) {
 			return true;
 		}
 
-		int section = info.chunkSectionToIndexMap[y >> 4];
-
-		if ((info.chunkMask & (1 << (y >> 4))) > 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
-			int cX = ((x % 16) < 0) ? (x % 16 + 16) : (x % 16);
-			int cZ = ((z % 16) < 0) ? (z % 16 + 16) : (z % 16);
-
-			int index = section * 4096 + (y % 16 << 8) + (cZ << 4) + cX;
-			try {
-				id = info.data[info.startIndex + index];
-				foundID = true;
-			}
-			catch (Exception e) {
-				Orebfuscator.log(e);
-			}
+		int id = 0;
+		if (CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
+			id = (byte) info.world.getBlockTypeIdAt(x, y, z);
 		}
-
-		if (!foundID) {
-			if (CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
-				id = (byte) info.world.getBlockTypeIdAt(x, y, z);
-			}
-			else {
-				id = 1;
-				info.useCache = false;
-			}
+		else {
+			id = 1;
+			info.useCache = false;
 		}
 
 		if (id != currentBlockID && OrebfuscatorConfig.isBlockTransparent(id)) {
