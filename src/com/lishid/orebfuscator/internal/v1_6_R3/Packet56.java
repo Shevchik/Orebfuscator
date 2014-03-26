@@ -23,7 +23,6 @@ import net.minecraft.server.v1_6_R3.Packet56MapChunkBulk;
 
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
 import com.lishid.orebfuscator.internal.IPacket56;
-import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class Packet56 implements IPacket56 {
@@ -33,9 +32,6 @@ public class Packet56 implements IPacket56 {
 	public void setPacket(Object packet) {
 		if (packet instanceof Packet56MapChunkBulk) {
 			this.packet = (Packet56MapChunkBulk) packet;
-		}
-		else {
-			InternalAccessor.Instance.PrintError();
 		}
 	}
 

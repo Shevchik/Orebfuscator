@@ -33,10 +33,6 @@ public class InternalAccessor {
 		Instance.version = packageName.substring(packageName.lastIndexOf('.') + 1);
 	}
 
-	public void PrintError() {
-		Orebfuscator.log("Orebfuscator encountered an error with the CraftBukkit version \"" + Instance.version + "\". Please look for an updated version of Orebfuscator.");
-	}
-
 	public INBT newNBT() {
 		return (INBT) createObject(INBT.class, "NBT");
 	}
@@ -69,7 +65,6 @@ public class InternalAccessor {
 			}
 		}
 		catch (Exception e) {
-			PrintError();
 			Orebfuscator.log(e);
 		}
 
