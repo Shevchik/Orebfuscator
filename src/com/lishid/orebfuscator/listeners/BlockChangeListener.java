@@ -31,10 +31,10 @@ public class BlockChangeListener {
 			) {
 				@Override
 				public void onPacketSending(PacketEvent event) {
-					Player player = event.getPlayer();
-					World world = player.getWorld();
 					List<Integer> ints = event.getPacket().getIntegers().getValues();
 					if (OrebfuscatorConfig.isBlockTransparent(ints.get(3))) {
+						Player player = event.getPlayer();
+						World world = player.getWorld();
 						Block block = world.getBlockAt(ints.get(0), ints.get(1), ints.get(2));
 						BlockUpdate.Update(player, block);
 					}
