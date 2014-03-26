@@ -181,13 +181,13 @@ public class Calculations {
 
 		// Obfuscate
 		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName()) && OrebfuscatorConfig.Enabled) {
-			byte[] obfuscated = Obfuscate(info, original);
+			byte[] obfuscated = Obfuscate(info);
 			// Copy the data out of the buffer
 			System.arraycopy(obfuscated, 0, original, info.startIndex, info.blockSize);
 		}
 	}
 
-	public static byte[] Obfuscate(ChunkInfo info, byte[] original) {
+	public static byte[] Obfuscate(ChunkInfo info) {
 		boolean isNether = info.world.getEnvironment() == Environment.NETHER;
 		// Used for caching
 		ObfuscatedCachedChunk cache = null;
