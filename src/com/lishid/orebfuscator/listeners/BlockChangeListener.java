@@ -13,6 +13,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 
 public class BlockChangeListener {
@@ -33,8 +34,10 @@ public class BlockChangeListener {
 					Player player = event.getPlayer();
 					World world = player.getWorld();
 					List<Integer> ints = event.getPacket().getIntegers().getValues();
-					Block block = world.getBlockAt(ints.get(0), ints.get(1), ints.get(2));
-					BlockUpdate.Update(player, block);
+					if (OrebfuscatorConfig.isBlockTransparent(ints.get(3))) {
+						Block block = world.getBlockAt(ints.get(0), ints.get(1), ints.get(2));
+						BlockUpdate.Update(player, block);
+					}
 				}
 			}
 		);
