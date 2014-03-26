@@ -18,32 +18,13 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 
 //Volatile
 import net.minecraft.server.v1_6_R3.Block;
-import net.minecraft.server.v1_6_R3.Packet;
-import net.minecraft.server.v1_6_R3.TileEntity;
-
-import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
-import org.bukkit.entity.Player;
-
 import com.lishid.orebfuscator.internal.IBlockAccess;
 
 public class BlockAccess implements IBlockAccess {
+
 	@Override
 	public boolean isBlockTransparent(int id) {
 		return !Block.l(id);
 	}
 
-	@Override
-	public void updateBlockTileEntity(org.bukkit.block.Block block, Player player) {
-		CraftWorld world = (CraftWorld) block.getWorld();
-		TileEntity tileEntity = world.getTileEntityAt(block.getX(), block.getY(), block.getZ());
-		if (tileEntity == null) {
-			return;
-		}
-		Packet packet = tileEntity.getUpdatePacket();
-		if (packet != null) {
-			CraftPlayer player2 = (CraftPlayer) player;
-			player2.getHandle().playerConnection.sendPacket(packet);
-		}
-	}
 }
