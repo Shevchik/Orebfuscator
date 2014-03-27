@@ -1,6 +1,8 @@
 package com.lishid.orebfuscator.listeners;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -20,6 +22,8 @@ public class BlockChangeListener {
 
 	private ProtocolManager manager;
 
+	private final ExecutorService blockUpdateProcessingThread = Executors.newSingleThreadExecutor();
+	
 	public void register(Plugin plugin) {
 		manager = ProtocolLibrary.getProtocolManager();
 
@@ -30,13 +34,19 @@ public class BlockChangeListener {
 				.listenerPriority(ListenerPriority.LOWEST)
 			) {
 				@Override
-				public void onPacketSending(PacketEvent event) {
-					List<Integer> ints = event.getPacket().getIntegers().getValues();
+				public void onPacketSending(final PacketEvent event) {
+					final List<Integer> ints = event.getPacket().getIntegers().getValues();
 					if (OrebfuscatorConfig.isBlockTransparent(ints.get(3))) {
-						Player player = event.getPlayer();
-						World world = player.getWorld();
-						Block block = world.getBlockAt(ints.get(0), ints.get(1), ints.get(2));
-						BlockUpdate.Update(player, block);
+						Runnable updateBlock = new Runnable() {
+							@Override
+							public void run() {
+								Player player = event.getPlayer();
+								World world = player.getWorld();
+								Block block = world.getBlockAt(ints.get(0), ints.get(1), ints.get(2));
+								BlockUpdate.Update(player, block);
+							}
+						};
+						blockUpdateProcessingThread.submit(updateBlock);
 					}
 				}
 			}
