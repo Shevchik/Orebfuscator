@@ -26,13 +26,10 @@ public class ChunkInfo {
 	public int extraMask;
 	public int chunkSectionNumber;
 	public int extraSectionNumber;
-	public boolean canUseCache;
 	public int[] chunkSectionToIndexMap = new int[16];
 	public int[] extraSectionToIndexMap = new int[16];
 	public World world;
 	public byte[] data;
 	public Player player;
 	public int startIndex;
-	public int size;
-	public int blockSize;
 }

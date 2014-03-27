@@ -119,9 +119,8 @@ public class Calculations {
 			info.extraMask = extraMask[chunkNum];
 			info.data = buildBuffer;
 			info.startIndex = dataStartIndex;
-			info.size = inflatedBuffers[chunkNum].length;
 
-			dataStartIndex += info.size;
+			dataStartIndex += inflatedBuffers[chunkNum].length;
 		}
 
 		return infos;
@@ -157,10 +156,7 @@ public class Calculations {
 			}
 		}
 
-		info.size = 2048 * (5 * info.chunkSectionNumber + info.extraSectionNumber) + 256;
-		info.blockSize = 4096 * info.chunkSectionNumber;
-
-		if (info.startIndex + info.blockSize > info.data.length) {
+		if (info.startIndex + 4096 * info.chunkSectionNumber > info.data.length) {
 			return;
 		}
 
