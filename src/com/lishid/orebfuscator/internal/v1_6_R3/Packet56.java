@@ -21,7 +21,6 @@ import java.util.zip.Deflater;
 //Volatile
 import net.minecraft.server.v1_6_R3.Packet56MapChunkBulk;
 
-import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
 import com.lishid.orebfuscator.internal.IPacket56;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
@@ -106,9 +105,5 @@ public class Packet56 implements IPacket56 {
 		// Free memory
 		ReflectionHelper.setPrivateField(packet, "field_73591_h", null);
 		ReflectionHelper.setPrivateField(packet, "field_73584_f", null);
-
-		if (OrebfuscatorCommandExecutor.DebugMode) {
-			System.out.println("Packet size: " + size);
-		}
 	}
 }

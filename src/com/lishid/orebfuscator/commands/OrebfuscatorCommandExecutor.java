@@ -24,7 +24,6 @@ import com.lishid.orebfuscator.Orebfuscator;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 
 public class OrebfuscatorCommandExecutor {
-	public static boolean DebugMode = false;
 
 	public static boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
@@ -120,10 +119,6 @@ public class OrebfuscatorCommandExecutor {
 
 			String disabledWorlds = OrebfuscatorConfig.getDisabledWorlds();
 			Orebfuscator.message(sender, "Disabled worlds: " + (disabledWorlds.equals("") ? "None" : disabledWorlds));
-		}
-
-		else if (args[0].equalsIgnoreCase("debug")) {
-			DebugMode = !DebugMode;
 		}
 
 		return true;
