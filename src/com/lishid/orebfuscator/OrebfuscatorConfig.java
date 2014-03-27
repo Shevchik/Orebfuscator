@@ -64,10 +64,6 @@ public class OrebfuscatorConfig {
 			generateTransparentBlocks();
 		}
 
-		if (i < 0) {
-			i += 256;
-		}
-
 		return TransparentBlocks[i];
 	}
 
