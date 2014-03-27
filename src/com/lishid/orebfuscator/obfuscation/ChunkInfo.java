@@ -31,7 +31,6 @@ public class ChunkInfo {
 	public int[] extraSectionToIndexMap = new int[16];
 	public World world;
 	public byte[] data;
-	public byte[] buffer;
 	public Player player;
 	public int startIndex;
 	public int size;

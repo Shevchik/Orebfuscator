@@ -167,22 +167,14 @@ public class Calculations {
 		// Obfuscate
 		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName()) && OrebfuscatorConfig.Enabled) {
 			Obfuscate(info);
-			// Copy the data out of the buffer
-			//System.arraycopy(obfuscated, 0, original, info.startIndex, info.blockSize);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	public static byte[] Obfuscate(ChunkInfo info) {
+	public static void Obfuscate(ChunkInfo info) {
 		boolean isNether = info.world.getEnvironment() == Environment.NETHER;
 
 		int initialRadius = OrebfuscatorConfig.InitialRadius;
-
-		// Expand buffer
-		info.buffer = new byte[info.blockSize];
-
-		// Copy data into buffer
-		System.arraycopy(info.data, info.startIndex, info.buffer, 0, info.blockSize);
 
 		// Track of pseudo-randomly assigned randomBlock
 		int randomIncrement = 0;
@@ -252,8 +244,6 @@ public class Calculations {
 				}
 			}
 		}
-
-		return info.buffer;
 	}
 
 	@SuppressWarnings("deprecation")
