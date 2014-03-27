@@ -217,28 +217,6 @@ public class Calculations {
 
 							int blockY = (i << 4) + y;
 							int typeID = info.world.getBlockTypeIdAt(startX + x, blockY, startZ + z);
-							
-							/*int typeIDinfo.data[info.startIndex + currentTypeIndex];
-							
-							if (usesExtra) {
-								byte extended = info.data[info.startIndex + currentExtendedIndex];
-	                            byte extra = 0;
-	                            int extraint = 0;
-								if (currentTypeIndex % 2 == 0) {
-									extra = (byte) (extended & 0x0F);
-								} else {
-									extra = (byte) (extended >> 4);
-								}
-								if (extra != 0) {
-									if (extra > 0) {
-										extra -= 16;
-									}
-									if (typeID > 0) {
-										typeID -= 256;
-									}
-									typeID += (17 + extra) *256;
-								}
-							}*/
 
 							// Obfuscate block if needed
 							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, typeID, startX + x, blockY, startZ + z, initialRadius)) {
