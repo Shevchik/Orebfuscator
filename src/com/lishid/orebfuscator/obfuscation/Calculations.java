@@ -220,22 +220,23 @@ public class Calculations {
 
 							// Obfuscate block if needed
 							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, typeID, startX + x, blockY, startZ + z, initialRadius)) {
+								int newBlockID = 0;
 								if (engineMode == 1) {
-									// Engine mode 1, replace with stone
-									info.buffer[currentTypeIndex] = (byte) (isNether ? 87 : 1);
+									// Engine mode 1, use stone
+									newBlockID = (isNether ? 87 : 1);
 								} else if (engineMode == 2) {
-									// Ending mode 2, replace with random block
+									// Ending mode 2, get random block
 									randomIncrement = CalculationsUtil.increment(randomIncrement, randomBlocksLength);
-									int randomBlockID = OrebfuscatorConfig.getRandomBlockID(randomIncrement, isNether);
-									byte type = (byte) (randomBlockID % 256);
-									info.data[info.startIndex + currentTypeIndex] = type;
-									if (usesExtra) {
-										byte extra = (byte) (randomBlockID / 256);
-										if (currentTypeIndex % 2 == 0) {
-											block1extra = extra;
-										} else {
-											info.data[info.startIndex + currentExtendedIndex] = (byte) (block1extra * 16 + extra);
-										}
+									newBlockID = OrebfuscatorConfig.getRandomBlockID(randomIncrement, isNether);
+								}
+								byte type = (byte) (newBlockID % 256);
+								info.data[info.startIndex + currentTypeIndex] = type;
+								if (usesExtra) {
+									byte extra = (byte) (newBlockID / 256);
+									if (currentTypeIndex % 2 == 0) {
+										block1extra = extra;
+									} else {
+										info.data[info.startIndex + currentExtendedIndex] = (byte) (block1extra * 16 + extra);
 									}
 								}
 							}
