@@ -16,25 +16,17 @@
 
 package com.lishid.orebfuscator.obfuscation;
 
-import java.io.File;
 import java.util.zip.Deflater;
 
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.cache.ObfuscatedCachedChunk;
 import com.lishid.orebfuscator.internal.IPacket51;
 import com.lishid.orebfuscator.internal.IPacket56;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 
 public class Calculations {
-	public static final ThreadLocal<byte[]> buffer = new ThreadLocal<byte[]>() {
-		@Override
-		protected byte[] initialValue() {
-			return new byte[65536];
-		}
-	};
 
 	public static final ThreadLocal<Deflater> localDeflater = new ThreadLocal<Deflater>() {
 		@Override
@@ -60,7 +52,6 @@ public class Calculations {
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
 			// Create an info objects
 			ChunkInfo info = infos[chunkNum];
-			info.buffer = buffer.get();
 			ComputeChunkInfoAndObfuscate(info, (byte[]) packet.getFieldData(packet.getBuildBuffer()));
 		}
 	}
@@ -71,13 +62,8 @@ public class Calculations {
 
 	public static void Obfuscate(IPacket51 packet, Player player, boolean needCompression) {
 		ChunkInfo info = getInfo(packet, player);
-		info.buffer = buffer.get();
 
 		if (info.chunkMask == 0 && info.extraMask == 0) {
-			return;
-		}
-
-		if (info.buffer == null || info.buffer.length == 0) {
 			return;
 		}
 
@@ -180,59 +166,23 @@ public class Calculations {
 
 		// Obfuscate
 		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName()) && OrebfuscatorConfig.Enabled) {
-			byte[] obfuscated = Obfuscate(info);
+			Obfuscate(info);
 			// Copy the data out of the buffer
-			System.arraycopy(obfuscated, 0, original, info.startIndex, info.blockSize);
+			//System.arraycopy(obfuscated, 0, original, info.startIndex, info.blockSize);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
 	public static byte[] Obfuscate(ChunkInfo info) {
 		boolean isNether = info.world.getEnvironment() == Environment.NETHER;
-		// Used for caching
-		ObfuscatedCachedChunk cache = null;
-		// Hash used to check cache consistency
-		long hash = 0L;
-		// Start with caching false
-		info.useCache = false;
 
 		int initialRadius = OrebfuscatorConfig.InitialRadius;
 
-		// Expand buffer if not enough space
-		if (info.blockSize > info.buffer.length) {
-			info.buffer = new byte[info.blockSize];
-			buffer.set(info.buffer);
-		}
+		// Expand buffer
+		info.buffer = new byte[info.blockSize];
 
 		// Copy data into buffer
 		System.arraycopy(info.data, info.startIndex, info.buffer, 0, info.blockSize);
-
-		// Caching
-		if (OrebfuscatorConfig.UseCache) {
-			// Sanitize buffer for caching
-			PrepareBufferForCaching(info.buffer, info.blockSize);
-
-			// Get cache folder
-			File cacheFolder = new File(OrebfuscatorConfig.getCacheFolder(), info.world.getName());
-			// Create cache objects
-			cache = new ObfuscatedCachedChunk(cacheFolder, info.chunkX, info.chunkZ);
-			info.useCache = true;
-			// Hash the chunk
-			hash = CalculationsUtil.Hash(info.buffer, info.blockSize);
-
-			// Check if hash is consistent
-			cache.Read();
-
-			long storedHash = cache.getHash();
-
-			if (storedHash == hash && cache.data != null) {
-				// Caching done, de-sanitize buffer
-				RepaintChunkToBuffer(cache.data, info);
-
-				// Hash match, use the cached data instead and skip calculations
-				return cache.data;
-			}
-		}
 
 		// Track of pseudo-randomly assigned randomBlock
 		int randomIncrement = 0;
@@ -257,6 +207,8 @@ public class Calculations {
 			// If the bitmask indicates this chunk is sent...
 			if ((info.chunkMask & 1 << i) != 0) {
 
+				int block1extra = 0;
+				
 				OrebfuscatorConfig.shuffleRandomBlocks();
 				for (int y = 0; y < 16; y++) {
 					for (int z = 0; z < 16; z++) {
@@ -297,7 +249,16 @@ public class Calculations {
 									// Ending mode 2, replace with random block
 									randomIncrement = CalculationsUtil.increment(randomIncrement, randomBlocksLength);
 									int randomBlockID = OrebfuscatorConfig.getRandomBlockID(randomIncrement, isNether);
-									info.buffer[currentTypeIndex] = (byte) randomBlockID;
+									byte type = (byte) (randomBlockID % 256);
+									info.data[info.startIndex + currentTypeIndex] = type;
+									if (usesExtra) {
+										byte extra = (byte) (randomBlockID / 256);
+										if (currentTypeIndex % 2 == 0) {
+											block1extra = extra;
+										} else {
+											info.data[info.startIndex + currentExtendedIndex] = (byte) (block1extra * 16 + extra);
+										}
+									}
 								}
 							}
 
@@ -313,60 +274,7 @@ public class Calculations {
 			}
 		}
 
-		// If cache is still allowed
-		if (info.useCache) {
-			cache.Write(hash, info.buffer);
-		}
-
-		// Free memory taken by cache quickly
-		if (cache != null) {
-			cache.free();
-		}
-
-		// Caching done, de-sanitize buffer
-		if (OrebfuscatorConfig.UseCache) {
-			RepaintChunkToBuffer(info.buffer, info);
-		}
-
 		return info.buffer;
-	}
-
-	private static byte[] cacheMap = new byte[256];
-	static {
-		buildCacheMap();
-	}
-
-	public static void buildCacheMap() {
-		for (int i = 0; i < 256; i++) {
-			cacheMap[i] = (byte) i;
-			if (OrebfuscatorConfig.isBlockTransparent((short) i)) {
-				cacheMap[i] = 0;
-			}
-		}
-	}
-
-	private static void PrepareBufferForCaching(byte[] data, int length) {
-		for (int i = 0; i < length; i++) {
-			data[i] = cacheMap[(data[i] + 256) % 256];
-		}
-	}
-
-	private static void RepaintChunkToBuffer(byte[] data, ChunkInfo info) {
-		RepaintChunkToBuffer1(data, info);
-	}
-
-	private static void RepaintChunkToBuffer1(byte[] data, ChunkInfo info) {
-		byte[] original = info.data;
-		int start = info.startIndex;
-		int length = info.blockSize;
-
-		for (int i = 0; i < length; i++) {
-			if (data[i] == 0 && original[start + i] != 0) {
-				if (OrebfuscatorConfig.isBlockTransparent(original[start + i])) {
-					data[i] = original[start + i];
-				}
-			}
-		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -375,13 +283,9 @@ public class Calculations {
 			return true;
 		}
 
-		int id = 0;
+		int id = 1;
 		if (CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
 			id = (byte) info.world.getBlockTypeIdAt(x, y, z);
-		}
-		else {
-			id = 1;
-			info.useCache = false;
 		}
 
 		if (id != currentBlockID && OrebfuscatorConfig.isBlockTransparent(id)) {

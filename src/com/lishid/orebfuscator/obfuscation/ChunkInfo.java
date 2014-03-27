@@ -20,7 +20,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class ChunkInfo {
-	public boolean useCache;
 	public int chunkX;
 	public int chunkZ;
 	public int chunkMask;

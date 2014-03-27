@@ -48,7 +48,6 @@ public class OrebfuscatorConfig {
 	public static int ProcessingThreads = AvailableProcessors - 1;
 
 	// Caching
-	public static boolean UseCache = true;
 	public static int MaxLoadedCacheFiles = 64;
 	public static String CacheLocation = "orebfuscator_cache";
 	public static File CacheFolder = new File(Bukkit.getServer().getWorldContainer(), CacheLocation);
@@ -178,11 +177,6 @@ public class OrebfuscatorConfig {
 		ProcessingThreads = data;
 	}
 
-	public static void setUseCache(boolean data) {
-		setData("Booleans.UseCache", data);
-		UseCache = data;
-	}
-
 	public static void setEnabled(boolean data) {
 		setData("Booleans.Enabled", data);
 		Enabled = data;
@@ -286,7 +280,6 @@ public class OrebfuscatorConfig {
 		OrebfuscatorPriority = clamp(getInt("Integers.OrebfuscatorPriority", OrebfuscatorPriority), Thread.MIN_PRIORITY, Thread.MAX_PRIORITY);
 		CompressionLevel = clamp(getInt("Integers.CompressionLevel", CompressionLevel), 1, 9);
 		UpdateOnDamage = getBoolean("Booleans.UpdateOnDamage", UpdateOnDamage);
-		UseCache = getBoolean("Booleans.UseCache", UseCache);
 		Enabled = getBoolean("Booleans.Enabled", Enabled);
 
 		// Read block lists

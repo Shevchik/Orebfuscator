@@ -100,11 +100,7 @@ public class OrebfuscatorCommandExecutor {
 			}
 
 			else if (args.length > 1) {
-				if (args[1].equalsIgnoreCase("cache")) {
-					OrebfuscatorConfig.setUseCache(data);
-					Orebfuscator.message(sender, "Cache " + (data ? "enabled" : "disabled") + ".");
-				}
-				else if (args[1].equalsIgnoreCase("world") && args.length > 2) {
+				if (args[1].equalsIgnoreCase("world") && args.length > 2) {
 					OrebfuscatorConfig.setDisabledWorlds(args[2], !data);
 					Orebfuscator.message(sender, "World \"" + args[2] + "\" obfuscation " + (data ? "enabled" : "disabled") + ".");
 				}
@@ -119,8 +115,6 @@ public class OrebfuscatorCommandExecutor {
 		else if (args[0].equalsIgnoreCase("status")) {
 			Orebfuscator.message(sender, "Orebfuscator " + Orebfuscator.instance.getDescription().getVersion() + " is: " + (OrebfuscatorConfig.Enabled ? "Enabled" : "Disabled"));
 			Orebfuscator.message(sender, "EngineMode: " + OrebfuscatorConfig.EngineMode);
-
-			Orebfuscator.message(sender, "Caching: " + (OrebfuscatorConfig.UseCache ? "Enabled" : "Disabled"));
 
 			Orebfuscator.message(sender, "Initial Obfuscation Radius: " + OrebfuscatorConfig.InitialRadius);
 			Orebfuscator.message(sender, "Update Radius: " + OrebfuscatorConfig.UpdateRadius);
