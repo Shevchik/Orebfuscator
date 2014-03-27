@@ -53,15 +53,6 @@ public class ChunkProcessingThread extends Thread {
 		}
 	}
 
-	public synchronized static void KillAll() {
-		for (ChunkProcessingThread thread : threads) {
-			thread.kill.set(true);
-			thread.interrupt();
-		}
-		threads.clear();
-		queue.clear();
-	}
-
 	public synchronized static void SyncThreads() {
 		// Return as soon as possible
 		if (threads.size() == OrebfuscatorConfig.ProcessingThreads) {

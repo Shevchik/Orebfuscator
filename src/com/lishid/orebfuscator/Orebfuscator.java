@@ -24,7 +24,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
-import com.lishid.orebfuscator.hook.ChunkProcessingThread;
 import com.lishid.orebfuscator.hook.OrebfuscatorPlayerHook;
 import com.lishid.orebfuscator.hook.ProtocolLibHook;
 import com.lishid.orebfuscator.internal.InternalAccessor;
@@ -61,7 +60,6 @@ public class Orebfuscator extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		ChunkProcessingThread.KillAll();
 		getServer().shutdown();
 	}
 

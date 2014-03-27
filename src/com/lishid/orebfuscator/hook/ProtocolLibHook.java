@@ -28,6 +28,7 @@ import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.obfuscation.Calculations;
 
 public class ProtocolLibHook {
+
 	private ProtocolManager manager;
 
 	public void register(Plugin plugin) {
