@@ -27,13 +27,12 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.lishid.orebfuscator.cache.ObfuscatedDataCache;
 import com.lishid.orebfuscator.internal.IBlockAccess;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 
 public class OrebfuscatorConfig {
+
 	// Constant/persistent data
-	private static final int CONFIG_VERSION = 10;
 	private static Random random = new Random();
 	private static int AvailableProcessors = Runtime.getRuntime().availableProcessors();
 
@@ -257,13 +256,6 @@ public class OrebfuscatorConfig {
 	}
 
 	public static void load() {
-
-		// Version check
-		int version = getInt("ConfigVersion", CONFIG_VERSION);
-		if (version < CONFIG_VERSION) {
-			ObfuscatedDataCache.ClearCache();
-			setData("ConfigVersion", CONFIG_VERSION);
-		}
 
 		EngineMode = getInt("Integers.EngineMode", EngineMode);
 		if (EngineMode != 1 && EngineMode != 2) {

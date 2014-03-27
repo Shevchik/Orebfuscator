@@ -33,14 +33,6 @@ public class InternalAccessor {
 		Instance.version = packageName.substring(packageName.lastIndexOf('.') + 1);
 	}
 
-	public INBT newNBT() {
-		return (INBT) createObject(INBT.class, "NBT");
-	}
-
-	public IChunkCache newChunkCache() {
-		return (IChunkCache) createObject(IChunkCache.class, "ChunkCache");
-	}
-
 	public IPacket51 newPacket51() {
 		return (IPacket51) createObject(IPacket51.class, "Packet51");
 	}

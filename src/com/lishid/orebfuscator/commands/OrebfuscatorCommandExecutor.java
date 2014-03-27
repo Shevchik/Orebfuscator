@@ -22,7 +22,6 @@ import org.bukkit.entity.Player;
 
 import com.lishid.orebfuscator.Orebfuscator;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.cache.ObfuscatedDataCache;
 
 public class OrebfuscatorCommandExecutor {
 	public static boolean DebugMode = false;
@@ -121,11 +120,6 @@ public class OrebfuscatorCommandExecutor {
 
 			String disabledWorlds = OrebfuscatorConfig.getDisabledWorlds();
 			Orebfuscator.message(sender, "Disabled worlds: " + (disabledWorlds.equals("") ? "None" : disabledWorlds));
-		}
-
-		else if (args[0].equalsIgnoreCase("clearcache")) {
-			ObfuscatedDataCache.ClearCache();
-			Orebfuscator.message(sender, "Cache cleared.");
 		}
 
 		else if (args[0].equalsIgnoreCase("debug")) {

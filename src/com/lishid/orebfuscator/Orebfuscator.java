@@ -23,7 +23,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.lishid.orebfuscator.cache.ObfuscatedDataCache;
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
 import com.lishid.orebfuscator.hook.ChunkProcessingThread;
 import com.lishid.orebfuscator.hook.OrebfuscatorPlayerHook;
@@ -62,7 +61,6 @@ public class Orebfuscator extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		ObfuscatedDataCache.clearCache();
 		ChunkProcessingThread.KillAll();
 		getServer().shutdown();
 	}
