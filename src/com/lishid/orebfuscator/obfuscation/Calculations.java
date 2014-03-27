@@ -112,7 +112,6 @@ public class Calculations {
 			ChunkInfo info = new ChunkInfo();
 			infos[chunkNum] = info;
 			info.world = player.getWorld();
-			info.player = player;
 			info.chunkX = x[chunkNum];
 			info.chunkZ = z[chunkNum];
 			info.chunkMask = chunkMask[chunkNum];
@@ -130,7 +129,6 @@ public class Calculations {
 		// Create an info objects
 		ChunkInfo info = new ChunkInfo();
 		info.world = player.getWorld();
-		info.player = player;
 		info.chunkX = packet.getX();
 		info.chunkZ = packet.getZ();
 		info.chunkMask = packet.getChunkMask();
@@ -142,21 +140,14 @@ public class Calculations {
 
 	public static void ComputeChunkInfoAndObfuscate(ChunkInfo info, byte[] original) {
 		// Compute chunk number
+		int chunkSectionNumber = 0;
 		for (int i = 0; i < 16; i++) {
 			if ((info.chunkMask & 1 << i) > 0) {
-				info.chunkSectionToIndexMap[i] = info.chunkSectionNumber;
-				info.chunkSectionNumber++;
-			}
-			else {
-				info.chunkSectionToIndexMap[i] = -1;
-			}
-			if ((info.extraMask & 1 << i) > 0) {
-				info.extraSectionToIndexMap[i] = info.extraSectionNumber;
-				info.extraSectionNumber++;
+				chunkSectionNumber++;
 			}
 		}
 
-		if (info.startIndex + 4096 * info.chunkSectionNumber > info.data.length) {
+		if (info.startIndex + 4096 * chunkSectionNumber > info.data.length) {
 			return;
 		}
 
@@ -283,39 +274,4 @@ public class Calculations {
 		return false;
 	}
 
-	public static boolean areAjacentBlocksBright(ChunkInfo info, int x, int y, int z, int countdown) {
-		if (CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
-			if (info.world.getBlockAt(x, y, z).getLightLevel() > 0) {
-				return true;
-			}
-		}
-		else {
-			return true;
-		}
-
-		if (countdown == 0) {
-			return false;
-		}
-
-		if (areAjacentBlocksBright(info, x, y + 1, z, countdown - 1)) {
-			return true;
-		}
-		if (areAjacentBlocksBright(info, x, y - 1, z, countdown - 1)) {
-			return true;
-		}
-		if (areAjacentBlocksBright(info, x + 1, y, z, countdown - 1)) {
-			return true;
-		}
-		if (areAjacentBlocksBright(info, x - 1, y, z, countdown - 1)) {
-			return true;
-		}
-		if (areAjacentBlocksBright(info, x, y, z + 1, countdown - 1)) {
-			return true;
-		}
-		if (areAjacentBlocksBright(info, x, y, z - 1, countdown - 1)) {
-			return true;
-		}
-
-		return false;
-	}
 }

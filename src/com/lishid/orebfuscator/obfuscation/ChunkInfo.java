@@ -17,19 +17,15 @@
 package com.lishid.orebfuscator.obfuscation;
 
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class ChunkInfo {
+
 	public int chunkX;
 	public int chunkZ;
 	public int chunkMask;
 	public int extraMask;
-	public int chunkSectionNumber;
-	public int extraSectionNumber;
-	public int[] chunkSectionToIndexMap = new int[16];
-	public int[] extraSectionToIndexMap = new int[16];
 	public World world;
 	public byte[] data;
-	public Player player;
 	public int startIndex;
+
 }
