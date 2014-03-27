@@ -29,9 +29,6 @@ import com.lishid.orebfuscator.internal.InternalAccessor;
 
 public class OrebfuscatorConfig {
 
-	// Constant/persistent data
-	private static int AvailableProcessors = Runtime.getRuntime().availableProcessors();
-
 	// Main engine config
 	public static boolean Enabled = true;
 	public static boolean UpdateOnDamage = true;
@@ -40,7 +37,7 @@ public class OrebfuscatorConfig {
 	public static int UpdateRadius = 2;
 	public static int OrebfuscatorPriority = 1;
 	public static int CompressionLevel = 1;
-	public static int ProcessingThreads = AvailableProcessors - 1;
+	public static int ProcessingThreads = Runtime.getRuntime().availableProcessors() - 1;
 
 	// Utilities
 	private static boolean[] ObfuscateBlocks = new boolean[4096];
@@ -231,7 +228,7 @@ public class OrebfuscatorConfig {
 		InitialRadius = clamp(getInt("Integers.InitialRadius", InitialRadius), 1, 2);
 
 		UpdateRadius = clamp(getInt("Integers.UpdateRadius", UpdateRadius), 1, 5);
-		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, AvailableProcessors);
+		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
 
 		OrebfuscatorPriority = clamp(getInt("Integers.OrebfuscatorPriority", OrebfuscatorPriority), Thread.MIN_PRIORITY, Thread.MAX_PRIORITY);
 		CompressionLevel = clamp(getInt("Integers.CompressionLevel", CompressionLevel), 1, 9);
