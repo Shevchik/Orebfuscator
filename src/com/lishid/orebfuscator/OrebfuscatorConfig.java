@@ -16,15 +16,12 @@
 
 package com.lishid.orebfuscator;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import com.lishid.orebfuscator.internal.IBlockAccess;
@@ -33,7 +30,6 @@ import com.lishid.orebfuscator.internal.InternalAccessor;
 public class OrebfuscatorConfig {
 
 	// Constant/persistent data
-	private static Random random = new Random();
 	private static int AvailableProcessors = Runtime.getRuntime().availableProcessors();
 
 	// Main engine config
@@ -46,11 +42,6 @@ public class OrebfuscatorConfig {
 	public static int CompressionLevel = 1;
 	public static int ProcessingThreads = AvailableProcessors - 1;
 
-	// Caching
-	public static int MaxLoadedCacheFiles = 64;
-	public static String CacheLocation = "orebfuscator_cache";
-	public static File CacheFolder = new File(Bukkit.getServer().getWorldContainer(), CacheLocation);
-
 	// Utilities
 	private static boolean[] ObfuscateBlocks = new boolean[4096];
 	private static boolean[] NetherObfuscateBlocks = new boolean[4096];
@@ -58,17 +49,6 @@ public class OrebfuscatorConfig {
 	private static Integer[] NetherRandomBlocks = new Integer[] { 13, 87, 88, 112, 153 };
 	private static HashSet<String> DisabledWorlds = new HashSet<String>();
 
-	public static File getCacheFolder() {
-		// Try to make the folder
-		if (!CacheFolder.exists()) {
-			CacheFolder.mkdirs();
-		}
-		// Can't make folder? Use default
-		if (!CacheFolder.exists()) {
-			CacheFolder = new File("orebfuscator_cache");
-		}
-		return CacheFolder;
-	}
 
 	public static IBlockAccess blockAccess;
 	private static boolean[] TransparentBlocks = new boolean[4096];
@@ -147,10 +127,6 @@ public class OrebfuscatorConfig {
 		}
 	}
 
-	public static int random(int max) {
-		return random.nextInt(max);
-	}
-
 	// Set
 
 	public static void setEngineMode(int data) {
@@ -196,13 +172,6 @@ public class OrebfuscatorConfig {
 			setData(path, defaultData);
 		}
 		return getConfig().getBoolean(path, defaultData);
-	}
-
-	private static String getString(String path, String defaultData) {
-		if (getConfig().get(path) == null) {
-			setData(path, defaultData);
-		}
-		return getConfig().getString(path, defaultData);
 	}
 
 	private static int getInt(String path, int defaultData) {
@@ -267,7 +236,6 @@ public class OrebfuscatorConfig {
 
 		UpdateRadius = clamp(getInt("Integers.UpdateRadius", UpdateRadius), 1, 5);
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, AvailableProcessors);
-		MaxLoadedCacheFiles = clamp(getInt("Integers.MaxLoadedCacheFiles", MaxLoadedCacheFiles), 16, 128);
 
 		OrebfuscatorPriority = clamp(getInt("Integers.OrebfuscatorPriority", OrebfuscatorPriority), Thread.MIN_PRIORITY, Thread.MAX_PRIORITY);
 		CompressionLevel = clamp(getInt("Integers.CompressionLevel", CompressionLevel), 1, 9);
@@ -280,10 +248,6 @@ public class OrebfuscatorConfig {
 
 		// Disable worlds
 		DisabledWorlds = new HashSet<String>(getStringList("Lists.DisabledWorlds", new ArrayList<String>(DisabledWorlds)));
-
-		// Read the cache location
-		CacheLocation = getString("Strings.CacheLocation", CacheLocation);
-		CacheFolder = new File(CacheLocation);
 
 		RandomBlocks = getIntList2("Lists.RandomBlocks", Arrays.asList(RandomBlocks));
 		NetherRandomBlocks = getIntList2("Lists.NetherRandomBlocks", Arrays.asList(NetherRandomBlocks));
