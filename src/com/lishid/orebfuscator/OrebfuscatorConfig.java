@@ -36,7 +36,6 @@ public class OrebfuscatorConfig {
 	public static int EngineMode = 2;
 	public static int InitialRadius = 1;
 	public static int UpdateRadius = 2;
-	public static int OrebfuscatorPriority = 1;
 	public static int CompressionLevel = 1;
 	public static int ProcessingThreads = Runtime.getRuntime().availableProcessors() - 1;
 
@@ -232,7 +231,6 @@ public class OrebfuscatorConfig {
 		UpdateRadius = clamp(getInt("Integers.UpdateRadius", UpdateRadius), 1, 5);
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
 
-		OrebfuscatorPriority = clamp(getInt("Integers.OrebfuscatorPriority", OrebfuscatorPriority), Thread.MIN_PRIORITY, Thread.MAX_PRIORITY);
 		CompressionLevel = clamp(getInt("Integers.CompressionLevel", CompressionLevel), 1, 9);
 		UpdateOnDamage = getBoolean("Booleans.UpdateOnDamage", UpdateOnDamage);
 		Enabled = getBoolean("Booleans.Enabled", Enabled);
