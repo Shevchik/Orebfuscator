@@ -31,7 +31,6 @@ public class OrebfuscatorConfig {
 
 	// Main engine config
 	public static boolean Enabled = true;
-	public static boolean UpdateOnDamage = true;
 	public static int EngineMode = 2;
 	public static int UpdateRadius = 2;
 	public static int CompressionLevel = 0;
@@ -207,7 +206,6 @@ public class OrebfuscatorConfig {
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
 
 		CompressionLevel = clamp(getInt("Integers.CompressionLevel", CompressionLevel), 1, 9);
-		UpdateOnDamage = getBoolean("Booleans.UpdateOnDamage", UpdateOnDamage);
 		Enabled = getBoolean("Booleans.Enabled", Enabled);
 
 		// Read block lists
