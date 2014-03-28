@@ -186,13 +186,13 @@ public class Calculations {
 			// If the bitmask indicates this chunk is sent...
 			if ((info.chunkMask & 1 << i) != 0) {
 
+				boolean usesExtra = ((info.extraMask & 1 << i) != 0);
 				int block1extra = 0;
 				
 				OrebfuscatorConfig.shuffleRandomBlocks();
 				for (int y = 0; y < 16; y++) {
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
-							boolean usesExtra = ((info.extraMask & 1 << i) != 0);
 
 							int blockY = (i << 4) + y;
 							int typeID = info.world.getBlockTypeIdAt(startX + x, blockY, startZ + z);
