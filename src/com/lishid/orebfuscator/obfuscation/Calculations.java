@@ -144,16 +144,23 @@ public class Calculations {
 
 	private static void ComputeChunkInfoAndObfuscate(ChunkInfo info, byte[] original) {
 		// Compute chunk number
-		int chunkSectionNumber = 0;
-		for (int i = 0; i < 16; i++) {
-			if ((info.chunkMask & 1 << i) > 0) {
-				chunkSectionNumber++;
-			}
-		}
+        for (int i = 0; i < 16; i++) {
+            if ((info.chunkMask & 1 << i) > 0) {
+                info.chunkSectionToIndexMap[i] = info.chunkSectionNumber;
+                info.chunkSectionNumber++;
+            }
+            if ((info.extraMask & 1 << i) > 0) {
+                info.extraSectionToIndexMap[i] = info.extraSectionNumber;
+                info.extraSectionNumber++;
+            }
+        }
 
-		if (info.startIndex + 4096 * chunkSectionNumber > info.data.length) {
+		if (info.startIndex + 4096 * info.chunkSectionNumber > info.data.length) {
 			return;
 		}
+
+		info.typeBuffer = new byte[info.chunkSectionNumber * 4096];
+		info.extraBuffer = new byte[info.extraSectionNumber * 2048];
 
 		// Obfuscate
 		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName()) && OrebfuscatorConfig.Enabled) {
@@ -166,30 +173,27 @@ public class Calculations {
 
 		int engineMode = OrebfuscatorConfig.EngineMode;
 
-		// Loop over 16x16x16 chunks in the 16x256x16 column
 		int currentTypeIndex = 0;
+		int addExtendedIndex = 10240 * info.chunkSectionNumber;
 		int currentExtendedIndex = 0;
-		for (int i = 0; i < 16; i++) {
-			if ((info.chunkMask & 1 << i) != 0) {
-				currentExtendedIndex += 10240;
-			}
-		}
-
 		int startX = info.chunkX << 4;
 		int startZ = info.chunkZ << 4;
+		int blockY = 0;
 
+		// Loop over 16x16x16 chunks in the 16x256x16 column
 		for (int i = 0; i < 16; i++) {
-			// If the bitmask indicates this chunk is sent...
 			if ((info.chunkMask & 1 << i) != 0) {
 
 				boolean usesExtra = ((info.extraMask & 1 << i) != 0);
 				int block1extra = 0;
 
 				for (int y = 0; y < 16; y++) {
+
+					blockY++;
+
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
 
-							int blockY = (i << 4) + y;
 							int typeID = info.data[info.startIndex + currentTypeIndex];
 							if (typeID < 0) {
 								typeID += 256;
@@ -197,9 +201,9 @@ public class Calculations {
 							if (usesExtra) {
 								byte extra = 0;
 								if (currentTypeIndex % 2 == 0) {
-									extra = (byte) (info.data[info.startIndex + currentExtendedIndex] & 0x0F);
+									extra = (byte) (info.data[info.startIndex + addExtendedIndex + currentExtendedIndex] & 0x0F);
 								} else {
-									extra = (byte) (info.data[info.startIndex + currentExtendedIndex] >> 4);
+									extra = (byte) (info.data[info.startIndex + addExtendedIndex + currentExtendedIndex] >> 4);
 								}
 								if (extra < 0) {
 									extra += 16;
@@ -207,9 +211,9 @@ public class Calculations {
 								typeID += extra * 256;
 							}
 
-							// Obfuscate block if needed
+							// Obfuscate block if needed or copy old
+							int newBlockID = typeID;
 							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z)) {
-								int newBlockID = 0;
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
 									newBlockID = (isNether ? 87 : 1);
@@ -217,15 +221,14 @@ public class Calculations {
 									// Ending mode 2, get random block
 									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
 								}
-								byte type = (byte) newBlockID;
-								info.data[info.startIndex + currentTypeIndex] = type;
-								if (usesExtra) {
-									byte extra = (byte) (newBlockID / 256);
-									if (currentTypeIndex % 2 == 0) {
-										block1extra = extra;
-									} else {
-										info.data[info.startIndex + currentExtendedIndex] = (byte) (extra * 16 + block1extra);
-									}
+							}
+							info.typeBuffer[currentTypeIndex] = (byte) newBlockID;
+							if (usesExtra) {
+								byte extra = (byte) (newBlockID / 256);
+								if (currentTypeIndex % 2 == 0) {
+									block1extra = extra;
+								} else {
+									info.extraBuffer[currentExtendedIndex] = (byte) (extra * 16 + block1extra);
 								}
 							}
 
@@ -240,29 +243,34 @@ public class Calculations {
 				}
 			}
 		}
+
+		// Copy obfuscated buffer to data
+		System.arraycopy(info.typeBuffer, 0, info.data, info.startIndex, info.typeBuffer.length);
+		System.arraycopy(info.extraBuffer, 0, info.data, info.startIndex + addExtendedIndex, info.extraBuffer.length);
+
+		// Clear buffer
+		info.typeBuffer = null;
+		info.extraBuffer = null;
 	}
 
 	private static boolean areAjacentBlocksTransparent(ChunkInfo info, int x, int y, int z) {
-		if (y >= info.world.getMaxHeight() || y < 0) {
-			return true;
-		}
 
-		if (isTranspaent(info, x, y + 1, z)) {
+		if (isTransparent(info, x + 1, y, z)) {
 			return true;
 		}
-		if (isTranspaent(info, x, y - 1, z)) {
+		if (isTransparent(info, x - 1, y, z)) {
 			return true;
 		}
-		if (isTranspaent(info, x + 1, y, z)) {
+		if (isTransparent(info, x, y, z + 1)) {
 			return true;
 		}
-		if (isTranspaent(info, x - 1, y, z)) {
+		if (isTransparent(info, x, y, z - 1)) {
 			return true;
 		}
-		if (isTranspaent(info, x, y, z + 1)) {
+		if (isTransparent(info, x, y + 1, z)) {
 			return true;
 		}
-		if (isTranspaent(info, x, y, z - 1)) {
+		if (isTransparent(info, x, y - 1, z)) {
 			return true;
 		}
 
@@ -270,9 +278,12 @@ public class Calculations {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static boolean isTranspaent(ChunkInfo info, int x, int y, int z) {
-		int id = 1;
+	private static boolean isTransparent(ChunkInfo info, int x, int y, int z) {
+		if (y < 0 || y > info.world.getMaxHeight()) {
+			return true;
+		}
 
+		int id = 1;
 		if (CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
 			id = info.world.getBlockTypeIdAt(x, y, z);
 		}

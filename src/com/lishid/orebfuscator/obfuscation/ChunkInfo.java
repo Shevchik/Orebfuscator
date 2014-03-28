@@ -27,5 +27,11 @@ public class ChunkInfo {
 	public World world;
 	public byte[] data;
 	public int startIndex;
+    public int[] chunkSectionToIndexMap = new int[16];
+    public int[] extraSectionToIndexMap = new int[16];
+    public int chunkSectionNumber;
+    public int extraSectionNumber;
+    public byte[] typeBuffer;
+    public byte[] extraBuffer;
 
 }
