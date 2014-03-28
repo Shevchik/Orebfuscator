@@ -27,6 +27,7 @@ import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
 import com.lishid.orebfuscator.hook.ProtocolLibHook;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.listeners.BlockChangeListener;
+import com.lishid.orebfuscator.obfuscation.ProcessingThreads;
 
 /**
  * Orebfuscator Anti X-RAY
@@ -48,12 +49,23 @@ public class Orebfuscator extends JavaPlugin {
 
 		// Load configurations
 		OrebfuscatorConfig.load();
+		
+		// Start processing Threads
+		ProcessingThreads.initialize();
+		ProcessingThreads.instance.startThreads();
 
 		// Hook block change packet
 		new BlockChangeListener().register(this);
 
 		// Hook chunk data packets
 		new ProtocolLibHook().register(this);
+	}
+
+	@Override
+	public void onDisable() {
+		if (ProcessingThreads.instance != null) {
+			ProcessingThreads.instance.stopThreads();
+		}
 	}
 
 	@Override

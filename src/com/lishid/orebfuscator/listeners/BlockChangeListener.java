@@ -1,8 +1,6 @@
 package com.lishid.orebfuscator.listeners;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -17,12 +15,11 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
+import com.lishid.orebfuscator.obfuscation.ProcessingThreads;
 
 public class BlockChangeListener {
 
 	private ProtocolManager manager;
-
-	private final ExecutorService blockUpdateProcessingThread = Executors.newSingleThreadExecutor();
 
 	public void register(Plugin plugin) {
 		manager = ProtocolLibrary.getProtocolManager();
@@ -46,7 +43,7 @@ public class BlockChangeListener {
 								BlockUpdate.Update(player, block);
 							}
 						};
-						blockUpdateProcessingThread.submit(updateBlock);
+						ProcessingThreads.instance.submitBlockUpdate(updateBlock);
 					}
 				}
 			}
