@@ -170,8 +170,8 @@ public class Calculations {
 		int engineMode = OrebfuscatorConfig.EngineMode;
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
-		int currentTypeIndex = 0;
-		int currentExtendedIndex = 0;
+		int currentTypeIndex = info.startIndex;
+		int currentExtendedIndex = info.startIndex;
 		for (int i = 0; i < 16; i++) {
 			if ((info.chunkMask & 1 << i) != 0) {
 				currentExtendedIndex += 4096 + 2048 + 2048 + 2048;
@@ -207,13 +207,13 @@ public class Calculations {
 									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
 								}
 								byte type = (byte) (newBlockID % 256);
-								info.data[info.startIndex + currentTypeIndex] = type;
+								info.data[currentTypeIndex] = type;
 								if (usesExtra) {
 									byte extra = (byte) (newBlockID / 256);
 									if (currentTypeIndex % 2 == 0) {
 										block1extra = extra;
 									} else {
-										info.data[info.startIndex + currentExtendedIndex] = (byte) (block1extra * 16 + extra);
+										info.data[currentExtendedIndex] = (byte) (block1extra * 16 + extra);
 									}
 								}
 							}
