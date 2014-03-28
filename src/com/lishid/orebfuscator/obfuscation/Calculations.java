@@ -21,21 +21,35 @@ import java.util.zip.Deflater;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.IPacket51;
 import com.lishid.orebfuscator.internal.IPacket56;
+import com.lishid.orebfuscator.internal.InternalAccessor;
 
 public class Calculations {
 
 	public static final ThreadLocal<Deflater> localDeflater = new ThreadLocal<Deflater>() {
 		@Override
 		protected Deflater initialValue() {
-			// Not used from orebfuscator thread, best speed instead
 			return new Deflater(OrebfuscatorConfig.CompressionLevel);
 		}
 	};
+	
+	public static void Obfuscate(PacketContainer container, Player player) {
+		if (container.getType().equals(PacketType.Play.Server.MAP_CHUNK)) {
+			IPacket51 packet = InternalAccessor.Instance.newPacket51();
+			packet.setPacket(container.getHandle());
+			Calculations.Obfuscate(packet, player);
+		} else if (container.getType().equals(PacketType.Play.Server.MAP_CHUNK_BULK)) {
+			IPacket56 packet = InternalAccessor.Instance.newPacket56();
+			packet.setPacket(container.getHandle());
+			Calculations.Obfuscate(packet, player);
+		}
+	}
 
-	public static void Obfuscate(IPacket56 packet, Player player) {
+	private static void Obfuscate(IPacket56 packet, Player player) {
 		if (packet.getFieldData(packet.getOutputBuffer()) != null) {
 			return;
 		}
@@ -52,7 +66,7 @@ public class Calculations {
 		packet.compress(deflater);
 	}
 
-	public static void Obfuscate(IPacket51 packet, Player player) {
+	private static void Obfuscate(IPacket51 packet, Player player) {
 		ChunkInfo info = getInfo(packet, player);
 
 		if (info.chunkMask == 0 && info.extraMask == 0) {
@@ -65,7 +79,7 @@ public class Calculations {
 		packet.compress(deflater);
 	}
 
-	public static ChunkInfo[] getInfo(IPacket56 packet, Player player) {
+	private static ChunkInfo[] getInfo(IPacket56 packet, Player player) {
 		ChunkInfo[] infos = new ChunkInfo[packet.getPacketChunkNumber()];
 
 		int dataStartIndex = 0;
@@ -115,7 +129,7 @@ public class Calculations {
 		return infos;
 	}
 
-	public static ChunkInfo getInfo(IPacket51 packet, Player player) {
+	private static ChunkInfo getInfo(IPacket51 packet, Player player) {
 		// Create an info objects
 		ChunkInfo info = new ChunkInfo();
 		info.world = player.getWorld();
@@ -128,7 +142,7 @@ public class Calculations {
 		return info;
 	}
 
-	public static void ComputeChunkInfoAndObfuscate(ChunkInfo info, byte[] original) {
+	private static void ComputeChunkInfoAndObfuscate(ChunkInfo info, byte[] original) {
 		// Compute chunk number
 		int chunkSectionNumber = 0;
 		for (int i = 0; i < 16; i++) {
@@ -148,7 +162,7 @@ public class Calculations {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void Obfuscate(ChunkInfo info) {
+	private static void Obfuscate(ChunkInfo info) {
 		boolean isNether = info.world.getEnvironment() == Environment.NETHER;
 
 		int initialRadius = OrebfuscatorConfig.InitialRadius;
@@ -224,7 +238,7 @@ public class Calculations {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static boolean areAjacentBlocksTransparent(ChunkInfo info, int x, int y, int z, int countdown) {
+	private static boolean areAjacentBlocksTransparent(ChunkInfo info, int x, int y, int z, int countdown) {
 		if (y >= info.world.getMaxHeight() || y < 0) {
 			return true;
 		}
