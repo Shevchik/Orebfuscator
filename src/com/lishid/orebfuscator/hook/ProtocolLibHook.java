@@ -37,21 +37,6 @@ public class ProtocolLibHook {
 				@Override
 				public void onPacketSending(PacketEvent event) {
 					Calculations.Obfuscate(event.getPacket(), event.getPlayer());
-					/*event.setCancelled(true);
-					final PacketContainer packet = event.getPacket();
-					final Player player = event.getPlayer();
-					Runnable processChunk = new Runnable() {
-						@Override
-						public void run() {
-							Calculations.Obfuscate(packet, player);
-							try {
-								manager.sendServerPacket(player, packet, false);
-							} catch (InvocationTargetException e) {
-								e.printStackTrace();
-							}
-						}			
-					};
-					ProcessingThreads.instance.submitChunkObfuscate(processChunk);*/
 				}
 			}
 		);

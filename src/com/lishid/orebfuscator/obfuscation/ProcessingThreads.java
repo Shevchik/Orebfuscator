@@ -12,23 +12,14 @@ public class ProcessingThreads {
 		instance = new ProcessingThreads();
 	}
 
-	private ExecutorService chunkProcessingService = null;
 	private ExecutorService blockUpdateProcessingService = null;
 	public void startThreads() {
-		chunkProcessingService = Executors.newFixedThreadPool(OrebfuscatorConfig.ProcessingThreads);
-		blockUpdateProcessingService = Executors.newSingleThreadExecutor();
+		blockUpdateProcessingService = Executors.newFixedThreadPool(OrebfuscatorConfig.ProcessingThreads);
 	}
 	public void stopThreads() {
-		if (chunkProcessingService != null) {
-			chunkProcessingService.shutdownNow();
-		}
 		if (blockUpdateProcessingService != null) {
 			blockUpdateProcessingService.shutdownNow();
 		}
-	}
-
-	public void submitChunkObfuscate(Runnable run) {
-		chunkProcessingService.submit(run);
 	}
 
 	public void submitBlockUpdate(Runnable run) {
