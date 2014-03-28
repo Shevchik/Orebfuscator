@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 
 public class ProcessingThreads {
-	
+
 	public static ProcessingThreads instance;
 	public static void initialize() {
 		instance = new ProcessingThreads();
