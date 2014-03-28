@@ -70,20 +70,6 @@ public class OrebfuscatorCommandExecutor {
 			return true;
 		}
 
-		else if (args[0].equalsIgnoreCase("initialradius") && args.length > 1) {
-			int radius = OrebfuscatorConfig.InitialRadius;
-			try {
-				radius = new Integer(args[1]);
-			}
-			catch (NumberFormatException e) {
-				Orebfuscator.message(sender, args[1] + " is not a number!");
-				return true;
-			}
-			OrebfuscatorConfig.setInitialRadius(radius);
-			Orebfuscator.message(sender, "InitialRadius set to: " + radius);
-			return true;
-		}
-
 		else if (args[0].equalsIgnoreCase("enable") || args[0].equalsIgnoreCase("disable")) {
 			boolean data = args[0].equalsIgnoreCase("enable");
 
@@ -114,7 +100,6 @@ public class OrebfuscatorCommandExecutor {
 			Orebfuscator.message(sender, "Orebfuscator " + Orebfuscator.instance.getDescription().getVersion() + " is: " + (OrebfuscatorConfig.Enabled ? "Enabled" : "Disabled"));
 			Orebfuscator.message(sender, "EngineMode: " + OrebfuscatorConfig.EngineMode);
 
-			Orebfuscator.message(sender, "Initial Obfuscation Radius: " + OrebfuscatorConfig.InitialRadius);
 			Orebfuscator.message(sender, "Update Radius: " + OrebfuscatorConfig.UpdateRadius);
 
 			String disabledWorlds = OrebfuscatorConfig.getDisabledWorlds();

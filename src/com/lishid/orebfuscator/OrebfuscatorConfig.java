@@ -34,7 +34,6 @@ public class OrebfuscatorConfig {
 	public static boolean Enabled = true;
 	public static boolean UpdateOnDamage = true;
 	public static int EngineMode = 2;
-	public static int InitialRadius = 1;
 	public static int UpdateRadius = 2;
 	public static int CompressionLevel = 0;
 	public static int ProcessingThreads = Runtime.getRuntime().availableProcessors() - 1;
@@ -133,14 +132,6 @@ public class OrebfuscatorConfig {
 		UpdateRadius = data;
 	}
 
-	public static void setInitialRadius(int data) {
-		if (data < 1) {
-			data = 1;
-		}
-		setData("Integers.InitialRadius", data);
-		InitialRadius = data;
-	}
-
 	public static void setProcessingThreads(int data) {
 		setData("Integers.ProcessingThreads", data);
 		ProcessingThreads = data;
@@ -225,8 +216,6 @@ public class OrebfuscatorConfig {
 			EngineMode = 2;
 			Orebfuscator.log("EngineMode must be 1 or 2.");
 		}
-
-		InitialRadius = clamp(getInt("Integers.InitialRadius", InitialRadius), 1, 2);
 
 		UpdateRadius = clamp(getInt("Integers.UpdateRadius", UpdateRadius), 1, 5);
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);

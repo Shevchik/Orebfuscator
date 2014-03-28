@@ -164,8 +164,6 @@ public class Calculations {
 	private static void Obfuscate(ChunkInfo info) {
 		boolean isNether = info.world.getEnvironment() == Environment.NETHER;
 
-		int initialRadius = OrebfuscatorConfig.InitialRadius;
-
 		int engineMode = OrebfuscatorConfig.EngineMode;
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
@@ -211,7 +209,7 @@ public class Calculations {
 							}
 
 							// Obfuscate block if needed
-							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z, initialRadius)) {
+							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z)) {
 								int newBlockID = 0;
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
@@ -245,41 +243,42 @@ public class Calculations {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	private static boolean areAjacentBlocksTransparent(ChunkInfo info, int x, int y, int z, int countdown) {
+	private static boolean areAjacentBlocksTransparent(ChunkInfo info, int x, int y, int z) {
 		if (y >= info.world.getMaxHeight() || y < 0) {
 			return true;
 		}
 
+		if (isTranspaent(info, x, y + 1, z)) {
+			return true;
+		}
+		if (isTranspaent(info, x, y - 1, z)) {
+			return true;
+		}
+		if (isTranspaent(info, x + 1, y, z)) {
+			return true;
+		}
+		if (isTranspaent(info, x - 1, y, z)) {
+			return true;
+		}
+		if (isTranspaent(info, x, y, z + 1)) {
+			return true;
+		}
+		if (isTranspaent(info, x, y, z - 1)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@SuppressWarnings("deprecation")
+	private static boolean isTranspaent(ChunkInfo info, int x, int y, int z) {
 		int id = 1;
+
 		if (CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
 			id = info.world.getBlockTypeIdAt(x, y, z);
 		}
 
 		if (OrebfuscatorConfig.isBlockTransparent(id)) {
-			return true;
-		}
-
-		if (countdown == 0) {
-			return false;
-		}
-
-		if (areAjacentBlocksTransparent(info, x, y + 1, z, countdown - 1)) {
-			return true;
-		}
-		if (areAjacentBlocksTransparent(info, x, y - 1, z, countdown - 1)) {
-			return true;
-		}
-		if (areAjacentBlocksTransparent(info, x + 1, y, z, countdown - 1)) {
-			return true;
-		}
-		if (areAjacentBlocksTransparent(info, x - 1, y, z, countdown - 1)) {
-			return true;
-		}
-		if (areAjacentBlocksTransparent(info, x, y, z + 1, countdown - 1)) {
-			return true;
-		}
-		if (areAjacentBlocksTransparent(info, x, y, z - 1, countdown - 1)) {
 			return true;
 		}
 
