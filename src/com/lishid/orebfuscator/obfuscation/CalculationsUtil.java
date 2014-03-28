@@ -20,6 +20,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 public class CalculationsUtil {
+
 	public static boolean isChunkLoaded(World world, int x, int z) {
 		return world.isChunkLoaded(x, z);
 	}
@@ -32,7 +33,4 @@ public class CalculationsUtil {
 		return null;
 	}
 
-	public static int increment(int current, int max) {
-		return (current + 1) % max;
-	}
 }

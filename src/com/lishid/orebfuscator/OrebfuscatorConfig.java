@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -100,11 +101,12 @@ public class OrebfuscatorConfig {
 		return retval.length() > 1 ? retval.substring(0, retval.length() - 2) : retval;
 	}
 
-	public static int getRandomBlockID(int index, boolean nether) {
+	private static Random rnd = new Random();
+	public static int getRandomBlockID(boolean nether) {
 		if (nether) {
-			return NetherRandomBlocks[index];
+			return NetherRandomBlocks[rnd.nextInt(NetherRandomBlocks.length)];
 		}
-		return RandomBlocks[index];
+		return RandomBlocks[rnd.nextInt(RandomBlocks.length)];
 	}
 
 	public static Integer[] getRandomBlocks(boolean nether) {

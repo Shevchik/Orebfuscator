@@ -167,12 +167,7 @@ public class Calculations {
 
 		int initialRadius = OrebfuscatorConfig.InitialRadius;
 
-		// Track of pseudo-randomly assigned randomBlock
-		int randomIncrement = 0;
-
 		int engineMode = OrebfuscatorConfig.EngineMode;
-
-		int randomBlocksLength = OrebfuscatorConfig.getRandomBlocks(isNether).length;
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
 		int currentTypeIndex = 0;
@@ -209,8 +204,7 @@ public class Calculations {
 									newBlockID = (isNether ? 87 : 1);
 								} else if (engineMode == 2) {
 									// Ending mode 2, get random block
-									randomIncrement = CalculationsUtil.increment(randomIncrement, randomBlocksLength);
-									newBlockID = OrebfuscatorConfig.getRandomBlockID(randomIncrement, isNether);
+									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
 								}
 								byte type = (byte) (newBlockID % 256);
 								info.data[info.startIndex + currentTypeIndex] = type;
