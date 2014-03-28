@@ -34,14 +34,16 @@ public class ProtocolLibHook {
 	public void register(Plugin plugin) {
 		manager = ProtocolLibrary.getProtocolManager();
 
-		manager.addPacketListener(new PacketAdapter(plugin, PacketType.Play.Server.MAP_CHUNK) {
-			@Override
-			public void onPacketSending(PacketEvent event) {
-				IPacket51 packet = InternalAccessor.Instance.newPacket51();
-				packet.setPacket(event.getPacket().getHandle());
-				Calculations.Obfuscate(packet, event.getPlayer());
+		manager.addPacketListener(
+			new PacketAdapter(plugin, PacketType.Play.Server.MAP_CHUNK) {
+				@Override
+				public void onPacketSending(PacketEvent event) {
+					IPacket51 packet = InternalAccessor.Instance.newPacket51();
+					packet.setPacket(event.getPacket().getHandle());
+					Calculations.Obfuscate(packet, event.getPlayer());
+				}
 			}
-		});
+		);
 	}
 
 }

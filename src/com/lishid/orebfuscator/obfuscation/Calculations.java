@@ -57,10 +57,6 @@ public class Calculations {
 	}
 
 	public static void Obfuscate(IPacket51 packet, Player player) {
-		Obfuscate(packet, player, true);
-	}
-
-	public static void Obfuscate(IPacket51 packet, Player player, boolean needCompression) {
 		ChunkInfo info = getInfo(packet, player);
 
 		if (info.chunkMask == 0 && info.extraMask == 0) {
@@ -69,10 +65,8 @@ public class Calculations {
 
 		ComputeChunkInfoAndObfuscate(info, packet.getBuffer());
 
-		if (needCompression) {
-			Deflater deflater = localDeflater.get();
-			packet.compress(deflater);
-		}
+		Deflater deflater = localDeflater.get();
+		packet.compress(deflater);
 	}
 
 	public static ChunkInfo[] getInfo(IPacket56 packet, Player player) {
