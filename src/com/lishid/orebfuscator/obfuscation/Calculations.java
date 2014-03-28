@@ -198,7 +198,7 @@ public class Calculations {
 							int typeID = info.world.getBlockTypeIdAt(startX + x, blockY, startZ + z);
 
 							// Obfuscate block if needed
-							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, typeID, startX + x, blockY, startZ + z, initialRadius)) {
+							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z, initialRadius)) {
 								int newBlockID = 0;
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
@@ -234,17 +234,17 @@ public class Calculations {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static boolean areAjacentBlocksTransparent(ChunkInfo info, int currentBlockID, int x, int y, int z, int countdown) {
+	public static boolean areAjacentBlocksTransparent(ChunkInfo info, int x, int y, int z, int countdown) {
 		if (y >= info.world.getMaxHeight() || y < 0) {
 			return true;
 		}
 
 		int id = 1;
 		if (CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
-			id = (byte) info.world.getBlockTypeIdAt(x, y, z);
+			id = info.world.getBlockTypeIdAt(x, y, z);
 		}
 
-		if (id != currentBlockID && OrebfuscatorConfig.isBlockTransparent(id)) {
+		if (OrebfuscatorConfig.isBlockTransparent(id)) {
 			return true;
 		}
 
@@ -252,22 +252,22 @@ public class Calculations {
 			return false;
 		}
 
-		if (areAjacentBlocksTransparent(info, currentBlockID, x, y + 1, z, countdown - 1)) {
+		if (areAjacentBlocksTransparent(info, x, y + 1, z, countdown - 1)) {
 			return true;
 		}
-		if (areAjacentBlocksTransparent(info, currentBlockID, x, y - 1, z, countdown - 1)) {
+		if (areAjacentBlocksTransparent(info, x, y - 1, z, countdown - 1)) {
 			return true;
 		}
-		if (areAjacentBlocksTransparent(info, currentBlockID, x + 1, y, z, countdown - 1)) {
+		if (areAjacentBlocksTransparent(info, x + 1, y, z, countdown - 1)) {
 			return true;
 		}
-		if (areAjacentBlocksTransparent(info, currentBlockID, x - 1, y, z, countdown - 1)) {
+		if (areAjacentBlocksTransparent(info, x - 1, y, z, countdown - 1)) {
 			return true;
 		}
-		if (areAjacentBlocksTransparent(info, currentBlockID, x, y, z + 1, countdown - 1)) {
+		if (areAjacentBlocksTransparent(info, x, y, z + 1, countdown - 1)) {
 			return true;
 		}
-		if (areAjacentBlocksTransparent(info, currentBlockID, x, y, z - 1, countdown - 1)) {
+		if (areAjacentBlocksTransparent(info, x, y, z - 1, countdown - 1)) {
 			return true;
 		}
 
