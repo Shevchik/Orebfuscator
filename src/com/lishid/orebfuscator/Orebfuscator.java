@@ -24,7 +24,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
-import com.lishid.orebfuscator.hook.OrebfuscatorPlayerHook;
 import com.lishid.orebfuscator.hook.ProtocolLibHook;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.listeners.BlockChangeListener;
@@ -50,11 +49,10 @@ public class Orebfuscator extends JavaPlugin {
 		// Load configurations
 		OrebfuscatorConfig.load();
 
-		// Orebfuscator events
+		// Hook block change packet
 		new BlockChangeListener().register(this);
 
-		// Hooks
-		getServer().getPluginManager().registerEvents(new OrebfuscatorPlayerHook(), this);
+		// Hook chunk data packets
 		new ProtocolLibHook().register(this);
 	}
 

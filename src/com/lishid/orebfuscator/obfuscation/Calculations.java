@@ -24,7 +24,6 @@ import org.bukkit.entity.Player;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.IPacket51;
 import com.lishid.orebfuscator.internal.IPacket56;
-import com.lishid.orebfuscator.internal.InternalAccessor;
 
 public class Calculations {
 
@@ -35,12 +34,6 @@ public class Calculations {
 			return new Deflater(Deflater.BEST_SPEED);
 		}
 	};
-
-	public static void Obfuscate(Object packet, Player player) {
-		IPacket51 packet51 = InternalAccessor.Instance.newPacket51();
-		packet51.setPacket(packet);
-		Calculations.Obfuscate(packet51, player);
-	}
 
 	public static void Obfuscate(IPacket56 packet, Player player) {
 		if (packet.getFieldData(packet.getOutputBuffer()) != null) {
@@ -54,6 +47,9 @@ public class Calculations {
 			ChunkInfo info = infos[chunkNum];
 			ComputeChunkInfoAndObfuscate(info, (byte[]) packet.getFieldData(packet.getBuildBuffer()));
 		}
+
+		Deflater deflater = localDeflater.get();
+		packet.compress(deflater);
 	}
 
 	public static void Obfuscate(IPacket51 packet, Player player) {

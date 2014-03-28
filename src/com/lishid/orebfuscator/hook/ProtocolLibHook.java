@@ -24,6 +24,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.lishid.orebfuscator.internal.IPacket51;
+import com.lishid.orebfuscator.internal.IPacket56;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.obfuscation.Calculations;
 
@@ -39,6 +40,17 @@ public class ProtocolLibHook {
 				@Override
 				public void onPacketSending(PacketEvent event) {
 					IPacket51 packet = InternalAccessor.Instance.newPacket51();
+					packet.setPacket(event.getPacket().getHandle());
+					Calculations.Obfuscate(packet, event.getPlayer());
+				}
+			}
+		);
+
+		manager.addPacketListener(
+			new PacketAdapter(plugin, PacketType.Play.Server.MAP_CHUNK_BULK) {
+				@Override
+				public void onPacketSending(PacketEvent event) {
+					IPacket56 packet = InternalAccessor.Instance.newPacket56();
 					packet.setPacket(event.getPacket().getHandle());
 					Calculations.Obfuscate(packet, event.getPlayer());
 				}

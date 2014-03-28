@@ -41,10 +41,6 @@ public class InternalAccessor {
 		return (IPacket56) createObject(IPacket56.class, "Packet56");
 	}
 
-	public IPlayerHook newPlayerHook() {
-		return (IPlayerHook) createObject(IPlayerHook.class, "PlayerHook");
-	}
-
 	public IBlockAccess newBlockAccess() {
 		return (IBlockAccess) createObject(IBlockAccess.class, "BlockAccess");
 	}
