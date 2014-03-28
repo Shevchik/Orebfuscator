@@ -264,7 +264,7 @@ public class ChunkQueue extends LinkedList<ChunkCoordIntPair> implements IChunkQ
 
 		public ChunkCoordComparator(EntityPlayer entityplayer) {
 			x = (int) entityplayer.locX >> 4;
-					z = (int) entityplayer.locZ >> 4;
+			z = (int) entityplayer.locZ >> 4;
 		}
 
 		@Override

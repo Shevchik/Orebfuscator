@@ -32,7 +32,7 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 
 public class BlockUpdate {
-	
+
 	private static ProtocolManager manager;
 	private static ProtocolManager getProtocolManager() {
 		if (manager == null) {
@@ -43,7 +43,7 @@ public class BlockUpdate {
 
 	public static void Update(Player player, Block block) {
 		HashSet<Block> updateBlocks = GetAjacentBlocks(block.getWorld(), new HashSet<Block>(20), block, OrebfuscatorConfig.UpdateRadius);
-		
+
 		sendBlockUpdates(player, updateBlocks);
 	}
 

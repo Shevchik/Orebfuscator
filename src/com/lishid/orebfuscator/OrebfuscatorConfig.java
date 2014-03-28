@@ -102,9 +102,9 @@ public class OrebfuscatorConfig {
 
 	public static int getRandomBlockID(int index, boolean nether) {
 		if (nether) {
-			return (int) NetherRandomBlocks[index];
+			return NetherRandomBlocks[index];
 		}
-		return (int) RandomBlocks[index];
+		return RandomBlocks[index];
 	}
 
 	public static Integer[] getRandomBlocks(boolean nether) {

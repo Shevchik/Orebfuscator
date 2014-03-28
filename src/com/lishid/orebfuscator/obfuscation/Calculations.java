@@ -188,7 +188,7 @@ public class Calculations {
 
 				boolean usesExtra = ((info.extraMask & 1 << i) != 0);
 				int block1extra = 0;
-				
+
 				OrebfuscatorConfig.shuffleRandomBlocks();
 				for (int y = 0; y < 16; y++) {
 					for (int z = 0; z < 16; z++) {

@@ -23,7 +23,7 @@ public class BlockChangeListener {
 	private ProtocolManager manager;
 
 	private final ExecutorService blockUpdateProcessingThread = Executors.newSingleThreadExecutor();
-	
+
 	public void register(Plugin plugin) {
 		manager = ProtocolLibrary.getProtocolManager();
 
