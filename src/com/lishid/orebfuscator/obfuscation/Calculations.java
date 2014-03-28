@@ -161,7 +161,6 @@ public class Calculations {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private static void Obfuscate(ChunkInfo info) {
 		boolean isNether = info.world.getEnvironment() == Environment.NETHER;
 
@@ -174,7 +173,7 @@ public class Calculations {
 		int currentExtendedIndex = 0;
 		for (int i = 0; i < 16; i++) {
 			if ((info.chunkMask & 1 << i) != 0) {
-				currentExtendedIndex += 4096 + 2048 + 2048 + 2048;
+				currentExtendedIndex += 10240;
 			}
 		}
 
@@ -194,7 +193,22 @@ public class Calculations {
 						for (int x = 0; x < 16; x++) {
 
 							int blockY = (i << 4) + y;
-							int typeID = info.world.getBlockTypeIdAt(startX + x, blockY, startZ + z);
+							int typeID = info.data[info.startIndex + currentTypeIndex];
+							if (typeID < 0) {
+								typeID += 256;
+							}
+							if (usesExtra) {
+								byte extra = 0;
+								if (currentTypeIndex % 2 == 0) {
+									extra = (byte) (info.data[info.startIndex + currentExtendedIndex] & 0x0F);
+								} else {
+									extra = (byte) (info.data[info.startIndex + currentExtendedIndex] >> 4);
+								}
+								if (extra < 0) {
+									extra += 16;
+								}
+								typeID += extra * 256;
+							}
 
 							// Obfuscate block if needed
 							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z, initialRadius)) {
@@ -206,7 +220,7 @@ public class Calculations {
 									// Ending mode 2, get random block
 									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
 								}
-								byte type = (byte) (newBlockID % 256);
+								byte type = (byte) newBlockID;
 								info.data[info.startIndex + currentTypeIndex] = type;
 								if (usesExtra) {
 									byte extra = (byte) (newBlockID / 256);
