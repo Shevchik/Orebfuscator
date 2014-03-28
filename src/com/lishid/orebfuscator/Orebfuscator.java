@@ -57,17 +57,8 @@ public class Orebfuscator extends JavaPlugin {
 	}
 
 	@Override
-	public void onDisable() {
-		getServer().shutdown();
-	}
-
-	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		return OrebfuscatorCommandExecutor.onCommand(sender, command, label, args);
-	}
-
-	public void runTask(Runnable task) {
-		getServer().getScheduler().runTask(this, task);
 	}
 
 	/**
@@ -91,4 +82,5 @@ public class Orebfuscator extends JavaPlugin {
 	public static void message(CommandSender target, String message) {
 		target.sendMessage(ChatColor.AQUA + "[OFC] " + message);
 	}
+
 }
