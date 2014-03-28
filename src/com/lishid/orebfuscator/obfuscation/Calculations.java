@@ -31,7 +31,7 @@ public class Calculations {
 		@Override
 		protected Deflater initialValue() {
 			// Not used from orebfuscator thread, best speed instead
-			return new Deflater(Deflater.BEST_SPEED);
+			return new Deflater(OrebfuscatorConfig.CompressionLevel);
 		}
 	};
 
