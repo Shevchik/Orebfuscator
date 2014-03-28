@@ -16,14 +16,19 @@
 
 package com.lishid.orebfuscator.hook;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.lishid.orebfuscator.obfuscation.Calculations;
+import com.lishid.orebfuscator.obfuscation.ProcessingThreads;
 
 public class ProtocolLibHook {
 
@@ -36,7 +41,21 @@ public class ProtocolLibHook {
 			new PacketAdapter(plugin, PacketType.Play.Server.MAP_CHUNK, PacketType.Play.Server.MAP_CHUNK_BULK) {
 				@Override
 				public void onPacketSending(PacketEvent event) {
-					Calculations.Obfuscate(event.getPacket(), event.getPlayer());
+					event.setCancelled(true);
+					final PacketContainer packet = event.getPacket();
+					final Player player = event.getPlayer();
+					Runnable processChunk = new Runnable() {
+						@Override
+						public void run() {
+							Calculations.Obfuscate(packet, player);
+							try {
+								manager.sendServerPacket(player, packet, false);
+							} catch (InvocationTargetException e) {
+								e.printStackTrace();
+							}
+						}			
+					};
+					ProcessingThreads.instance.submitChunkObfuscate(processChunk);
 				}
 			}
 		);
