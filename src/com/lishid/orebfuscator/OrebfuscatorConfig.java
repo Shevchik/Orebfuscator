@@ -18,7 +18,6 @@ package com.lishid.orebfuscator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -105,19 +104,6 @@ public class OrebfuscatorConfig {
 			return NetherRandomBlocks[rnd.nextInt(NetherRandomBlocks.length)];
 		}
 		return RandomBlocks[rnd.nextInt(RandomBlocks.length)];
-	}
-
-	public static Integer[] getRandomBlocks(boolean nether) {
-		if (nether) {
-			return NetherRandomBlocks;
-		}
-		return (RandomBlocks);
-	}
-
-	public static void shuffleRandomBlocks() {
-		synchronized (RandomBlocks) {
-			Collections.shuffle(Arrays.asList(RandomBlocks));
-		}
 	}
 
 	// Set
