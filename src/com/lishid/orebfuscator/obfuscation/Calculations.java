@@ -36,7 +36,7 @@ public class Calculations {
 			return new Deflater(OrebfuscatorConfig.CompressionLevel);
 		}
 	};
-	
+
 	public static void Obfuscate(PacketContainer container, Player player) {
 		if (container.getType().equals(PacketType.Play.Server.MAP_CHUNK)) {
 			IPacket51 packet = InternalAccessor.Instance.newPacket51();
