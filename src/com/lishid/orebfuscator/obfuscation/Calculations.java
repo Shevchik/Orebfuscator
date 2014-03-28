@@ -227,7 +227,7 @@ public class Calculations {
 									if (currentTypeIndex % 2 == 0) {
 										block1extra = extra;
 									} else {
-										info.data[info.startIndex + currentExtendedIndex] = (byte) (block1extra * 16 + extra);
+										info.data[info.startIndex + currentExtendedIndex] = (byte) (extra * 16 + block1extra);
 									}
 								}
 							}
