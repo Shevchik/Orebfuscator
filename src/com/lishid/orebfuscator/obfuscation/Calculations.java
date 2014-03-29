@@ -50,10 +50,6 @@ public class Calculations {
 	}
 
 	private static void Obfuscate(IPacket56 packet, Player player) {
-		if (packet.getFieldData(packet.getOutputBuffer()) != null) {
-			return;
-		}
-
 		ChunkInfo[] infos = getInfo(packet, player);
 
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
@@ -68,11 +64,6 @@ public class Calculations {
 	private static void Obfuscate(IPacket51 packet, Player player) {
 		ChunkInfo info = getInfo(packet, player);
 
-		if (info.chunkMask == 0 && info.extraMask == 0) {
-			return;
-		}
-
-		
 		ComputeChunkInfoAndObfuscate(info);
 
 		Deflater deflater = localDeflater.get();
@@ -134,9 +125,6 @@ public class Calculations {
 			return;
 		}
 
-		info.typeBuffer = new byte[info.chunkSectionNumber * 4096];
-		info.extraBuffer = new byte[info.extraSectionNumber * 2048];
-
 		// Obfuscate
 		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName()) && OrebfuscatorConfig.Enabled) {
 			Obfuscate(info);
@@ -183,9 +171,9 @@ public class Calculations {
 								typeID += extra << 8;
 							}
 
-							// Obfuscate block if needed or copy old
-							int newBlockID = typeID;
+							// Obfuscate block if needed
 							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z)) {
+								int newBlockID = 0;
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
 									newBlockID = (isNether ? 87 : 1);
@@ -193,14 +181,14 @@ public class Calculations {
 									// Ending mode 2, get random block
 									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
 								}
-							}
-							info.typeBuffer[currentTypeIndex] = (byte) newBlockID;
-							if (usesExtra) {
-								byte extra = (byte) (newBlockID >> 8);
-								if (currentTypeIndex % 2 == 0) {
-									block1extra = extra;
-								} else {
-									info.extraBuffer[currentExtendedIndex] = (byte) (extra << 4 + block1extra);
+								info.data[currentTypeIndex] = (byte) newBlockID;
+								if (usesExtra) {
+									byte extra = (byte) (newBlockID >> 8);
+									if (currentTypeIndex % 2 == 0) {
+										block1extra = extra;
+									} else {
+										info.data[addExtendedIndex + currentExtendedIndex] = (byte) (extra << 4 + block1extra);
+									}
 								}
 							}
 
@@ -215,14 +203,6 @@ public class Calculations {
 				}
 			}
 		}
-
-		// Copy obfuscated buffer to data
-		System.arraycopy(info.typeBuffer, 0, info.data, 0, info.typeBuffer.length);
-		System.arraycopy(info.extraBuffer, 0, info.data, addExtendedIndex, info.extraBuffer.length);
-
-		// Clear buffer
-		info.typeBuffer = null;
-		info.extraBuffer = null;
 	}
 
 	private static boolean areAjacentBlocksTransparent(ChunkInfo info, int x, int y, int z) {
