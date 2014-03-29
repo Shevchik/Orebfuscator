@@ -153,7 +153,6 @@ public class Calculations {
 		int currentExtendedIndex = 0;
 		int startX = info.chunkX << 4;
 		int startZ = info.chunkZ << 4;
-		int blockY = 0;
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
 		for (int i = 0; i < 16; i++) {
@@ -163,9 +162,6 @@ public class Calculations {
 				int block1extra = 0;
 
 				for (int y = 0; y < 16; y++) {
-
-					blockY++;
-
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
 
@@ -188,7 +184,7 @@ public class Calculations {
 
 							// Obfuscate block if needed or copy old
 							int newBlockID = typeID;
-							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z)) {
+							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, (i << 4) + y, startZ + z)) {
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
 									newBlockID = (isNether ? 87 : 1);
@@ -199,11 +195,11 @@ public class Calculations {
 							}
 							info.typeBuffer[currentTypeIndex] = (byte) newBlockID;
 							if (usesExtra) {
-								byte extra = (byte) (newBlockID >> 8);
+								byte extra = (byte) (newBlockID / 256);
 								if (currentTypeIndex % 2 == 0) {
 									block1extra = extra;
 								} else {
-									info.extraBuffer[currentExtendedIndex] = (byte) (extra << 4 + block1extra);
+									info.extraBuffer[currentExtendedIndex] = (byte) (extra * 16 + block1extra);
 								}
 							}
 
