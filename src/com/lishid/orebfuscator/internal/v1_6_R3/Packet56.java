@@ -105,12 +105,7 @@ public class Packet56 implements IPacket56 {
 		deflater.finish();
 
 		ReflectionHelper.setPrivateField(packet, getOutputBuffer(), tempbuffer);
-		int size = deflater.deflate(tempbuffer);
-		ReflectionHelper.setPrivateField(packet, "field_73585_g", size);
-
-		// Free memory
-		ReflectionHelper.setPrivateField(packet, getInflatedBuffers(), null);
-		tempbuffer = null;
+		ReflectionHelper.setPrivateField(packet, "field_73585_g", deflater.deflate(tempbuffer));
 	}
 
 }
