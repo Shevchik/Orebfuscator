@@ -162,6 +162,7 @@ public class Calculations {
 				int block1extra = 0;
 
 				for (int y = 0; y < 16; y++) {
+					int blockY = (i << 4) + y;
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
 
@@ -184,7 +185,7 @@ public class Calculations {
 
 							// Obfuscate block if needed or copy old
 							int newBlockID = typeID;
-							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, (i << 4) + y, startZ + z)) {
+							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z)) {
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
 									newBlockID = (isNether ? 87 : 1);
