@@ -56,7 +56,6 @@ public class Calculations {
 
 		ChunkInfo[] infos = getInfo(packet, player);
 
-		// Create an info objects
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
 			ChunkInfo info = infos[chunkNum];
 			ComputeChunkInfoAndObfuscate(info);
@@ -73,6 +72,7 @@ public class Calculations {
 			return;
 		}
 
+		
 		ComputeChunkInfoAndObfuscate(info);
 
 		Deflater deflater = localDeflater.get();
@@ -259,7 +259,36 @@ public class Calculations {
 		}
 
 		int id = 1;
-		if (CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
+
+		boolean foundID = false;
+        if ((info.chunkMask & (1 << (y >> 4))) > 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
+            int section = info.chunkSectionToIndexMap[y >> 4];
+            int cX = ((x % 16) < 0) ? (x % 16 + 16) : (x % 16);
+            int cZ = ((z % 16) < 0) ? (z % 16 + 16) : (z % 16);
+
+            int blockindex = (y % 16 << 8) + (cZ << 4) + cX;
+
+            id = info.data[section * 4096 + blockindex];
+            if (id < 0) {
+            	id +=256;
+            }
+            if ((info.extraMask & (1 << (y >> 4))) > 0) {
+            	int extrasecton = info.extraSectionToIndexMap[y >> 4];
+				byte extra = 0;
+				if (blockindex % 2 == 0) {
+					extra = (byte) (info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex / 2] & 0x0F);
+				} else {
+					extra = (byte) (info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex / 2] >> 4);
+				}
+				if (extra < 0) {
+					extra += 16;
+				}
+				id += extra << 8;
+            }
+            foundID = true;
+        }
+
+		if (!foundID && CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
 			id = info.world.getBlockTypeIdAt(x, y, z);
 		}
 
