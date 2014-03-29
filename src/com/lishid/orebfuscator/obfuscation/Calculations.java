@@ -90,26 +90,7 @@ public class Calculations {
 		int[] chunkMask = packet.getChunkMask();
 		int[] extraMask = packet.getExtraMask();
 
-		byte[] buildBuffer = (byte[]) packet.getFieldData(packet.getBuildBuffer());
-
-		if (buildBuffer.length == 0) {
-			int finalBufferSize = 0;
-			for (int i = 0; i < inflatedBuffers.length; i++) {
-				finalBufferSize += inflatedBuffers[i].length;
-			}
-
-			buildBuffer = new byte[finalBufferSize];
-			int bufferLocation = 0;
-			for (int i = 0; i < inflatedBuffers.length; i++) {
-				System.arraycopy(inflatedBuffers[i], 0, buildBuffer, bufferLocation, inflatedBuffers[i].length);
-				bufferLocation += inflatedBuffers[i].length;
-			}
-
-			packet.setFieldData(packet.getBuildBuffer(), buildBuffer);
-		}
-
 		// Create an info objects
-		int dataStartIndex = 0;
 		for (int chunkNum = 0; chunkNum < packet.getPacketChunkNumber(); chunkNum++) {
 			ChunkInfo info = new ChunkInfo();
 			infos[chunkNum] = info;
@@ -118,10 +99,8 @@ public class Calculations {
 			info.chunkZ = z[chunkNum];
 			info.chunkMask = chunkMask[chunkNum];
 			info.extraMask = extraMask[chunkNum];
-			info.data = buildBuffer;
-			info.startIndex = dataStartIndex;
-
-			dataStartIndex += inflatedBuffers[chunkNum].length;
+			info.data = inflatedBuffers[chunkNum];
+			info.startIndex = 0;
 		}
 
 		return infos;

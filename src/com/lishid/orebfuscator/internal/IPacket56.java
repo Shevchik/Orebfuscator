@@ -37,8 +37,6 @@ public interface IPacket56 {
 
 	public String getInflatedBuffers();
 
-	public String getBuildBuffer();
-
 	public String getOutputBuffer();
 
 	public void compress(Deflater deflater);

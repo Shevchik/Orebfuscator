@@ -75,11 +75,6 @@ public class Packet56 implements IPacket56 {
 	}
 
 	@Override
-	public String getBuildBuffer() {
-		return "field_73591_h";
-	}
-
-	@Override
 	public String getOutputBuffer() {
 		return "field_73587_e";
 	}
@@ -90,19 +85,32 @@ public class Packet56 implements IPacket56 {
 			return;
 		}
 
-		byte[] buildBuffer = (byte[]) getFieldData(getBuildBuffer());
+		byte[][] inflatedBuffers = (byte[][]) getFieldData(getInflatedBuffers());
+
+		int finalBufferSize = 0;
+		for (int i = 0; i < inflatedBuffers.length; i++) {
+			finalBufferSize += inflatedBuffers[i].length;
+		}
+
+		byte[] tempbuffer = new byte[finalBufferSize];
+
+		int bufferLocation = 0;
+		for (int i = 0; i < inflatedBuffers.length; i++) {
+			System.arraycopy(inflatedBuffers[i], 0, tempbuffer, bufferLocation, inflatedBuffers[i].length);
+			bufferLocation += inflatedBuffers[i].length;
+		}
 
 		deflater.reset();
-		deflater.setInput(buildBuffer);
+		deflater.setInput(tempbuffer);
 		deflater.finish();
 
-		ReflectionHelper.setPrivateField(packet, "field_73587_e", buildBuffer);
-		int size = deflater.deflate(buildBuffer);
+		ReflectionHelper.setPrivateField(packet, getOutputBuffer(), tempbuffer);
+		int size = deflater.deflate(tempbuffer);
 		ReflectionHelper.setPrivateField(packet, "field_73585_g", size);
 
 		// Free memory
-		ReflectionHelper.setPrivateField(packet, "field_73591_h", null);
-		ReflectionHelper.setPrivateField(packet, "field_73584_f", null);
+		ReflectionHelper.setPrivateField(packet, getInflatedBuffers(), null);
+		tempbuffer = null;
 	}
 
 }
