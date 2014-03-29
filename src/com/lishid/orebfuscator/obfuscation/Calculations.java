@@ -100,7 +100,6 @@ public class Calculations {
 			info.chunkMask = chunkMask[chunkNum];
 			info.extraMask = extraMask[chunkNum];
 			info.data = inflatedBuffers[chunkNum];
-			info.startIndex = 0;
 		}
 
 		return infos;
@@ -115,7 +114,6 @@ public class Calculations {
 		info.chunkMask = packet.getChunkMask();
 		info.extraMask = packet.getExtraMask();
 		info.data = packet.getBuffer();
-		info.startIndex = 0;
 		return info;
 	}
 
@@ -132,7 +130,7 @@ public class Calculations {
             }
         }
 
-		if (info.startIndex + 4096 * info.chunkSectionNumber > info.data.length) {
+		if (4096 * info.chunkSectionNumber > info.data.length) {
 			return;
 		}
 
@@ -171,16 +169,16 @@ public class Calculations {
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
 
-							int typeID = info.data[info.startIndex + currentTypeIndex];
+							int typeID = info.data[currentTypeIndex];
 							if (typeID < 0) {
 								typeID += 256;
 							}
 							if (usesExtra) {
 								byte extra = 0;
 								if (currentTypeIndex % 2 == 0) {
-									extra = (byte) (info.data[info.startIndex + addExtendedIndex + currentExtendedIndex] & 0x0F);
+									extra = (byte) (info.data[addExtendedIndex + currentExtendedIndex] & 0x0F);
 								} else {
-									extra = (byte) (info.data[info.startIndex + addExtendedIndex + currentExtendedIndex] >> 4);
+									extra = (byte) (info.data[addExtendedIndex + currentExtendedIndex] >> 4);
 								}
 								if (extra < 0) {
 									extra += 16;
@@ -222,8 +220,8 @@ public class Calculations {
 		}
 
 		// Copy obfuscated buffer to data
-		System.arraycopy(info.typeBuffer, 0, info.data, info.startIndex, info.typeBuffer.length);
-		System.arraycopy(info.extraBuffer, 0, info.data, info.startIndex + addExtendedIndex, info.extraBuffer.length);
+		System.arraycopy(info.typeBuffer, 0, info.data, 0, info.typeBuffer.length);
+		System.arraycopy(info.extraBuffer, 0, info.data, addExtendedIndex, info.extraBuffer.length);
 
 		// Clear buffer
 		info.typeBuffer = null;
