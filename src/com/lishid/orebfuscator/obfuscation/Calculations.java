@@ -196,11 +196,11 @@ public class Calculations {
 							}
 							info.typeBuffer[currentTypeIndex] = (byte) newBlockID;
 							if (usesExtra) {
-								byte extra = (byte) (newBlockID / 256);
+								byte extra = (byte) (newBlockID >> 8);
 								if (currentTypeIndex % 2 == 0) {
 									block1extra = extra;
 								} else {
-									info.extraBuffer[currentExtendedIndex] = (byte) (extra * 16 + block1extra);
+									info.extraBuffer[currentExtendedIndex] = (byte) (extra << 4 + block1extra);
 								}
 							}
 
