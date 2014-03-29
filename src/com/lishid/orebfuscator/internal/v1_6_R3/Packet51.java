@@ -25,7 +25,6 @@ import com.lishid.orebfuscator.internal.IPacket51;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class Packet51 implements IPacket51 {
-	private static Class<? extends Object> packetClass = Packet51MapChunk.class;
 
 	Packet51MapChunk packet;
 
@@ -58,11 +57,11 @@ public class Packet51 implements IPacket51 {
 
 	@Override
 	public byte[] getBuffer() {
-		return (byte[]) ReflectionHelper.getPrivateField(packetClass, packet, "field_73596_g");
+		return (byte[]) ReflectionHelper.getPrivateField(packet, "field_73596_g");
 	}
 
 	private byte[] getOutputBuffer() {
-		return (byte[]) ReflectionHelper.getPrivateField(packetClass, packet, "field_73595_f");
+		return (byte[]) ReflectionHelper.getPrivateField(packet, "field_73595_f");
 	}
 
 	@Override
@@ -71,8 +70,10 @@ public class Packet51 implements IPacket51 {
 		byte[] chunkBuffer = getOutputBuffer();
 
 		deflater.reset();
-		deflater.setInput(chunkInflatedBuffer, 0, chunkInflatedBuffer.length);
+		deflater.setInput(chunkInflatedBuffer);
 		deflater.finish();
-		ReflectionHelper.setPrivateField(packetClass, packet, "field_73602_h", deflater.deflate(chunkBuffer));
+
+		ReflectionHelper.setPrivateField(packet, "field_73602_h", deflater.deflate(chunkBuffer));
 	}
+
 }

@@ -61,12 +61,12 @@ public class Packet56 implements IPacket56 {
 
 	@Override
 	public Object getFieldData(String field) {
-		return ReflectionHelper.getPrivateField(Packet56MapChunkBulk.class, packet, field);
+		return ReflectionHelper.getPrivateField(packet, field);
 	}
 
 	@Override
 	public void setFieldData(String field, Object data) {
-		ReflectionHelper.setPrivateField(Packet56MapChunkBulk.class, packet, field, data);
+		ReflectionHelper.setPrivateField(packet, field, data);
 	}
 
 	@Override
@@ -96,14 +96,13 @@ public class Packet56 implements IPacket56 {
 		deflater.setInput(buildBuffer);
 		deflater.finish();
 
-		byte[] buffer = new byte[buildBuffer.length + 100];
-
-		ReflectionHelper.setPrivateField(packet, "field_73587_e", buffer);
-		int size = deflater.deflate(buffer);
+		ReflectionHelper.setPrivateField(packet, "field_73587_e", buildBuffer);
+		int size = deflater.deflate(buildBuffer);
 		ReflectionHelper.setPrivateField(packet, "field_73585_g", size);
 
 		// Free memory
 		ReflectionHelper.setPrivateField(packet, "field_73591_h", null);
 		ReflectionHelper.setPrivateField(packet, "field_73584_f", null);
 	}
+
 }

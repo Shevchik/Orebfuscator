@@ -56,10 +56,10 @@ public class Calculations {
 
 		ChunkInfo[] infos = getInfo(packet, player);
 
+		// Create an info objects
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
-			// Create an info objects
 			ChunkInfo info = infos[chunkNum];
-			ComputeChunkInfoAndObfuscate(info, (byte[]) packet.getFieldData(packet.getBuildBuffer()));
+			ComputeChunkInfoAndObfuscate(info);
 		}
 
 		Deflater deflater = localDeflater.get();
@@ -73,7 +73,7 @@ public class Calculations {
 			return;
 		}
 
-		ComputeChunkInfoAndObfuscate(info, packet.getBuffer());
+		ComputeChunkInfoAndObfuscate(info);
 
 		Deflater deflater = localDeflater.get();
 		packet.compress(deflater);
@@ -81,8 +81,6 @@ public class Calculations {
 
 	private static ChunkInfo[] getInfo(IPacket56 packet, Player player) {
 		ChunkInfo[] infos = new ChunkInfo[packet.getPacketChunkNumber()];
-
-		int dataStartIndex = 0;
 
 		int[] x = packet.getX();
 		int[] z = packet.getZ();
@@ -94,7 +92,6 @@ public class Calculations {
 
 		byte[] buildBuffer = (byte[]) packet.getFieldData(packet.getBuildBuffer());
 
-		// Check for spigot and fix accordingly
 		if (buildBuffer.length == 0) {
 			int finalBufferSize = 0;
 			for (int i = 0; i < inflatedBuffers.length; i++) {
@@ -111,8 +108,9 @@ public class Calculations {
 			packet.setFieldData(packet.getBuildBuffer(), buildBuffer);
 		}
 
+		// Create an info objects
+		int dataStartIndex = 0;
 		for (int chunkNum = 0; chunkNum < packet.getPacketChunkNumber(); chunkNum++) {
-			// Create an info objects
 			ChunkInfo info = new ChunkInfo();
 			infos[chunkNum] = info;
 			info.world = player.getWorld();
@@ -142,7 +140,7 @@ public class Calculations {
 		return info;
 	}
 
-	private static void ComputeChunkInfoAndObfuscate(ChunkInfo info, byte[] original) {
+	private static void ComputeChunkInfoAndObfuscate(ChunkInfo info) {
 		// Compute chunk number
         for (int i = 0; i < 16; i++) {
             if ((info.chunkMask & 1 << i) > 0) {
@@ -208,7 +206,7 @@ public class Calculations {
 								if (extra < 0) {
 									extra += 16;
 								}
-								typeID += extra * 256;
+								typeID += extra << 8;
 							}
 
 							// Obfuscate block if needed or copy old
@@ -224,11 +222,11 @@ public class Calculations {
 							}
 							info.typeBuffer[currentTypeIndex] = (byte) newBlockID;
 							if (usesExtra) {
-								byte extra = (byte) (newBlockID / 256);
+								byte extra = (byte) (newBlockID >> 8);
 								if (currentTypeIndex % 2 == 0) {
 									block1extra = extra;
 								} else {
-									info.extraBuffer[currentExtendedIndex] = (byte) (extra * 16 + block1extra);
+									info.extraBuffer[currentExtendedIndex] = (byte) (extra << 4 + block1extra);
 								}
 							}
 
