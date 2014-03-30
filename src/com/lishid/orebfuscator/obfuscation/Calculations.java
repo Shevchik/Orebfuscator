@@ -56,10 +56,12 @@ public class Calculations {
 
 		ChunkInfo[] infos = getInfo(packet, player);
 
+		long timeA = System.currentTimeMillis();
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
 			ChunkInfo info = infos[chunkNum];
 			ComputeChunkInfoAndObfuscate(info);
 		}
+		System.out.println(System.currentTimeMillis() - timeA);
 
 		Deflater deflater = localDeflater.get();
 		packet.compress(deflater);
@@ -134,11 +136,9 @@ public class Calculations {
 			return;
 		}
 
-		// Copy data to buffer
+		// Create buffer
 		info.typeBuffer = new byte[info.chunkSectionNumber * 4096];
 		info.extraBuffer = new byte[info.extraSectionNumber * 2048];
-		System.arraycopy(info.data, 0, info.typeBuffer, 0, info.typeBuffer.length);
-		System.arraycopy(info.data, 10240 * info.chunkSectionNumber, info.extraBuffer, 0, info.extraBuffer.length);
 
 		// Obfuscate
 		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName()) && OrebfuscatorConfig.Enabled) {
@@ -185,8 +185,8 @@ public class Calculations {
 							}
 
 							// Obfuscate block if needed or copy old
+							int newBlockID = typeID;
 							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z)) {
-								int newBlockID = 0;
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
 									newBlockID = (isNether ? 87 : 1);
@@ -194,14 +194,14 @@ public class Calculations {
 									// Ending mode 2, get random block
 									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
 								}
-								info.typeBuffer[currentTypeIndex] = (byte) newBlockID;
-								if (usesExtra) {
-									byte extra = (byte) (newBlockID >> 8);
-									if (currentTypeIndex % 2 == 0) {
-										info.extraBuffer[currentExtendedIndex] = extra;
-									} else {
-										info.extraBuffer[currentExtendedIndex] += (byte) (extra << 4);
-									}
+							}
+							info.typeBuffer[currentTypeIndex] = (byte) newBlockID;
+							if (usesExtra) {
+								byte extra = (byte) (newBlockID >> 8);
+								if (currentTypeIndex % 2 == 0) {
+									info.extraBuffer[currentExtendedIndex] = extra;
+								} else {
+									info.extraBuffer[currentExtendedIndex] += (byte) (extra << 4);
 								}
 							}
 
