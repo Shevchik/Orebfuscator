@@ -141,7 +141,7 @@ public class Calculations {
 		info.extraBuffer = new byte[info.extraSectionNumber * 2048];
 
 		// Obfuscate
-		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName()) && OrebfuscatorConfig.Enabled) {
+		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName())) {
 			Obfuscate(info);
 		}
 	}

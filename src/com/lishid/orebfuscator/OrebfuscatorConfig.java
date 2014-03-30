@@ -30,7 +30,6 @@ import com.lishid.orebfuscator.internal.InternalAccessor;
 public class OrebfuscatorConfig {
 
 	// Main engine config
-	public static boolean Enabled = true;
 	public static int EngineMode = 2;
 	public static int UpdateRadius = 2;
 	public static int CompressionLevel = 0;
@@ -122,11 +121,6 @@ public class OrebfuscatorConfig {
 		ProcessingThreads = data;
 	}
 
-	public static void setEnabled(boolean data) {
-		setData("Booleans.Enabled", data);
-		Enabled = data;
-	}
-
 	public static void setDisabledWorlds(String name, boolean data) {
 		if (!data) {
 			DisabledWorlds.remove(name);
@@ -135,13 +129,6 @@ public class OrebfuscatorConfig {
 			DisabledWorlds.add(name);
 		}
 		setData("Lists.DisabledWorlds", DisabledWorlds);
-	}
-
-	private static boolean getBoolean(String path, boolean defaultData) {
-		if (getConfig().get(path) == null) {
-			setData(path, defaultData);
-		}
-		return getConfig().getBoolean(path, defaultData);
 	}
 
 	private static int getInt(String path, int defaultData) {
@@ -206,7 +193,6 @@ public class OrebfuscatorConfig {
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
 
 		CompressionLevel = clamp(getInt("Integers.CompressionLevel", CompressionLevel), 1, 9);
-		Enabled = getBoolean("Booleans.Enabled", Enabled);
 
 		// Read block lists
 		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", Arrays.asList(new Integer[] { 14, 15, 16, 21, 54, 56, 73, 74, 129, 130 })), false);

@@ -70,34 +70,13 @@ public class OrebfuscatorCommandExecutor {
 			return true;
 		}
 
-		else if (args[0].equalsIgnoreCase("enable") || args[0].equalsIgnoreCase("disable")) {
-			boolean data = args[0].equalsIgnoreCase("enable");
-
-			if (args[0].equalsIgnoreCase("enable") && args.length == 1) {
-				OrebfuscatorConfig.setEnabled(true);
-				Orebfuscator.message(sender, "Enabled.");
-			}
-
-			else if (args[0].equalsIgnoreCase("disable") && args.length == 1) {
-				OrebfuscatorConfig.setEnabled(false);
-				Orebfuscator.message(sender, "Disabled.");
-			}
-
-			else if (args.length > 1) {
-				if (args[1].equalsIgnoreCase("world") && args.length > 2) {
-					OrebfuscatorConfig.setDisabledWorlds(args[2], !data);
-					Orebfuscator.message(sender, "World \"" + args[2] + "\" obfuscation " + (data ? "enabled" : "disabled") + ".");
-				}
-			}
-		}
-
 		else if (args[0].equalsIgnoreCase("reload")) {
 			OrebfuscatorConfig.reload();
 			Orebfuscator.message(sender, "Reload complete.");
 		}
 
 		else if (args[0].equalsIgnoreCase("status")) {
-			Orebfuscator.message(sender, "Orebfuscator " + Orebfuscator.instance.getDescription().getVersion() + " is: " + (OrebfuscatorConfig.Enabled ? "Enabled" : "Disabled"));
+			Orebfuscator.message(sender, "Orebfuscator " + Orebfuscator.instance.getDescription().getVersion());
 			Orebfuscator.message(sender, "EngineMode: " + OrebfuscatorConfig.EngineMode);
 
 			Orebfuscator.message(sender, "Update Radius: " + OrebfuscatorConfig.UpdateRadius);
