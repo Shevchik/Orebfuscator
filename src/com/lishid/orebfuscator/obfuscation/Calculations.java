@@ -74,7 +74,6 @@ public class Calculations {
 			return;
 		}
 
-		
 		ComputeChunkInfoAndObfuscate(info);
 
 		Deflater deflater = localDeflater.get();

@@ -17,6 +17,7 @@
 package com.lishid.orebfuscator.utils;
 
 import java.lang.reflect.Field;
+
 import com.lishid.orebfuscator.Orebfuscator;
 
 public class ReflectionHelper {
