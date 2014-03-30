@@ -67,6 +67,7 @@ public class BlockChangeListener {
 					final int recordcount = packet.getRecordsCount();
 					final byte[] data = packet.getBuffer();
 					Runnable updateBlocks = new Runnable() {
+						@SuppressWarnings("deprecation")
 						@Override
 						public void run() {
 							Player player = event.getPlayer();
@@ -90,7 +91,10 @@ public class BlockChangeListener {
 								if (y < 0) {
 									y+= 256;
 								}
-								blocks.add(world.getBlockAt(x, y, z));
+								Block block = world.getBlockAt(x, y, z);
+								if (OrebfuscatorConfig.isBlockTransparent(block.getTypeId())) {
+									blocks.add(world.getBlockAt(x, y, z));
+								}
 							}
 							BlockUpdate.Update(player, blocks);
 						}
