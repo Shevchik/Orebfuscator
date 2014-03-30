@@ -3,8 +3,6 @@ package com.lishid.orebfuscator.listeners;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.v1_6_R3.Packet52MultiBlockChange;
-
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -17,6 +15,8 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
+import com.lishid.orebfuscator.internal.IPacket52;
+import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 import com.lishid.orebfuscator.obfuscation.ProcessingThreads;
 
@@ -60,11 +60,12 @@ public class BlockChangeListener {
 			) {
 				@Override
 				public void onPacketSending(final PacketEvent event) {
-					Packet52MultiBlockChange handle = (Packet52MultiBlockChange) event.getPacket().getHandle();
-					final int chunkX = handle.a;
-					final int chunkZ = handle.b;
-					final int recordcount = handle.d;
-					final byte[] data = handle.c;
+					IPacket52 packet = InternalAccessor.Instance.newPacket52();
+					packet.setPacket(event.getPacket().getHandle());
+					final int chunkX = packet.getChunkX();
+					final int chunkZ = packet.getChunkZ();
+					final int recordcount = packet.getRecordsCount();
+					final byte[] data = packet.getBuffer();
 					Runnable updateBlocks = new Runnable() {
 						@Override
 						public void run() {

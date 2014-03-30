@@ -33,6 +33,10 @@ public class InternalAccessor {
 		Instance.version = packageName.substring(packageName.lastIndexOf('.') + 1);
 	}
 
+	public IPacket52 newPacket52() {
+		return (IPacket52) createObject(IPacket52.class, "Packet52");
+	}
+
 	public IPacket51 newPacket51() {
 		return (IPacket51) createObject(IPacket51.class, "Packet51");
 	}
