@@ -56,12 +56,10 @@ public class Calculations {
 
 		ChunkInfo[] infos = getInfo(packet, player);
 
-		long timeA = System.currentTimeMillis();
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
 			ChunkInfo info = infos[chunkNum];
 			ComputeChunkInfoAndObfuscate(info);
 		}
-		System.out.println(System.currentTimeMillis() - timeA);
 
 		Deflater deflater = localDeflater.get();
 		packet.compress(deflater);
