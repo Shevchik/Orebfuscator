@@ -134,8 +134,11 @@ public class Calculations {
 			return;
 		}
 
+		// Copy data to buffer
 		info.typeBuffer = new byte[info.chunkSectionNumber * 4096];
 		info.extraBuffer = new byte[info.extraSectionNumber * 2048];
+		System.arraycopy(info.data, 0, info.typeBuffer, 0, info.typeBuffer.length);
+		System.arraycopy(info.data, 10240 * info.chunkSectionNumber, info.extraBuffer, 0, info.extraBuffer.length);
 
 		// Obfuscate
 		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName()) && OrebfuscatorConfig.Enabled) {
@@ -157,9 +160,7 @@ public class Calculations {
 		// Loop over 16x16x16 chunks in the 16x256x16 column
 		for (int i = 0; i < 16; i++) {
 			if ((info.chunkMask & 1 << i) != 0) {
-
 				boolean usesExtra = ((info.extraMask & 1 << i) != 0);
-				int block1extra = 0;
 
 				for (int y = 0; y < 16; y++) {
 					int blockY = (i << 4) + y;
@@ -184,8 +185,8 @@ public class Calculations {
 							}
 
 							// Obfuscate block if needed or copy old
-							int newBlockID = typeID;
 							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z)) {
+								int newBlockID = 0;
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
 									newBlockID = (isNether ? 87 : 1);
@@ -193,14 +194,14 @@ public class Calculations {
 									// Ending mode 2, get random block
 									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
 								}
-							}
-							info.typeBuffer[currentTypeIndex] = (byte) newBlockID;
-							if (usesExtra) {
-								byte extra = (byte) (newBlockID >> 8);
-								if (currentTypeIndex % 2 == 0) {
-									block1extra = extra;
-								} else {
-									info.extraBuffer[currentExtendedIndex] = (byte) (extra << 4 + block1extra);
+								info.typeBuffer[currentTypeIndex] = (byte) newBlockID;
+								if (usesExtra) {
+									byte extra = (byte) (newBlockID >> 8);
+									if (currentTypeIndex % 2 == 0) {
+										info.extraBuffer[currentExtendedIndex] = extra;
+									} else {
+										info.extraBuffer[currentExtendedIndex] += (byte) (extra << 4);
+									}
 								}
 							}
 
