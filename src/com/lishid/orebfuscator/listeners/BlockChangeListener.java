@@ -91,9 +91,11 @@ public class BlockChangeListener {
 								if (y < 0) {
 									y+= 256;
 								}
-								Block block = world.getBlockAt(x, y, z);
-								if (OrebfuscatorConfig.isBlockTransparent(block.getTypeId())) {
-									blocks.add(world.getBlockAt(x, y, z));
+								if (world.isChunkLoaded(chunkX, chunkZ)) {
+									Block block = world.getBlockAt(x, y, z);
+									if (OrebfuscatorConfig.isBlockTransparent(block.getTypeId())) {
+										blocks.add(world.getBlockAt(x, y, z));
+									}
 								}
 							}
 							BlockUpdate.Update(player, blocks);
