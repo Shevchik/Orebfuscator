@@ -18,6 +18,7 @@ package com.lishid.orebfuscator.obfuscation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
+import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -39,6 +40,15 @@ public class BlockUpdate {
 			manager = ProtocolLibrary.getProtocolManager();
 		}
 		return manager;
+	}
+
+	public static void Update(Player player, List<Block> blocks) {
+		HashSet<Block> updateBlocks = new HashSet<Block>();
+		for (Block block : blocks) {
+			updateBlocks.addAll(GetAjacentBlocks(block.getWorld(), new HashSet<Block>(), block, OrebfuscatorConfig.UpdateRadius));
+		}
+
+		sendBlockUpdates(player, updateBlocks);
 	}
 
 	public static void Update(Player player, Block block) {
