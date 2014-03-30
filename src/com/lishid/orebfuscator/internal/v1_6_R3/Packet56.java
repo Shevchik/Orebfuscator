@@ -81,6 +81,10 @@ public class Packet56 implements IPacket56 {
 
 	@Override
 	public void compress(Deflater deflater) {
+		if (getFieldData(getOutputBuffer()) != null) {
+			return;
+		}
+
 		byte[][] inflatedBuffers = (byte[][]) getFieldData(getInflatedBuffers());
 
 		int finalBufferSize = 0;
