@@ -180,7 +180,7 @@ public class Calculations {
 							}
 
 							// Obfuscate block if needed or copy old
-							int newBlockID = typeID;
+							int newBlockID = 0;
 							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z)) {
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
@@ -189,14 +189,14 @@ public class Calculations {
 									// Ending mode 2, get random block
 									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
 								}
-							}
-							info.finaldata[info.finaldataWriteIndex + currentTypeIndex] = (byte) newBlockID;
-							if (usesExtra) {
-								byte extra = (byte) (newBlockID >> 8);
-								if (currentTypeIndex % 2 == 0) {
-									info.finaldata[info.finaldataWriteIndex + addExtendedIndex + currentExtendedIndex] = extra;
-								} else {
-									info.finaldata[info.finaldataWriteIndex + addExtendedIndex + currentExtendedIndex] += (byte) (extra << 4);
+								info.finaldata[info.finaldataWriteIndex + currentTypeIndex] = (byte) newBlockID;
+								if (usesExtra) {
+									byte extra = (byte) (newBlockID >> 8);
+									if (currentTypeIndex % 2 == 0) {
+										info.finaldata[info.finaldataWriteIndex + addExtendedIndex + currentExtendedIndex] = extra;
+									} else {
+										info.finaldata[info.finaldataWriteIndex + addExtendedIndex + currentExtendedIndex] += (byte) (extra << 4);
+									}
 								}
 							}
 
