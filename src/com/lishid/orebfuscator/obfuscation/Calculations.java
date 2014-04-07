@@ -112,8 +112,8 @@ public class Calculations {
 		info.chunkZ = packet.getZ();
 		info.chunkMask = packet.getChunkMask();
 		info.extraMask = packet.getExtraMask();
-		info.data = packet.getBuffer();
-		info.finaldata = packet.getBuffer();
+		info.data = packet.getInflatedBuffer();
+		info.finaldata = packet.getInflatedBuffer();
 		info.finaldataWriteIndex = 0;
 		return info;
 	}

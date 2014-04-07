@@ -29,7 +29,7 @@ public interface IPacket51 {
 
 	public int getExtraMask();
 
-	public byte[] getBuffer();
+	public byte[] getInflatedBuffer();
 
 	public void compress(Deflater deflater);
 }

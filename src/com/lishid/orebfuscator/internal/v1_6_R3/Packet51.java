@@ -59,7 +59,7 @@ public class Packet51 implements IPacket51 {
 	}
 
 	@Override
-	public byte[] getBuffer() {
+	public byte[] getInflatedBuffer() {
 		return inflatedBuffer;
 	}
 
