@@ -31,13 +31,9 @@ public interface IPacket56 {
 
 	public int[] getExtraMask();
 
-	public Object getFieldData(String field);
-
-	public void setFieldData(String field, Object data);
-
-	public String getInflatedBuffers();
-
-	public String getOutputBuffer();
+	public byte[][] getInflatedBuffers();
+	
+	public byte[] getOutputBuffer();
 
 	public void compress(Deflater deflater);
 

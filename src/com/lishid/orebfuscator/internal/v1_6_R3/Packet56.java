@@ -18,6 +18,7 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 
 import java.util.zip.Deflater;
 
+
 //Volatile
 import net.minecraft.server.v1_6_R3.Packet56MapChunkBulk;
 
@@ -26,12 +27,34 @@ import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class Packet56 implements IPacket56 {
 	Packet56MapChunkBulk packet;
+	
+	byte[] finalbuffer;
+	byte[][] inflatedBuffers;
 
 	@Override
 	public void setPacket(Object packet) {
 		if (packet instanceof Packet56MapChunkBulk) {
 			this.packet = (Packet56MapChunkBulk) packet;
+			inflatedBuffers = (byte[][]) ReflectionHelper.getPrivateField(packet, "field_73584_f");
+
+			int finalBufferSize = 0;
+			for (int i = 0; i < inflatedBuffers.length; i++) {
+				finalBufferSize += inflatedBuffers[i].length;
+			}
+
+			finalbuffer = new byte[finalBufferSize];
+			finalBufferSize = 0;
+			for (int i = 0; i < inflatedBuffers.length; i++) {
+				System.arraycopy(inflatedBuffers[i], 0, finalbuffer, finalBufferSize, inflatedBuffers[i].length);
+				finalBufferSize += inflatedBuffers[i].length;
+			}
+			ReflectionHelper.setPrivateField(packet, "field_73587_e", finalbuffer);
 		}
+	}
+
+	@Override
+	public byte[] getOutputBuffer() {
+		return finalbuffer;
 	}
 
 	@Override
@@ -60,52 +83,17 @@ public class Packet56 implements IPacket56 {
 	}
 
 	@Override
-	public Object getFieldData(String field) {
-		return ReflectionHelper.getPrivateField(packet, field);
-	}
-
-	@Override
-	public void setFieldData(String field, Object data) {
-		ReflectionHelper.setPrivateField(packet, field, data);
-	}
-
-	@Override
-	public String getInflatedBuffers() {
-		return "field_73584_f";
-	}
-
-	@Override
-	public String getOutputBuffer() {
-		return "field_73587_e";
+	public byte[][] getInflatedBuffers() {
+		return inflatedBuffers;
 	}
 
 	@Override
 	public void compress(Deflater deflater) {
-		if (getFieldData(getOutputBuffer()) != null) {
-			return;
-		}
-
-		byte[][] inflatedBuffers = (byte[][]) getFieldData(getInflatedBuffers());
-
-		int finalBufferSize = 0;
-		for (int i = 0; i < inflatedBuffers.length; i++) {
-			finalBufferSize += inflatedBuffers[i].length;
-		}
-
-		byte[] tempbuffer = new byte[finalBufferSize];
-
-		int bufferLocation = 0;
-		for (int i = 0; i < inflatedBuffers.length; i++) {
-			System.arraycopy(inflatedBuffers[i], 0, tempbuffer, bufferLocation, inflatedBuffers[i].length);
-			bufferLocation += inflatedBuffers[i].length;
-		}
-
 		deflater.reset();
-		deflater.setInput(tempbuffer);
+		deflater.setInput(finalbuffer);
 		deflater.finish();
 
-		ReflectionHelper.setPrivateField(packet, getOutputBuffer(), tempbuffer);
-		ReflectionHelper.setPrivateField(packet, "field_73585_g", deflater.deflate(tempbuffer));
+		ReflectionHelper.setPrivateField(packet, "field_73585_g", deflater.deflate(finalbuffer));
 	}
 
 }

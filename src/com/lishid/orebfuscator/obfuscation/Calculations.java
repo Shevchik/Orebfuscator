@@ -50,10 +50,6 @@ public class Calculations {
 	}
 
 	private static void Obfuscate(IPacket56 packet, Player player) {
-		if (packet.getFieldData(packet.getOutputBuffer()) != null) {
-			return;
-		}
-
 		ChunkInfo[] infos = getInfo(packet, player);
 
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
@@ -84,13 +80,14 @@ public class Calculations {
 		int[] x = packet.getX();
 		int[] z = packet.getZ();
 
-		byte[][] inflatedBuffers = (byte[][]) packet.getFieldData(packet.getInflatedBuffers());
+		byte[][] inflatedBuffers = packet.getInflatedBuffers();
 
 		int[] chunkMask = packet.getChunkMask();
 		int[] extraMask = packet.getExtraMask();
 
 		// Create an info objects
-		for (int chunkNum = 0; chunkNum < packet.getPacketChunkNumber(); chunkNum++) {
+		int writeindex = 0;
+		for (int chunkNum = 0; chunkNum < inflatedBuffers.length; chunkNum++) {
 			ChunkInfo info = new ChunkInfo();
 			infos[chunkNum] = info;
 			info.world = player.getWorld();
@@ -99,6 +96,9 @@ public class Calculations {
 			info.chunkMask = chunkMask[chunkNum];
 			info.extraMask = extraMask[chunkNum];
 			info.data = inflatedBuffers[chunkNum];
+			info.finaldata = packet.getOutputBuffer();
+			info.finaldataWriteIndex = writeindex;
+			writeindex += inflatedBuffers[chunkNum].length;
 		}
 
 		return infos;
@@ -113,6 +113,8 @@ public class Calculations {
 		info.chunkMask = packet.getChunkMask();
 		info.extraMask = packet.getExtraMask();
 		info.data = packet.getBuffer();
+		info.finaldata = packet.getBuffer();
+		info.finaldataWriteIndex = 0;
 		return info;
 	}
 
@@ -132,10 +134,6 @@ public class Calculations {
 		if (4096 * info.chunkSectionNumber > info.data.length) {
 			return;
 		}
-
-		// Create buffer
-		info.typeBuffer = new byte[info.chunkSectionNumber * 4096];
-		info.extraBuffer = new byte[info.extraSectionNumber * 2048];
 
 		// Obfuscate
 		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName())) {
@@ -192,13 +190,13 @@ public class Calculations {
 									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
 								}
 							}
-							info.typeBuffer[currentTypeIndex] = (byte) newBlockID;
+							info.finaldata[info.finaldataWriteIndex + currentTypeIndex] = (byte) newBlockID;
 							if (usesExtra) {
 								byte extra = (byte) (newBlockID >> 8);
 								if (currentTypeIndex % 2 == 0) {
-									info.extraBuffer[currentExtendedIndex] = extra;
+									info.finaldata[info.finaldataWriteIndex + addExtendedIndex + currentExtendedIndex] = extra;
 								} else {
-									info.extraBuffer[currentExtendedIndex] += (byte) (extra << 4);
+									info.finaldata[info.finaldataWriteIndex + addExtendedIndex + currentExtendedIndex] += (byte) (extra << 4);
 								}
 							}
 
@@ -213,14 +211,6 @@ public class Calculations {
 				}
 			}
 		}
-
-		// Copy obfuscated buffer to data
-		System.arraycopy(info.typeBuffer, 0, info.data, 0, info.typeBuffer.length);
-		System.arraycopy(info.extraBuffer, 0, info.data, addExtendedIndex, info.extraBuffer.length);
-
-		// Clear buffer
-		info.typeBuffer = null;
-		info.extraBuffer = null;
 	}
 
 	private static boolean areAjacentBlocksTransparent(ChunkInfo info, int x, int y, int z) {

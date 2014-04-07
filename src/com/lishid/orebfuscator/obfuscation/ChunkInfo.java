@@ -30,7 +30,7 @@ public class ChunkInfo {
     public int[] extraSectionToIndexMap = new int[16];
     public int chunkSectionNumber;
     public int extraSectionNumber;
-    public byte[] typeBuffer;
-    public byte[] extraBuffer;
+    public byte[] finaldata;
+    public int finaldataWriteIndex;
 
 }
