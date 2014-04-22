@@ -255,10 +255,8 @@ public class Calculations {
 		boolean foundID = false;
         if ((info.chunkMask & (1 << (y >> 4))) > 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
             int section = info.chunkSectionToIndexMap[y >> 4];
-            int cX = ((x % 16) < 0) ? (x % 16 + 16) : (x % 16);
-            int cZ = ((z % 16) < 0) ? (z % 16 + 16) : (z % 16);
 
-            int blockindex = (y % 16 << 8) + (cZ << 4) + cX;
+            int blockindex = (y % 16 << 8) + (((z % 16) & 0x0F) << 4) + ((x % 16) & 0x0F);
 
             typeID = info.data[section * 4096 + blockindex] & 0xFF;
             if ((info.extraMask & (1 << (y >> 4))) > 0) {
