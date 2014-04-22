@@ -70,11 +70,6 @@ public class OrebfuscatorCommandExecutor {
 			return true;
 		}
 
-		else if (args[0].equalsIgnoreCase("reload")) {
-			OrebfuscatorConfig.reload();
-			Orebfuscator.message(sender, "Reload complete.");
-		}
-
 		else if (args[0].equalsIgnoreCase("status")) {
 			Orebfuscator.message(sender, "Orebfuscator " + Orebfuscator.instance.getDescription().getVersion());
 			Orebfuscator.message(sender, "EngineMode: " + OrebfuscatorConfig.EngineMode);

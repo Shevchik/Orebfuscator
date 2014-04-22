@@ -215,11 +215,6 @@ public class OrebfuscatorConfig {
 		save();
 	}
 
-	public static void reload() {
-		Orebfuscator.instance.reloadConfig();
-		load();
-	}
-
 	public static void save() {
 		Orebfuscator.instance.saveConfig();
 	}
