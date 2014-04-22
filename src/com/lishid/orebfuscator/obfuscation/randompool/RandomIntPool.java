@@ -35,15 +35,23 @@ public class RandomIntPool {
 	private volatile boolean generatorrunning = true;
 	public void start() {
 		generatorrunning = true;
-		ExecutorService executor = Executors.newSingleThreadExecutor();
+		ExecutorService executor = Executors.newFixedThreadPool(2);
 		executor.submit(
 			new Runnable() {
 				@Override
 				public void run() {
 					while (generatorrunning) {
 						randomnormalqueue.put(OrebfuscatorConfig.getRandomBlockID(false));
+					}
+				}
+			}
+		);
+		executor.submit(
+			new Runnable() {
+				@Override
+				public void run() {
+					while (generatorrunning) {
 						randomnetherqueue.put(OrebfuscatorConfig.getRandomBlockID(true));
-						try {Thread.sleep(0);} catch (InterruptedException e) {}
 					}
 				}
 			}
@@ -55,8 +63,8 @@ public class RandomIntPool {
 		generatorrunning = false;
 	}
 
-	private PrimitiveIntLinkedBlockingQueue randomnormalqueue = new PrimitiveIntLinkedBlockingQueue(30*1024*1024);
-	private PrimitiveIntLinkedBlockingQueue randomnetherqueue = new PrimitiveIntLinkedBlockingQueue(30*1024*1024);
+	private PrimitiveIntLinkedBlockingQueue randomnormalqueue = new PrimitiveIntLinkedBlockingQueue(100*1024*1024);
+	private PrimitiveIntLinkedBlockingQueue randomnetherqueue = new PrimitiveIntLinkedBlockingQueue(100*1024*1024);
 
 	public static int getRandomBlockID(boolean nether) {
 		if (nether) {
