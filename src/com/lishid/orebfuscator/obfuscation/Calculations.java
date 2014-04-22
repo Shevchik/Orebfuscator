@@ -179,11 +179,16 @@ public class Calculations {
 
 							int typeID = info.data[currentTypeIndex] & 0xFF;
 							if (usesExtra) {
+								byte extra = 0;
 								if (currentTypeIndex % 2 == 0) {
-									typeID += info.data[addExtendedIndex + currentExtendedIndex] & 0x0F << 8;
+									extra = (byte) (info.data[addExtendedIndex + currentExtendedIndex] & 0x0F);
 								} else {
-									typeID += info.data[addExtendedIndex + currentExtendedIndex] >> 4 & 0xFF;
+									extra = (byte) (info.data[addExtendedIndex + currentExtendedIndex] >> 4);
 								}
+								if (extra < 0) {
+									extra += 16;
+								}
+								typeID += extra << 8;
 							}
 
 							// Obfuscate block if needed or copy old
