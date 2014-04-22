@@ -28,7 +28,6 @@ import com.lishid.orebfuscator.hook.ProtocolLibHook;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.listeners.BlockChangeListener;
 import com.lishid.orebfuscator.listeners.ProcessingThreads;
-import com.lishid.orebfuscator.obfuscation.randompool.RandomIntPool;
 
 /**
  * Orebfuscator Anti X-RAY
@@ -55,10 +54,6 @@ public class Orebfuscator extends JavaPlugin {
 		ProcessingThreads.initialize();
 		ProcessingThreads.instance.startThreads();
 
-		// Start random generator pool
-		RandomIntPool.initialize();
-		RandomIntPool.getInstance().start();
-
 		// Hook block change packet
 		new BlockChangeListener().register(this);
 
@@ -70,9 +65,6 @@ public class Orebfuscator extends JavaPlugin {
 	public void onDisable() {
 		if (ProcessingThreads.instance != null) {
 			ProcessingThreads.instance.stopThreads();
-		}
-		if (RandomIntPool.getInstance() != null) {
-			RandomIntPool.getInstance().stop();
 		}
 	}
 

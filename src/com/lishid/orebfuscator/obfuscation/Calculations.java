@@ -30,7 +30,6 @@ import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.IPacket51;
 import com.lishid.orebfuscator.internal.IPacket56;
 import com.lishid.orebfuscator.internal.InternalAccessor;
-import com.lishid.orebfuscator.obfuscation.randompool.RandomIntPool;
 
 public class Calculations {
 
@@ -203,7 +202,6 @@ public class Calculations {
 									newBlockID = (isNether ? 87 : 1);
 								} else if (engineMode == 2) {
 									// Ending mode 2, get random block
-									//newBlockID = RandomIntPool.getInstance().getRandomBlockID(isNether);
 									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
 								}
 								info.finaldata[info.finaldataWriteIndex + currentTypeIndex] = (byte) newBlockID;
