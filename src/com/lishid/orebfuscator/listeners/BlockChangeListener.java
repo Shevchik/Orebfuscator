@@ -18,7 +18,6 @@ import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.IPacket52;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
-import com.lishid.orebfuscator.obfuscation.ProcessingThreads;
 
 public class BlockChangeListener {
 

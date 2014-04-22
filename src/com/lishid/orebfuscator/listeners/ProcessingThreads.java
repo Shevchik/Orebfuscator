@@ -1,4 +1,4 @@
-package com.lishid.orebfuscator.obfuscation;
+package com.lishid.orebfuscator.listeners;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

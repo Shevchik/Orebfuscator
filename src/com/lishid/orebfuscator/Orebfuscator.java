@@ -27,7 +27,7 @@ import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
 import com.lishid.orebfuscator.hook.ProtocolLibHook;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.listeners.BlockChangeListener;
-import com.lishid.orebfuscator.obfuscation.ProcessingThreads;
+import com.lishid.orebfuscator.listeners.ProcessingThreads;
 
 /**
  * Orebfuscator Anti X-RAY
