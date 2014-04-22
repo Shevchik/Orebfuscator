@@ -179,16 +179,11 @@ public class Calculations {
 
 							int typeID = info.data[currentTypeIndex] & 0xFF;
 							if (usesExtra) {
-								byte extra = 0;
 								if (currentTypeIndex % 2 == 0) {
-									extra = (byte) (info.data[addExtendedIndex + currentExtendedIndex] & 0x0F);
+									typeID += info.data[addExtendedIndex + currentExtendedIndex] & 0x0F << 8;
 								} else {
-									extra = (byte) (info.data[addExtendedIndex + currentExtendedIndex] >> 4);
+									typeID += info.data[addExtendedIndex + currentExtendedIndex] >> 4 & 0x0F << 8;
 								}
-								if (extra < 0) {
-									extra += 16;
-								}
-								typeID += extra << 8;
 							}
 
 							// Obfuscate block if needed or copy old
@@ -268,16 +263,11 @@ public class Calculations {
             typeID = info.data[section * 4096 + blockindex] & 0xFF;
             if ((info.extraMask & (1 << (y >> 4))) > 0) {
             	int extrasecton = info.extraSectionToIndexMap[y >> 4];
-				byte extra = 0;
 				if (blockindex % 2 == 0) {
-					extra = (byte) (info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex / 2] & 0x0F);
+					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] & 0x0F << 8;
 				} else {
-					extra = (byte) (info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex / 2] >> 4);
+					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] >> 4 & 0x0F << 8;
 				}
-				if (extra < 0) {
-					extra += 16;
-				}
-				typeID += extra << 8;
             }
             foundID = true;
         }
