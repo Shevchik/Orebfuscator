@@ -255,7 +255,7 @@ public class Calculations {
 			return true;
 		}
 
-		int id = 1;
+		int typeID = 1;
 
 		boolean foundID = false;
         if ((info.chunkMask & (1 << (y >> 4))) > 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
@@ -265,10 +265,7 @@ public class Calculations {
 
             int blockindex = (y % 16 << 8) + (cZ << 4) + cX;
 
-            id = info.data[section * 4096 + blockindex];
-            if (id < 0) {
-            	id +=256;
-            }
+            typeID = info.data[section * 4096 + blockindex] & 0xFF;
             if ((info.extraMask & (1 << (y >> 4))) > 0) {
             	int extrasecton = info.extraSectionToIndexMap[y >> 4];
 				byte extra = 0;
@@ -280,16 +277,16 @@ public class Calculations {
 				if (extra < 0) {
 					extra += 16;
 				}
-				id += extra << 8;
+				typeID += extra << 8;
             }
             foundID = true;
         }
 
 		if (!foundID && CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
-			id = info.world.getBlockTypeIdAt(x, y, z);
+			typeID = info.world.getBlockTypeIdAt(x, y, z);
 		}
 
-		if (OrebfuscatorConfig.isBlockTransparent(id)) {
+		if (OrebfuscatorConfig.isBlockTransparent(typeID)) {
 			return true;
 		}
 
