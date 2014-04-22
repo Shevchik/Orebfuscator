@@ -177,21 +177,13 @@ public class Calculations {
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
 
-							int typeID = info.data[currentTypeIndex];
-							if (typeID < 0) {
-								typeID += 256;
-							}
+							int typeID = info.data[currentTypeIndex] & 0xFF;
 							if (usesExtra) {
-								byte extra = 0;
 								if (currentTypeIndex % 2 == 0) {
-									extra = (byte) (info.data[addExtendedIndex + currentExtendedIndex] & 0x0F);
+									typeID += info.data[addExtendedIndex + currentExtendedIndex] & 0x0F << 8;
 								} else {
-									extra = (byte) (info.data[addExtendedIndex + currentExtendedIndex] >> 4);
+									typeID += info.data[addExtendedIndex + currentExtendedIndex] >> 4 & 0xFF;
 								}
-								if (extra < 0) {
-									extra += 16;
-								}
-								typeID += extra << 8;
 							}
 
 							// Obfuscate block if needed or copy old
