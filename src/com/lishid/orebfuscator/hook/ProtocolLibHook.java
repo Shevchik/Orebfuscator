@@ -36,9 +36,7 @@ public class ProtocolLibHook {
 			new PacketAdapter(plugin, PacketType.Play.Server.MAP_CHUNK, PacketType.Play.Server.MAP_CHUNK_BULK) {
 				@Override
 				public void onPacketSending(PacketEvent event) {
-					long timeA = System.currentTimeMillis();
 					Calculations.Obfuscate(event.getPacket(), event.getPlayer());
-					System.out.println(System.currentTimeMillis() - timeA);
 				}
 			}
 		);
