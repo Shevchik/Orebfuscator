@@ -55,7 +55,7 @@ public class Calculations {
 	private static void Obfuscate(IPacket56 packet, Player player) {
 		ChunkInfo[] infos = getInfo(packet, player);
 
-		ExecutorService localservice =  Executors.newFixedThreadPool(OrebfuscatorConfig.ProcessingThreads);
+		ExecutorService localservice =  Executors.newFixedThreadPool(5);
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
 			final ChunkInfo info = infos[chunkNum];
 			localservice.execute(
