@@ -250,15 +250,12 @@ public class Calculations {
 			return true;
 		}
 
-		int typeID = 1;
-
-		boolean foundID = false;
         if ((info.chunkMask & (1 << (y >> 4))) > 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
             int section = info.chunkSectionToIndexMap[y >> 4];
 
             int blockindex = (y % 16 << 8) + (((z % 16) & 0x0F) << 4) + ((x % 16) & 0x0F);
 
-            typeID = info.data[section * 4096 + blockindex] & 0xFF;
+            int typeID = info.data[section * 4096 + blockindex] & 0xFF;
             if ((info.extraMask & (1 << (y >> 4))) > 0) {
             	int extrasecton = info.extraSectionToIndexMap[y >> 4];
 				if (blockindex % 2 == 0) {
@@ -267,18 +264,14 @@ public class Calculations {
 					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] >> 4 & 0x0F << 8;
 				}
             }
-            foundID = true;
+            return OrebfuscatorConfig.isBlockTransparent(typeID);
         }
 
-		if (!foundID && CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
-			typeID = info.world.getBlockTypeIdAt(x, y, z);
+		if (CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
+			return OrebfuscatorConfig.isBlockTransparent(info.world.getBlockTypeIdAt(x, y, z));
 		}
 
-		if (OrebfuscatorConfig.isBlockTransparent(typeID)) {
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 }
