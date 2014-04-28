@@ -42,7 +42,7 @@ public class Packet56 implements IPacket56 {
 				finalBufferSize += inflatedBuffers[i].length;
 			}
 
-			finalbuffer = new byte[finalBufferSize];
+			finalbuffer = new byte[finalBufferSize + 100];
 			finalBufferSize = 0;
 			for (int i = 0; i < inflatedBuffers.length; i++) {
 				System.arraycopy(inflatedBuffers[i], 0, finalbuffer, finalBufferSize, inflatedBuffers[i].length);
