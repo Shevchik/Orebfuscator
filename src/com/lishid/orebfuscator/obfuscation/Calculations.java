@@ -110,7 +110,6 @@ public class Calculations {
 			info.chunkZ = z[chunkNum];
 			info.chunkMask = chunkMask[chunkNum];
 			info.extraMask = extraMask[chunkNum];
-			info.data = inflatedBuffers[chunkNum];
 			info.finaldata = packet.getOutputBuffer();
 			info.finaldataWriteIndex = writeindex;
 			writeindex += inflatedBuffers[chunkNum].length;
@@ -127,7 +126,6 @@ public class Calculations {
 		info.chunkZ = packet.getZ();
 		info.chunkMask = packet.getChunkMask();
 		info.extraMask = packet.getExtraMask();
-		info.data = packet.getInflatedBuffer();
 		info.finaldata = packet.getInflatedBuffer();
 		info.finaldataWriteIndex = 0;
 		return info;
@@ -145,10 +143,6 @@ public class Calculations {
                 info.extraSectionNumber++;
             }
         }
-
-		if (4096 * info.chunkSectionNumber > info.data.length) {
-			return;
-		}
 
 		// Obfuscate
 		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName())) {
@@ -177,12 +171,12 @@ public class Calculations {
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
 
-							int typeID = info.data[currentTypeIndex] & 0xFF;
+							int typeID = info.finaldata[info.finaldataWriteIndex + currentTypeIndex] & 0xFF;
 							if (usesExtra) {
 								if (currentTypeIndex % 2 == 0) {
-									typeID += info.data[addExtendedIndex + currentExtendedIndex] & 0x0F << 8;
+									typeID += info.finaldata[info.finaldataWriteIndex + addExtendedIndex + currentExtendedIndex] & 0x0F << 8;
 								} else {
-									typeID += info.data[addExtendedIndex + currentExtendedIndex] >> 4 & 0x0F << 8;
+									typeID += info.finaldata[info.finaldataWriteIndex + addExtendedIndex + currentExtendedIndex] >> 4 & 0x0F << 8;
 								}
 							}
 
@@ -255,13 +249,13 @@ public class Calculations {
 
             int blockindex = (y % 16 << 8) + (((z % 16) & 0x0F) << 4) + ((x % 16) & 0x0F);
 
-            int typeID = info.data[section * 4096 + blockindex] & 0xFF;
+            int typeID = info.finaldata[info.finaldataWriteIndex + section * 4096 + blockindex] & 0xFF;
             if ((info.extraMask & (1 << (y >> 4))) > 0) {
             	int extrasecton = info.extraSectionToIndexMap[y >> 4];
 				if (blockindex % 2 == 0) {
-					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] & 0x0F << 8;
+					typeID += info.finaldata[info.finaldataWriteIndex + info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] & 0x0F << 8;
 				} else {
-					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] >> 4 & 0x0F << 8;
+					typeID += info.finaldata[info.finaldataWriteIndex + info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] >> 4 & 0x0F << 8;
 				}
             }
             return OrebfuscatorConfig.isBlockTransparent(typeID);
