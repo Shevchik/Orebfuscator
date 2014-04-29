@@ -31,15 +31,12 @@ public class Packet51 implements IPacket51 {
 	Packet51MapChunk packet;
 	
 	private byte[] inflatedBuffer;
-	private byte[] buildBuffer;
 
 	@Override
 	public void setPacket(Object packet) {
 		if (packet instanceof Packet51MapChunk) {
 			this.packet = (Packet51MapChunk) packet;
 			inflatedBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, "field_73596_g");
-			buildBuffer = new byte[inflatedBuffer.length];
-			System.arraycopy(inflatedBuffer, 0, buildBuffer, 0, inflatedBuffer.length);
 		}
 	}
 
@@ -69,18 +66,12 @@ public class Packet51 implements IPacket51 {
 	}
 
 	@Override
-	public byte[] getBuildBuffer() {
-		return buildBuffer;
-	}
-
-	@Override
 	public void compress() {
-		byte[] outputBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, "field_73595_f");
-
 		Deflater deflater = new Deflater(OrebfuscatorConfig.CompressionLevel);
-		deflater.setInput(buildBuffer);
+		deflater.setInput(inflatedBuffer);
 		deflater.finish();
 
+		byte[] outputBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, "field_73595_f");
 		ReflectionHelper.setPrivateField(packet, "field_73602_h", deflater.deflate(outputBuffer));
 	}
 

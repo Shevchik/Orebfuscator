@@ -29,8 +29,7 @@ import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class Packet56 implements IPacket56 {
 	Packet56MapChunkBulk packet;
-	
-	byte[] finalbuffer;
+
 	byte[][] inflatedBuffers;
 
 	@Override
@@ -38,25 +37,7 @@ public class Packet56 implements IPacket56 {
 		if (packet instanceof Packet56MapChunkBulk) {
 			this.packet = (Packet56MapChunkBulk) packet;
 			inflatedBuffers = (byte[][]) ReflectionHelper.getPrivateField(packet, "field_73584_f");
-
-			int finalBufferSize = 0;
-			for (int i = 0; i < inflatedBuffers.length; i++) {
-				finalBufferSize += inflatedBuffers[i].length;
-			}
-
-			finalbuffer = new byte[finalBufferSize + 100];
-			finalBufferSize = 0;
-			for (int i = 0; i < inflatedBuffers.length; i++) {
-				System.arraycopy(inflatedBuffers[i], 0, finalbuffer, finalBufferSize, inflatedBuffers[i].length);
-				finalBufferSize += inflatedBuffers[i].length;
-			}
-			ReflectionHelper.setPrivateField(packet, "field_73587_e", finalbuffer);
 		}
-	}
-
-	@Override
-	public byte[] getOutputBuffer() {
-		return finalbuffer;
 	}
 
 	@Override
@@ -91,9 +72,20 @@ public class Packet56 implements IPacket56 {
 
 	@Override
 	public void compress() {
-		Deflater deflater = new Deflater(OrebfuscatorConfig.CompressionLevel);
+		int finalBufferSize = 0;
+		for (int i = 0; i < inflatedBuffers.length; i++) {
+			finalBufferSize += inflatedBuffers[i].length;
+		}
 
-		deflater.reset();
+		byte[] finalbuffer = new byte[finalBufferSize + 100];
+		finalBufferSize = 0;
+		for (int i = 0; i < inflatedBuffers.length; i++) {
+			System.arraycopy(inflatedBuffers[i], 0, finalbuffer, finalBufferSize, inflatedBuffers[i].length);
+			finalBufferSize += inflatedBuffers[i].length;
+		}
+		ReflectionHelper.setPrivateField(packet, "field_73587_e", finalbuffer);
+		
+		Deflater deflater = new Deflater(OrebfuscatorConfig.CompressionLevel);
 		deflater.setInput(finalbuffer);
 		deflater.finish();
 

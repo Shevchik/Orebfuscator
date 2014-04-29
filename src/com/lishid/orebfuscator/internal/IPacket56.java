@@ -30,8 +30,6 @@ public interface IPacket56 {
 	public int[] getExtraMask();
 
 	public byte[][] getInflatedBuffers();
-	
-	public byte[] getOutputBuffer();
 
 	public void compress();
 

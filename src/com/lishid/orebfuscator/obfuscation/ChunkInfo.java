@@ -25,12 +25,10 @@ public class ChunkInfo {
 	public int chunkMask;
 	public int extraMask;
 	public World world;
-	public byte[] data;
     public int[] chunkSectionToIndexMap = new int[16];
     public int[] extraSectionToIndexMap = new int[16];
     public int chunkSectionNumber;
     public int extraSectionNumber;
-    public byte[] finaldata;
-    public int finaldataWriteIndex;
+    public byte[] data;
 
 }
