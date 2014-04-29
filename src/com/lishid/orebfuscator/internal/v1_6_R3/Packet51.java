@@ -18,8 +18,6 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 
 import java.util.zip.Deflater;
 
-
-
 import net.minecraft.server.v1_6_R3.Packet51MapChunk;
 
 import com.lishid.orebfuscator.OrebfuscatorConfig;
@@ -28,7 +26,7 @@ import com.lishid.orebfuscator.utils.ReflectionHelper;
 public class Packet51 {
 
 	Packet51MapChunk packet;
-	
+
 	private byte[] inflatedBuffer;
 
 	public void setPacket(Object packet) {

@@ -37,7 +37,7 @@ import com.lishid.orebfuscator.obfuscation.Calculations;
 public class ProtocolLibHook {
 
 	private ProtocolManager manager;
-	
+
 	private ExecutorService executors = Executors.newFixedThreadPool(4);
 
 	private HashMap<String, AtomicInteger> suspendcount = new HashMap<String, AtomicInteger>();
@@ -66,6 +66,7 @@ public class ProtocolLibHook {
 						atomic.getAndIncrement();
 						executors.execute(
 							new Runnable() {
+								@Override
 								public void run() {
 									Calculations.Obfuscate(event.getPacket(), event.getPlayer());
 									atomic.decrementAndGet();

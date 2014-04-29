@@ -72,7 +72,7 @@ public class Packet56 {
 			finalBufferSize += inflatedBuffers[i].length;
 		}
 		ReflectionHelper.setPrivateField(packet, "field_73587_e", finalbuffer);
-		
+
 		Deflater deflater = new Deflater(OrebfuscatorConfig.CompressionLevel);
 		deflater.setInput(finalbuffer);
 		deflater.finish();
