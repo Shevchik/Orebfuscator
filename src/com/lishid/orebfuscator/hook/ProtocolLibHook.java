@@ -62,8 +62,8 @@ public class ProtocolLibHook {
 						f.setAccessible(true);
 						final Thread thread = (Thread) f.get(nm);
 						final AtomicInteger atomic = suspendcount.get(playername);
-						thread.suspend();
 						atomic.getAndIncrement();
+						thread.suspend();
 						executors.execute(
 							new Runnable() {
 								@Override
