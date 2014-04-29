@@ -75,20 +75,9 @@ public class BlockChangeListener {
 								byte[] locationdata = new byte[2];
 								System.arraycopy(data, i * 4, locationdata, 0, 2);
 								byte zx = locationdata[0];
-								int addx = zx >> 4;
-								if (addx < 0) {
-									addx += 16;
-								}
-								int addz = zx & 0x0F;
-								if (addz < 0) {
-									addz += 16;
-								}
-								int x = (chunkX << 4) + addx;
-								int z = (chunkZ << 4) + addz;
-								int y = locationdata[1];
-								if (y < 0) {
-									y+= 256;
-								}
+								int x = (chunkX << 4) + (zx >> 4) & 0x0F;
+								int z = (chunkZ << 4) + zx & 0x0F;
+								int y = locationdata[1] & 0xFF;
 								if (world.isChunkLoaded(chunkX, chunkZ)) {
 									Block block = world.getBlockAt(x, y, z);
 									if (OrebfuscatorConfig.isBlockTransparent(block.getTypeId())) {
