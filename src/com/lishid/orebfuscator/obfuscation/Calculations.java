@@ -118,7 +118,7 @@ public class Calculations {
 		info.chunkMask = packet.getChunkMask();
 		info.extraMask = packet.getExtraMask();
 		info.data = packet.getInflatedBuffer();
-		info.finaldata = packet.getInflatedBuffer();
+		info.finaldata = packet.getOutputBuffer();
 		info.finaldataWriteIndex = 0;
 		return info;
 	}
@@ -241,13 +241,13 @@ public class Calculations {
 
             int blockindex = (y % 16 << 8) + (((z % 16) & 0x0F) << 4) + ((x % 16) & 0x0F);
 
-            int typeID = info.finaldata[info.finaldataWriteIndex + section * 4096 + blockindex] & 0xFF;
+            int typeID = info.data[section * 4096 + blockindex] & 0xFF;
             if ((info.extraMask & (1 << (y >> 4))) > 0) {
             	int extrasecton = info.extraSectionToIndexMap[y >> 4];
 				if (blockindex % 2 == 0) {
-					typeID += info.finaldata[info.finaldataWriteIndex + info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] & 0x0F << 8;
+					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] & 0x0F << 8;
 				} else {
-					typeID += info.finaldata[info.finaldataWriteIndex + info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] >> 4 & 0x0F << 8;
+					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] >> 4 & 0x0F << 8;
 				}
             }
             return OrebfuscatorConfig.isBlockTransparent(typeID);

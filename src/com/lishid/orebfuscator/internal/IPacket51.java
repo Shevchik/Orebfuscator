@@ -29,5 +29,8 @@ public interface IPacket51 {
 
 	public byte[] getInflatedBuffer();
 
+	public byte[] getOutputBuffer();
+
 	public void compress();
+
 }
