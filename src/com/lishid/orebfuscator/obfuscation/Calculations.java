@@ -100,6 +100,7 @@ public class Calculations {
 			info.chunkZ = z[chunkNum];
 			info.chunkMask = chunkMask[chunkNum];
 			info.extraMask = extraMask[chunkNum];
+			info.data = inflatedBuffers[chunkNum];
 			info.finaldata = packet.getOutputBuffer();
 			info.finaldataWriteIndex = writeindex;
 			writeindex += inflatedBuffers[chunkNum].length;
@@ -116,6 +117,7 @@ public class Calculations {
 		info.chunkZ = packet.getZ();
 		info.chunkMask = packet.getChunkMask();
 		info.extraMask = packet.getExtraMask();
+		info.data = packet.getInflatedBuffer();
 		info.finaldata = packet.getInflatedBuffer();
 		info.finaldataWriteIndex = 0;
 		return info;
@@ -161,12 +163,12 @@ public class Calculations {
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
 
-							int typeID = info.finaldata[info.finaldataWriteIndex + currentTypeIndex] & 0xFF;
+							int typeID = info.data[currentTypeIndex] & 0xFF;
 							if (usesExtra) {
 								if (currentTypeIndex % 2 == 0) {
-									typeID += info.finaldata[info.finaldataWriteIndex + addExtendedIndex + currentExtendedIndex] & 0x0F << 8;
+									typeID += info.data[addExtendedIndex + currentExtendedIndex] & 0x0F << 8;
 								} else {
-									typeID += info.finaldata[info.finaldataWriteIndex + addExtendedIndex + currentExtendedIndex] >> 4 & 0x0F << 8;
+									typeID += info.data[addExtendedIndex + currentExtendedIndex] >> 4 & 0x0F << 8;
 								}
 							}
 
