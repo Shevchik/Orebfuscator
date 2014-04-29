@@ -16,8 +16,6 @@
 
 package com.lishid.orebfuscator.internal;
 
-import java.util.zip.Deflater;
-
 public interface IPacket56 {
 	public void setPacket(Object packet);
 
@@ -35,6 +33,6 @@ public interface IPacket56 {
 	
 	public byte[] getOutputBuffer();
 
-	public void compress(Deflater deflater);
+	public void compress();
 
 }

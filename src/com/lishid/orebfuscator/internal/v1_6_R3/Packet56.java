@@ -19,9 +19,11 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 import java.util.zip.Deflater;
 
 
+
 //Volatile
 import net.minecraft.server.v1_6_R3.Packet56MapChunkBulk;
 
+import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.IPacket56;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
@@ -88,7 +90,9 @@ public class Packet56 implements IPacket56 {
 	}
 
 	@Override
-	public void compress(Deflater deflater) {
+	public void compress() {
+		Deflater deflater = new Deflater(OrebfuscatorConfig.CompressionLevel);
+
 		deflater.reset();
 		deflater.setInput(finalbuffer);
 		deflater.finish();

@@ -19,7 +19,6 @@ package com.lishid.orebfuscator.obfuscation;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.zip.Deflater;
 
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
@@ -32,13 +31,6 @@ import com.lishid.orebfuscator.internal.IPacket56;
 import com.lishid.orebfuscator.internal.InternalAccessor;
 
 public class Calculations {
-
-	public static final ThreadLocal<Deflater> localDeflater = new ThreadLocal<Deflater>() {
-		@Override
-		protected Deflater initialValue() {
-			return new Deflater(OrebfuscatorConfig.CompressionLevel);
-		}
-	};
 
 	public static void Obfuscate(PacketContainer container, Player player) {
 		if (container.getType().equals(PacketType.Play.Server.MAP_CHUNK)) {
@@ -72,8 +64,7 @@ public class Calculations {
 		} catch (InterruptedException e) {
 		}
 
-		Deflater deflater = localDeflater.get();
-		packet.compress(deflater);
+		packet.compress();
 	}
 
 	private static void Obfuscate(IPacket51 packet, Player player) {
@@ -85,8 +76,7 @@ public class Calculations {
 
 		ComputeChunkInfoAndObfuscate(info);
 
-		Deflater deflater = localDeflater.get();
-		packet.compress(deflater);
+		packet.compress();
 	}
 
 	private static ChunkInfo[] getInfo(IPacket56 packet, Player player) {

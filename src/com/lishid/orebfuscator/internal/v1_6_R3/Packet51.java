@@ -18,9 +18,11 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 
 import java.util.zip.Deflater;
 
+
 //Volatile
 import net.minecraft.server.v1_6_R3.Packet51MapChunk;
 
+import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.IPacket51;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
@@ -64,7 +66,8 @@ public class Packet51 implements IPacket51 {
 	}
 
 	@Override
-	public void compress(Deflater deflater) {
+	public void compress() {
+		Deflater deflater = new Deflater(OrebfuscatorConfig.CompressionLevel);
 		byte[] chunkBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, "field_73595_f");
 
 		deflater.reset();
