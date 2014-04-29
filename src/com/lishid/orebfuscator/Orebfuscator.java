@@ -25,7 +25,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
 import com.lishid.orebfuscator.hook.ProtocolLibHook;
-import com.lishid.orebfuscator.internal.InternalAccessor;
 import com.lishid.orebfuscator.listeners.BlockChangeListener;
 import com.lishid.orebfuscator.listeners.ProcessingThreads;
 
@@ -43,9 +42,6 @@ public class Orebfuscator extends JavaPlugin {
 	public void onEnable() {
 		// Assign static instance
 		instance = this;
-
-		// Set NMS version
-		InternalAccessor.Initialize(getServer());
 
 		// Load configurations
 		OrebfuscatorConfig.load();

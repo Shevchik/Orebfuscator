@@ -26,25 +26,24 @@ import org.bukkit.entity.Player;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.internal.IPacket51;
-import com.lishid.orebfuscator.internal.IPacket56;
-import com.lishid.orebfuscator.internal.InternalAccessor;
+import com.lishid.orebfuscator.internal.v1_6_R3.Packet51;
+import com.lishid.orebfuscator.internal.v1_6_R3.Packet56;
 
 public class Calculations {
 
 	public static void Obfuscate(PacketContainer container, Player player) {
 		if (container.getType().equals(PacketType.Play.Server.MAP_CHUNK)) {
-			IPacket51 packet = InternalAccessor.Instance.newPacket51();
+			Packet51 packet = new Packet51();
 			packet.setPacket(container.getHandle());
 			Calculations.Obfuscate(packet, player);
 		} else if (container.getType().equals(PacketType.Play.Server.MAP_CHUNK_BULK)) {
-			IPacket56 packet = InternalAccessor.Instance.newPacket56();
+			Packet56 packet = new Packet56();
 			packet.setPacket(container.getHandle());
 			Calculations.Obfuscate(packet, player);
 		}
 	}
 
-	private static void Obfuscate(IPacket56 packet, Player player) {
+	private static void Obfuscate(Packet56 packet, Player player) {
 		ChunkInfo[] infos = getInfo(packet, player);
 
 		ExecutorService localservice =  Executors.newFixedThreadPool(5);
@@ -67,7 +66,7 @@ public class Calculations {
 		packet.compress();
 	}
 
-	private static void Obfuscate(IPacket51 packet, Player player) {
+	private static void Obfuscate(Packet51 packet, Player player) {
 		ChunkInfo info = getInfo(packet, player);
 
 		if (info.chunkMask == 0 && info.extraMask == 0) {
@@ -79,7 +78,7 @@ public class Calculations {
 		packet.compress();
 	}
 
-	private static ChunkInfo[] getInfo(IPacket56 packet, Player player) {
+	private static ChunkInfo[] getInfo(Packet56 packet, Player player) {
 		ChunkInfo[] infos = new ChunkInfo[packet.getPacketChunkNumber()];
 
 		int[] x = packet.getX();
@@ -105,7 +104,7 @@ public class Calculations {
 		return infos;
 	}
 
-	private static ChunkInfo getInfo(IPacket51 packet, Player player) {
+	private static ChunkInfo getInfo(Packet51 packet, Player player) {
 		// Create an info objects
 		ChunkInfo info = new ChunkInfo();
 		info.world = player.getWorld();

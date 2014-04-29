@@ -18,21 +18,16 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 
 import java.util.zip.Deflater;
 
-
-
-//Volatile
 import net.minecraft.server.v1_6_R3.Packet56MapChunkBulk;
 
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.internal.IPacket56;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
-public class Packet56 implements IPacket56 {
+public class Packet56 {
 	Packet56MapChunkBulk packet;
 
 	byte[][] inflatedBuffers;
 
-	@Override
 	public void setPacket(Object packet) {
 		if (packet instanceof Packet56MapChunkBulk) {
 			this.packet = (Packet56MapChunkBulk) packet;
@@ -40,37 +35,30 @@ public class Packet56 implements IPacket56 {
 		}
 	}
 
-	@Override
 	public int getPacketChunkNumber() {
 		return packet.d();
 	}
 
-	@Override
 	public int[] getX() {
 		return (int[]) ReflectionHelper.getPrivateField(packet, "field_73589_c");
 	}
 
-	@Override
 	public int[] getZ() {
 		return (int[]) ReflectionHelper.getPrivateField(packet, "field_73586_d");
 	}
 
-	@Override
 	public int[] getChunkMask() {
 		return packet.a;
 	}
 
-	@Override
 	public int[] getExtraMask() {
 		return packet.b;
 	}
 
-	@Override
 	public byte[][] getInflatedBuffers() {
 		return inflatedBuffers;
 	}
 
-	@Override
 	public void compress() {
 		int finalBufferSize = 0;
 		for (int i = 0; i < inflatedBuffers.length; i++) {

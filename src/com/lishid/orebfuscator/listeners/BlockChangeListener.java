@@ -15,8 +15,7 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.internal.IPacket52;
-import com.lishid.orebfuscator.internal.InternalAccessor;
+import com.lishid.orebfuscator.internal.v1_6_R3.Packet52;
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 
 public class BlockChangeListener {
@@ -59,7 +58,7 @@ public class BlockChangeListener {
 			) {
 				@Override
 				public void onPacketSending(final PacketEvent event) {
-					IPacket52 packet = InternalAccessor.Instance.newPacket52();
+					Packet52 packet = new Packet52();
 					packet.setPacket(event.getPacket().getHandle());
 					final int chunkX = packet.getChunkX();
 					final int chunkZ = packet.getChunkZ();

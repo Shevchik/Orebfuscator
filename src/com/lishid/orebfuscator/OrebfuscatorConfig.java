@@ -24,8 +24,7 @@ import java.util.Random;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.lishid.orebfuscator.internal.IBlockAccess;
-import com.lishid.orebfuscator.internal.InternalAccessor;
+import com.lishid.orebfuscator.internal.v1_6_R3.BlockAccess;
 
 public class OrebfuscatorConfig {
 
@@ -43,15 +42,11 @@ public class OrebfuscatorConfig {
 	private static HashSet<String> DisabledWorlds = new HashSet<String>();
 
 
-	public static IBlockAccess blockAccess;
+	public static BlockAccess blockAccess = new BlockAccess();
 	private static boolean[] TransparentBlocks = new boolean[4096];
 	private static boolean TransparentCached = false;
 
 	public static boolean isBlockTransparent(int i) {
-		if (blockAccess == null) {
-			blockAccess = InternalAccessor.Instance.newBlockAccess();
-		}
-
 		if (!TransparentCached) {
 			// Generate TransparentBlocks by reading them from Minecraft
 			generateTransparentBlocks();

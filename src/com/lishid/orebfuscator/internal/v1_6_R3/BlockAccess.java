@@ -19,11 +19,8 @@ package com.lishid.orebfuscator.internal.v1_6_R3;
 //Volatile
 import net.minecraft.server.v1_6_R3.Block;
 
-import com.lishid.orebfuscator.internal.IBlockAccess;
+public class BlockAccess {
 
-public class BlockAccess implements IBlockAccess {
-
-	@Override
 	public boolean isBlockTransparent(int id) {
 		return !Block.l(id);
 	}
