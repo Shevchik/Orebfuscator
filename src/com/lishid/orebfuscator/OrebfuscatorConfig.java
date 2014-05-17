@@ -191,6 +191,9 @@ public class OrebfuscatorConfig {
 		UpdateRadius = clamp(getInt("Integers.UpdateRadius", UpdateRadius), 1, 5);
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
 
+		// Disabled worlds
+		DisabledWorlds = new HashSet<String>(getStringList("Lists.DisabledWorlds", new ArrayList<String>(DisabledWorlds)));
+	
 		// Read block lists
 		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", 
 			Arrays.asList(
@@ -203,9 +206,6 @@ public class OrebfuscatorConfig {
 				}
 			)
 		), false);
-
-		// Disable worlds
-		DisabledWorlds = new HashSet<String>(getStringList("Lists.DisabledWorlds", new ArrayList<String>(DisabledWorlds)));
 
 		RandomBlocks = getIntList2("Lists.RandomBlocks", Arrays.asList(RandomBlocks));
 		shuffleArray(RandomBlocks);
