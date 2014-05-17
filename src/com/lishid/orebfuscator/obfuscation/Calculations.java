@@ -132,10 +132,7 @@ public class Calculations {
 			return;
 		}
 
-		// Obfuscate
-		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName())) {
-			Obfuscate(info);
-		}
+		Obfuscate(info);
 	}
 
 	private static void Obfuscate(ChunkInfo info) {

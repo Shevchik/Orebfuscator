@@ -46,6 +46,9 @@ public class ProtocolLibHook {
 			) {
 				@Override
 				public void onPacketSending(final PacketEvent event) {
+					if (OrebfuscatorConfig.isWorldDisabled(event.getPlayer().getWorld().getName())) {
+						return;
+					}
 					try {
 						final Thread thread = getPlayerConnectionWriteThread(event.getPlayer());
 						suspendThread(thread);
