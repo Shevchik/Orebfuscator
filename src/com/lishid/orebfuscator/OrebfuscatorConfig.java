@@ -39,8 +39,8 @@ public class OrebfuscatorConfig {
 	// Utilities
 	private static boolean[] ObfuscateBlocks = new boolean[4096];
 	private static boolean[] NetherObfuscateBlocks = new boolean[4096];
-	private static Integer[] RandomBlocks = new Integer[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129 };
-	private static Integer[] NetherRandomBlocks = new Integer[] { 13, 87, 88, 112, 153 };
+	private static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129 };
+	private static int[] NetherRandomBlocks = new int[] { 13, 87, 88, 112, 153 };
 	private static HashSet<String> DisabledWorlds = new HashSet<String>();
 
 
@@ -142,11 +142,16 @@ public class OrebfuscatorConfig {
 		return getConfig().getIntegerList(path);
 	}
 
-	private static Integer[] getIntList2(String path, List<Integer> defaultData) {
+	private static int[] getIntList2(String path, List<int[]> list) {
 		if (getConfig().get(path) == null) {
-			setData(path, defaultData);
+			setData(path, list);
 		}
-		return getConfig().getIntegerList(path).toArray(new Integer[1]);
+		List<Integer> ints = getConfig().getIntegerList(path);
+		int[] intsarr = new int[ints.size()];
+		for (int i = 0; i < ints.size(); i++) {
+			intsarr[i] = ints.get(i);
+		}
+		return intsarr;
 	}
 
 	private static List<String> getStringList(String path, List<String> defaultData) {
@@ -211,7 +216,7 @@ public class OrebfuscatorConfig {
 		// Validate RandomBlocks
 		for (int i = 0; i < RandomBlocks.length; i++) {
 			// Don't want people to put chests and other stuff that lags the hell out of players.
-			if (RandomBlocks[i] == null || OrebfuscatorConfig.isBlockTransparent(RandomBlocks[i])) {
+			if (RandomBlocks[i] == 0 || OrebfuscatorConfig.isBlockTransparent(RandomBlocks[i])) {
 				RandomBlocks[i] = 1;
 			}
 		}
