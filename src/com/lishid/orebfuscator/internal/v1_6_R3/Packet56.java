@@ -20,7 +20,6 @@ import java.util.zip.Deflater;
 
 import net.minecraft.server.v1_6_R3.Packet56MapChunkBulk;
 
-import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class Packet56 {
