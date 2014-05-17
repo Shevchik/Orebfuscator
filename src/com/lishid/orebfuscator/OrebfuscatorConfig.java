@@ -65,17 +65,8 @@ public class OrebfuscatorConfig {
 	}
 
 	public static boolean isObfuscated(int id, boolean nether) {
-		// Nether case
 		if (nether) {
-			if (id == 87) {
-				return true;
-			}
 			return NetherObfuscateBlocks[id];
-		}
-
-		// Normal case
-		if (id == 1) {
-			return true;
 		}
 
 		return ObfuscateBlocks[id];
