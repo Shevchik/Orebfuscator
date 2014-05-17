@@ -136,8 +136,12 @@ public class OrebfuscatorConfig {
 		return getConfig().getIntegerList(path);
 	}
 
-	private static int[] getIntList2(String path, List<int[]> list) {
+	private static int[] getIntList2(String path, int[] array) {
 		if (getConfig().get(path) == null) {
+			List<Integer> list = new ArrayList<Integer>();
+			for (int aint : array) {
+				list.add(aint);
+			}
 			setData(path, list);
 		}
 		List<Integer> ints = getConfig().getIntegerList(path);
@@ -214,9 +218,9 @@ public class OrebfuscatorConfig {
 			)
 		), false);
 
-		RandomBlocks = getIntList2("Lists.RandomBlocks", Arrays.asList(RandomBlocks));
+		RandomBlocks = getIntList2("Lists.RandomBlocks", RandomBlocks);
 		shuffleArray(RandomBlocks);
-		NetherRandomBlocks = getIntList2("Lists.NetherRandomBlocks", Arrays.asList(NetherRandomBlocks));
+		NetherRandomBlocks = getIntList2("Lists.NetherRandomBlocks", NetherRandomBlocks);
 		shuffleArray(NetherRandomBlocks);
 
 		// Validate RandomBlocks
