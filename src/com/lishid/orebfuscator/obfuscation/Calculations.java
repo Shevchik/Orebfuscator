@@ -178,7 +178,7 @@ public class Calculations {
 									newBlockID = (isNether ? 87 : 1);
 								} else if (engineMode == 2) {
 									// Ending mode 2, get random block
-									newBlockID = OrebfuscatorConfig.getBlockID(isNether, randomBlock++);
+									newBlockID = OrebfuscatorConfig.getBlockID(randomBlock++);
 								}
 								info.data[currentTypeIndex] = (byte) newBlockID;
 								if (usesExtra) {

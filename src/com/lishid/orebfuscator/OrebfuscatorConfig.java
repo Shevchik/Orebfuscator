@@ -39,8 +39,7 @@ public class OrebfuscatorConfig {
 
 	// Utilities
 	private static boolean[] ObfuscateBlocks = new boolean[4096];
-	private static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129 };
-	private static int[] NetherRandomBlocks = new int[] { 13, 87, 88, 112, 153 };
+	private static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
 	private static HashSet<String> DisabledWorlds = new HashSet<String>();
 
 
@@ -80,10 +79,7 @@ public class OrebfuscatorConfig {
 		return retval.length() > 1 ? retval.substring(0, retval.length() - 2) : retval;
 	}
 
-	public static int getBlockID(boolean nether, int block) {
-		if (nether) {
-			return NetherRandomBlocks[block % NetherRandomBlocks.length];
-		}
+	public static int getBlockID(int block) {
 		return RandomBlocks[block % RandomBlocks.length];
 	}
 
@@ -212,8 +208,6 @@ public class OrebfuscatorConfig {
 
 		RandomBlocks = getIntList2("Lists.RandomBlocks", RandomBlocks);
 		shuffleArray(RandomBlocks);
-		NetherRandomBlocks = getIntList2("Lists.NetherRandomBlocks", NetherRandomBlocks);
-		shuffleArray(NetherRandomBlocks);
 
 		// Validate RandomBlocks
 		for (int i = 0; i < RandomBlocks.length; i++) {
