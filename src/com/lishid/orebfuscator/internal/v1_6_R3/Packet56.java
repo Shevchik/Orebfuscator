@@ -59,24 +59,25 @@ public class Packet56 {
 	}
 
 	public void compress() {
-		int finalBufferSize = 0;
+		int bufferSize = 0;
 		for (int i = 0; i < inflatedBuffers.length; i++) {
-			finalBufferSize += inflatedBuffers[i].length;
+			bufferSize += inflatedBuffers[i].length;
 		}
 
-		byte[] finalbuffer = new byte[finalBufferSize + 100];
-		finalBufferSize = 0;
+		byte[] buildBuffer = new byte[bufferSize];
+		bufferSize = 0;
 		for (int i = 0; i < inflatedBuffers.length; i++) {
-			System.arraycopy(inflatedBuffers[i], 0, finalbuffer, finalBufferSize, inflatedBuffers[i].length);
-			finalBufferSize += inflatedBuffers[i].length;
+			System.arraycopy(inflatedBuffers[i], 0, buildBuffer, bufferSize, inflatedBuffers[i].length);
+			bufferSize += inflatedBuffers[i].length;
 		}
-		ReflectionHelper.setPrivateField(packet, "field_73587_e", finalbuffer);
 
 		Deflater deflater = new Deflater(Deflater.NO_COMPRESSION);
-		deflater.setInput(finalbuffer);
+		deflater.setInput(buildBuffer);
 		deflater.finish();
 
-		ReflectionHelper.setPrivateField(packet, "field_73585_g", deflater.deflate(finalbuffer));
+		byte[] outputBuffer = new byte[bufferSize + 100];
+		ReflectionHelper.setPrivateField(packet, "field_73587_e", outputBuffer);
+		ReflectionHelper.setPrivateField(packet, "field_73585_g", deflater.deflate(outputBuffer));
 	}
 
 }
