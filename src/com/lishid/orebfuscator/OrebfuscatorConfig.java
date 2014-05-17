@@ -80,12 +80,19 @@ public class OrebfuscatorConfig {
 		return retval.length() > 1 ? retval.substring(0, retval.length() - 2) : retval;
 	}
 
-	private static Random rnd = new Random();
+	private static int curOre = 0;
+	private static int curNOre = 0;
 	public static int getRandomBlockID(boolean nether) {
 		if (nether) {
-			return NetherRandomBlocks[rnd.nextInt(NetherRandomBlocks.length)];
+			if (curNOre >= NetherRandomBlocks.length) {
+				curNOre = 0;
+			}
+			return NetherRandomBlocks[curNOre++];
 		}
-		return RandomBlocks[rnd.nextInt(RandomBlocks.length)];
+		if (curOre >= RandomBlocks.length) {
+			curOre = 0;
+		}
+		return RandomBlocks[curOre++];
 	}
 
 	// Set
