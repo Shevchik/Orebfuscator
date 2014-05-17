@@ -18,6 +18,7 @@ package com.lishid.orebfuscator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -208,7 +209,9 @@ public class OrebfuscatorConfig {
 		DisabledWorlds = new HashSet<String>(getStringList("Lists.DisabledWorlds", new ArrayList<String>(DisabledWorlds)));
 
 		RandomBlocks = getIntList2("Lists.RandomBlocks", Arrays.asList(RandomBlocks));
+		shuffleArray(RandomBlocks);
 		NetherRandomBlocks = getIntList2("Lists.NetherRandomBlocks", Arrays.asList(NetherRandomBlocks));
+		shuffleArray(NetherRandomBlocks);
 
 		// Validate RandomBlocks
 		for (int i = 0; i < RandomBlocks.length; i++) {
@@ -238,4 +241,16 @@ public class OrebfuscatorConfig {
 		}
 		return value;
 	}
+
+	private static void shuffleArray(int[] array) {
+	    int index, temp;
+	    Random random = new Random();
+	    for (int i = array.length - 1; i > 0; i--) {
+	        index = random.nextInt(i + 1);
+	        temp = array[index];
+	        array[index] = array[i];
+	        array[i] = temp;
+	    }
+	}
+
 }
