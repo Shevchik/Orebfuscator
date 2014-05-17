@@ -170,7 +170,7 @@ public class Calculations {
 
 							// Obfuscate block if needed or copy old
 							int newBlockID = 0;
-							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, startX + x, blockY, startZ + z)) {
+							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, addExtendedIndex, startX + x, blockY, startZ + z)) {
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
 									newBlockID = (isNether ? 87 : 1);
@@ -202,24 +202,24 @@ public class Calculations {
 		}
 	}
 
-	private static boolean areAjacentBlocksTransparent(ChunkInfo info, int x, int y, int z) {
+	private static boolean areAjacentBlocksTransparent(ChunkInfo info, int addExtendedIndex, int x, int y, int z) {
 
-		if (isTransparent(info, x + 1, y, z)) {
+		if (isTransparent(info, addExtendedIndex, x + 1, y, z)) {
 			return true;
 		}
-		if (isTransparent(info, x - 1, y, z)) {
+		if (isTransparent(info, addExtendedIndex, x - 1, y, z)) {
 			return true;
 		}
-		if (isTransparent(info, x, y, z + 1)) {
+		if (isTransparent(info, addExtendedIndex, x, y, z + 1)) {
 			return true;
 		}
-		if (isTransparent(info, x, y, z - 1)) {
+		if (isTransparent(info, addExtendedIndex, x, y, z - 1)) {
 			return true;
 		}
-		if (isTransparent(info, x, y + 1, z)) {
+		if (isTransparent(info, addExtendedIndex, x, y + 1, z)) {
 			return true;
 		}
-		if (isTransparent(info, x, y - 1, z)) {
+		if (isTransparent(info, addExtendedIndex, x, y - 1, z)) {
 			return true;
 		}
 
@@ -227,7 +227,7 @@ public class Calculations {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static boolean isTransparent(ChunkInfo info, int x, int y, int z) {
+	private static boolean isTransparent(ChunkInfo info, int addExtendedIndex, int x, int y, int z) {
 		if (y < 0 || y > info.world.getMaxHeight()) {
 			return true;
 		}
@@ -242,9 +242,9 @@ public class Calculations {
 			if ((info.extraMask & (1 << ysection)) != 0) {
 				int extrasecton = info.extraSectionToIndexMap[ysection];
 				if (blockindex % 2 == 0) {
-					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] & 0x0F << 8;
+					typeID += info.data[addExtendedIndex + extrasecton * 2048 + blockindex >> 1] & 0x0F << 8;
 				} else {
-					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] >> 4 & 0x0F << 8;
+					typeID += info.data[addExtendedIndex + extrasecton * 2048 + blockindex >> 1] >> 4 & 0x0F << 8;
 				}
 			}
 			return OrebfuscatorConfig.isBlockTransparent(typeID);
