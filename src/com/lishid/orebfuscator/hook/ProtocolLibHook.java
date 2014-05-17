@@ -32,6 +32,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.obfuscation.Calculations;
 
 public class ProtocolLibHook {
@@ -52,7 +53,11 @@ public class ProtocolLibHook {
 							new Runnable() {
 								@Override
 								public void run() {
+									long timeA = System.currentTimeMillis();
 									Calculations.Obfuscate(event.getPacket(), event.getPlayer());
+									if (OrebfuscatorConfig.debug) {
+										System.out.println("Took "+(System.currentTimeMillis() - timeA)+" ms to obfuscate");
+									}
 									resumeThread(thread);
 								}
 							}
