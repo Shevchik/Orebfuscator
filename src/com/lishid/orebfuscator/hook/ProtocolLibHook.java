@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.server.v1_6_R3.NetworkManager;
 
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.comphenix.protocol.PacketType;
@@ -37,36 +38,22 @@ public class ProtocolLibHook {
 
 	private ExecutorService executors = Executors.newFixedThreadPool(4);
 
-	private HashMap<String, AtomicInteger> suspendcount = new HashMap<String, AtomicInteger>();
-
 	public void register(Plugin plugin) {
 		ProtocolLibrary.getProtocolManager().addPacketListener(
 			new PacketAdapter(
 				PacketAdapter.params(plugin, PacketType.Play.Server.MAP_CHUNK, PacketType.Play.Server.MAP_CHUNK_BULK)
 			) {
-				@SuppressWarnings("deprecation")
 				@Override
 				public void onPacketSending(final PacketEvent event) {
-					String playername = event.getPlayer().getName();
-					if (!suspendcount.containsKey(playername)) {
-						suspendcount.put(playername, new AtomicInteger());
-					}
 					try {
-						NetworkManager nm = (NetworkManager) CraftPlayer.class.cast(event.getPlayer()).getHandle().playerConnection.networkManager;
-						Field f = nm.getClass().getDeclaredField("field_74483_t");
-						f.setAccessible(true);
-						final Thread thread = (Thread) f.get(nm);
-						final AtomicInteger atomic = suspendcount.get(playername);
-						atomic.incrementAndGet();
-						thread.suspend();
+						final Thread thread = getPlayerConnectionWriteThread(event.getPlayer());
+						suspendThread(thread);
 						executors.execute(
 							new Runnable() {
 								@Override
 								public void run() {
 									Calculations.Obfuscate(event.getPacket(), event.getPlayer());
-									if (atomic.decrementAndGet() == 0) {
-										thread.resume();
-									}
+									resumeThread(thread);
 								}
 							}
 						);
@@ -75,6 +62,33 @@ public class ProtocolLibHook {
 				}
 			}
 		);
+	}
+
+	private Thread getPlayerConnectionWriteThread(Player player) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		CraftPlayer cplayer = (CraftPlayer) player;
+		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
+		Field f = nm.getClass().getDeclaredField("field_74483_t");
+		f.setAccessible(true);
+		return (Thread) f.get(nm);
+	}
+
+	private HashMap<Thread, AtomicInteger> suspendcount = new HashMap<Thread, AtomicInteger>();
+
+	@SuppressWarnings("deprecation")
+	private synchronized void suspendThread(Thread thread) {
+		if (!suspendcount.containsKey(thread)) {
+			suspendcount.put(thread, new AtomicInteger());
+		}
+		suspendcount.get(thread).incrementAndGet();
+		thread.suspend();
+	}
+
+	@SuppressWarnings("deprecation")
+	private synchronized void resumeThread(Thread thread) {
+		if (suspendcount.get(thread).decrementAndGet() == 0) {
+			thread.resume();
+			suspendcount.remove(thread);
+		}
 	}
 
 }
