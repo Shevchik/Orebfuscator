@@ -170,7 +170,7 @@ public class Calculations {
 
 							// Obfuscate block if needed or copy old
 							int newBlockID = 0;
-							if (OrebfuscatorConfig.isObfuscated(typeID, isNether) && !areAjacentBlocksTransparent(info, addExtendedIndex, startX + x, blockY, startZ + z)) {
+							if (OrebfuscatorConfig.isObfuscated(typeID) && !areAjacentBlocksTransparent(info, addExtendedIndex, startX + x, blockY, startZ + z)) {
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
 									newBlockID = (isNether ? 87 : 1);

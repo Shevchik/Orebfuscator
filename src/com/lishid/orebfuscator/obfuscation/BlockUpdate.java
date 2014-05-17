@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -80,7 +79,7 @@ public class BlockUpdate {
 
 	@SuppressWarnings("deprecation")
 	public static void AddBlockCheck(HashSet<Block> allBlocks, Block block) {
-		if ((OrebfuscatorConfig.isObfuscated(block.getTypeId(), block.getWorld().getEnvironment() == Environment.NETHER))) {
+		if (OrebfuscatorConfig.isObfuscated(block.getTypeId())) {
 			allBlocks.add(block);
 		}
 	}

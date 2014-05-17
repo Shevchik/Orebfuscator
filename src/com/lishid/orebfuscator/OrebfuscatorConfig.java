@@ -38,7 +38,6 @@ public class OrebfuscatorConfig {
 
 	// Utilities
 	private static boolean[] ObfuscateBlocks = new boolean[4096];
-	private static boolean[] NetherObfuscateBlocks = new boolean[4096];
 	private static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129 };
 	private static int[] NetherRandomBlocks = new int[] { 13, 87, 88, 112, 153 };
 	private static HashSet<String> DisabledWorlds = new HashSet<String>();
@@ -64,11 +63,7 @@ public class OrebfuscatorConfig {
 		TransparentCached = true;
 	}
 
-	public static boolean isObfuscated(int id, boolean nether) {
-		if (nether) {
-			return NetherObfuscateBlocks[id];
-		}
-
+	public static boolean isObfuscated(int id) {
 		return ObfuscateBlocks[id];
 	}
 
@@ -195,8 +190,7 @@ public class OrebfuscatorConfig {
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
 
 		// Read block lists
-		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", Arrays.asList(new Integer[] { 14, 15, 16, 21, 54, 56, 73, 74, 129, 130 })), false);
-		setBlockValues(NetherObfuscateBlocks, getIntList("Lists.NetherObfuscateBlocks", Arrays.asList(new Integer[] { 87, 153 })), false);
+		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", Arrays.asList(new Integer[] { 14, 15, 16, 21, 54, 56, 73, 74, 129, 130, 87, 153 })), false);
 
 		// Disable worlds
 		DisabledWorlds = new HashSet<String>(getStringList("Lists.DisabledWorlds", new ArrayList<String>(DisabledWorlds)));
