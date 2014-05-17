@@ -148,6 +148,8 @@ public class Calculations {
 		int currentExtendedIndex = 0;
 		int startX = info.chunkX << 4;
 		int startZ = info.chunkZ << 4;
+	
+		int randomBlock = 0;
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
 		for (int i = 0; i < 16; i++) {
@@ -169,14 +171,14 @@ public class Calculations {
 							}
 
 							// Obfuscate block if needed or copy old
-							int newBlockID = 0;
 							if (OrebfuscatorConfig.isObfuscated(typeID) && !areAjacentBlocksTransparent(info, addExtendedIndex, startX + x, blockY, startZ + z)) {
+								int newBlockID = 0;
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
 									newBlockID = (isNether ? 87 : 1);
 								} else if (engineMode == 2) {
 									// Ending mode 2, get random block
-									newBlockID = OrebfuscatorConfig.getRandomBlockID(isNether);
+									newBlockID = OrebfuscatorConfig.getBlockID(isNether, randomBlock++);
 								}
 								info.data[currentTypeIndex] = (byte) newBlockID;
 								if (usesExtra) {
