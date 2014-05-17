@@ -184,7 +184,7 @@ public class Calculations {
 									if (currentTypeIndex % 2 == 0) {
 										info.data[addExtendedIndex + currentExtendedIndex] = extra;
 									} else {
-										info.data[addExtendedIndex + currentExtendedIndex] += (byte) (extra << 4);
+										info.data[addExtendedIndex + currentExtendedIndex] |= (extra << 4);
 									}
 								}
 							}
