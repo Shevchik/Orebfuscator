@@ -190,7 +190,7 @@ public class OrebfuscatorConfig {
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
 
 		// Read block lists
-		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", Arrays.asList(new Integer[] { 14, 15, 16, 21, 54, 56, 73, 74, 129, 130, 87, 153 })), false);
+		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", Arrays.asList(new Integer[] {1, 14, 15, 16, 21, 54, 56, 73, 74, 129, 130, 87, 153 })), false);
 
 		// Disable worlds
 		DisabledWorlds = new HashSet<String>(getStringList("Lists.DisabledWorlds", new ArrayList<String>(DisabledWorlds)));
