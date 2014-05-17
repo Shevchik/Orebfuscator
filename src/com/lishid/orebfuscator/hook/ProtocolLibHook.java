@@ -68,7 +68,11 @@ public class ProtocolLibHook {
 							new Runnable() {
 								@Override
 								public void run() {
-									Calculations.Obfuscate(event.getPacket(), event.getPlayer());
+									try {
+										Calculations.Obfuscate(event.getPacket(), event.getPlayer());
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
 									atomic.decrementAndGet();
 									if (atomic.get() == 0) {
 										thread.resume();
