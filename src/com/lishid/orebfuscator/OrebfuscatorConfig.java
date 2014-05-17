@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import com.lishid.orebfuscator.internal.v1_6_R3.BlockAccess;
@@ -176,6 +177,7 @@ public class OrebfuscatorConfig {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void load() {
 
 		debug = getBoolean("Debug", false);
@@ -190,7 +192,17 @@ public class OrebfuscatorConfig {
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
 
 		// Read block lists
-		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", Arrays.asList(new Integer[] {1, 14, 15, 16, 21, 54, 56, 73, 74, 129, 130, 87, 153 })), false);
+		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", 
+			Arrays.asList(
+				new Integer[] {
+					Material.STONE.getId(), Material.GOLD_ORE.getId(), Material.IRON_ORE.getId(), Material.COAL_ORE.getId(),
+					Material.LAPIS_ORE.getId(), Material.DIAMOND_ORE.getId(), Material.REDSTONE_ORE.getId(),
+					Material.GLOWING_REDSTONE_ORE.getId(), Material.EMERALD_ORE.getId(),
+					Material.NETHERRACK.getId(), Material.QUARTZ_ORE.getId(),
+					Material.ENDER_STONE.getId()
+				}
+			)
+		), false);
 
 		// Disable worlds
 		DisabledWorlds = new HashSet<String>(getStringList("Lists.DisabledWorlds", new ArrayList<String>(DisabledWorlds)));
