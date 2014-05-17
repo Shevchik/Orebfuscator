@@ -91,21 +91,6 @@ public class OrebfuscatorConfig {
 		UpdateRadius = data;
 	}
 
-	public static void setProcessingThreads(int data) {
-		setData("Integers.ProcessingThreads", data);
-		ProcessingThreads = data;
-	}
-
-	public static void setDisabledWorlds(String name, boolean data) {
-		if (!data) {
-			DisabledWorlds.remove(name);
-		}
-		else {
-			DisabledWorlds.add(name);
-		}
-		setData("Lists.DisabledWorlds", DisabledWorlds);
-	}
-
 	private static int getInt(String path, int defaultData) {
 		if (getConfig().get(path) == null) {
 			setData(path, defaultData);
