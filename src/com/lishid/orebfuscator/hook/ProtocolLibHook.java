@@ -57,15 +57,14 @@ public class ProtocolLibHook {
 						f.setAccessible(true);
 						final Thread thread = (Thread) f.get(nm);
 						final AtomicInteger atomic = suspendcount.get(playername);
-						atomic.getAndIncrement();
+						atomic.incrementAndGet();
 						thread.suspend();
 						executors.execute(
 							new Runnable() {
 								@Override
 								public void run() {
 									Calculations.Obfuscate(event.getPacket(), event.getPlayer());
-									atomic.decrementAndGet();
-									if (atomic.get() == 0) {
+									if (atomic.decrementAndGet() == 0) {
 										thread.resume();
 									}
 								}
