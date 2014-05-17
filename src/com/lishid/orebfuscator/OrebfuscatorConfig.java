@@ -39,7 +39,7 @@ public class OrebfuscatorConfig {
 
 	// Utilities
 	private static boolean[] ObfuscateBlocks = new boolean[4096];
-	private static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
+	public static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
 	private static HashSet<String> DisabledWorlds = new HashSet<String>();
 
 
@@ -77,10 +77,6 @@ public class OrebfuscatorConfig {
 			retval += world + ", ";
 		}
 		return retval.length() > 1 ? retval.substring(0, retval.length() - 2) : retval;
-	}
-
-	public static int getBlockID(int block) {
-		return RandomBlocks[block % RandomBlocks.length];
 	}
 
 	// Set
