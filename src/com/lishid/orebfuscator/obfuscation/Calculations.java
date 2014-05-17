@@ -120,11 +120,11 @@ public class Calculations {
 	private static void ComputeChunkInfoAndObfuscate(ChunkInfo info) {
 		// Compute chunk number
         for (int i = 0; i < 16; i++) {
-            if ((info.chunkMask & 1 << i) > 0) {
+            if ((info.chunkMask & (1 << i)) != 0) {
                 info.chunkSectionToIndexMap[i] = info.chunkSectionNumber;
                 info.chunkSectionNumber++;
             }
-            if ((info.extraMask & 1 << i) > 0) {
+            if ((info.extraMask & (1 << i)) != 0) {
                 info.extraSectionToIndexMap[i] = info.extraSectionNumber;
                 info.extraSectionNumber++;
             }
@@ -149,8 +149,8 @@ public class Calculations {
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
 		for (int i = 0; i < 16; i++) {
-			if ((info.chunkMask & 1 << i) != 0) {
-				boolean usesExtra = ((info.extraMask & 1 << i) != 0);
+			if ((info.chunkMask & (1 << i)) != 0) {
+				boolean usesExtra = ((info.extraMask & (1 << i)) != 0);
 
 				for (int y = 0; y < 16; y++) {
 					int blockY = (i << 4) + y;
@@ -230,14 +230,15 @@ public class Calculations {
 			return true;
 		}
 
-        if ((info.chunkMask & (1 << (y >> 4))) > 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
+		int ysection = y >> 4;
+        if ((info.chunkMask & (1 << ysection)) != 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
             int section = info.chunkSectionToIndexMap[y >> 4];
 
             int blockindex = (y % 16 << 8) + (((z % 16) & 0x0F) << 4) + ((x % 16) & 0x0F);
 
             int typeID = info.data[section * 4096 + blockindex] & 0xFF;
-            if ((info.extraMask & (1 << (y >> 4))) > 0) {
-            	int extrasecton = info.extraSectionToIndexMap[y >> 4];
+            if ((info.extraMask & (1 << ysection)) != 0) {
+            	int extrasecton = info.extraSectionToIndexMap[ysection];
 				if (blockindex % 2 == 0) {
 					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] & 0x0F << 8;
 				} else {
