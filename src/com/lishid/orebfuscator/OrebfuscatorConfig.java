@@ -31,7 +31,6 @@ public class OrebfuscatorConfig {
 	// Main engine config
 	public static int EngineMode = 2;
 	public static int UpdateRadius = 2;
-	public static int CompressionLevel = 0;
 	public static int ProcessingThreads = Runtime.getRuntime().availableProcessors() - 1;
 
 	// Utilities
@@ -186,8 +185,6 @@ public class OrebfuscatorConfig {
 
 		UpdateRadius = clamp(getInt("Integers.UpdateRadius", UpdateRadius), 1, 5);
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
-
-		CompressionLevel = clamp(getInt("Integers.CompressionLevel", CompressionLevel), 1, 9);
 
 		// Read block lists
 		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", Arrays.asList(new Integer[] { 14, 15, 16, 21, 54, 56, 73, 74, 129, 130 })), false);

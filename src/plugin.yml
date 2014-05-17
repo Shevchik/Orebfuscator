@@ -15,6 +15,5 @@ commands:
            /<command> updateradius [number] - Set Update Radius
            /<command> reload - Reload from config
            /<command> status - Show plugin status
-           /<command> clearcache - Clear all cached chunks
            /<command> <enable/disable> - Toggle plugin state
            /<command> <enable/disable> world <worldname>
