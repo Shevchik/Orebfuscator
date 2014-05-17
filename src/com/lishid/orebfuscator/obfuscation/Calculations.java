@@ -85,13 +85,11 @@ public class Calculations {
 		int[] x = packet.getX();
 		int[] z = packet.getZ();
 
-		byte[][] inflatedBuffers = packet.getInflatedBuffers();
-
 		int[] chunkMask = packet.getChunkMask();
 		int[] extraMask = packet.getExtraMask();
 
 		// Create an info objects
-		for (int chunkNum = 0; chunkNum < inflatedBuffers.length; chunkNum++) {
+		for (int chunkNum = 0; chunkNum < packet.getPacketChunkNumber(); chunkNum++) {
 			ChunkInfo info = new ChunkInfo();
 			infos[chunkNum] = info;
 			info.world = player.getWorld();
