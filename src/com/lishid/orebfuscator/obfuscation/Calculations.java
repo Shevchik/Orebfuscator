@@ -46,7 +46,7 @@ public class Calculations {
 	private static void Obfuscate(Packet56 packet, Player player) {
 		ChunkInfo[] infos = getInfo(packet, player);
 
-		ExecutorService localservice =  Executors.newFixedThreadPool(5);
+		ExecutorService localservice = Executors.newFixedThreadPool(5);
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
 			final ChunkInfo info = infos[chunkNum];
 			localservice.execute(
@@ -117,20 +117,20 @@ public class Calculations {
 
 	private static void ComputeChunkInfoAndObfuscate(ChunkInfo info) {
 		// Compute chunk number
-        for (int i = 0; i < 16; i++) {
-            if ((info.chunkMask & (1 << i)) != 0) {
-                info.chunkSectionToIndexMap[i] = info.chunkSectionNumber;
-                info.chunkSectionNumber++;
-            }
-            if ((info.extraMask & (1 << i)) != 0) {
-                info.extraSectionToIndexMap[i] = info.extraSectionNumber;
-                info.extraSectionNumber++;
-            }
-        }
+		for (int i = 0; i < 16; i++) {
+			if ((info.chunkMask & (1 << i)) != 0) {
+				info.chunkSectionToIndexMap[i] = info.chunkSectionNumber;
+				info.chunkSectionNumber++;
+			}
+			if ((info.extraMask & (1 << i)) != 0) {
+				info.extraSectionToIndexMap[i] = info.extraSectionNumber;
+				info.extraSectionNumber++;
+			}
+		}
 
-        if (info.chunkSectionNumber * 4096 > info.data.length) {
-        	return;
-        }
+		if (info.chunkSectionNumber * 4096 > info.data.length) {
+			return;
+		}
 
 		// Obfuscate
 		if (!OrebfuscatorConfig.isWorldDisabled(info.world.getName())) {
@@ -233,22 +233,22 @@ public class Calculations {
 		}
 
 		int ysection = y >> 4;
-        if ((info.chunkMask & (1 << ysection)) != 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
-            int section = info.chunkSectionToIndexMap[y >> 4];
+		if ((info.chunkMask & (1 << ysection)) != 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
+			int section = info.chunkSectionToIndexMap[y >> 4];
 
-            int blockindex = (y % 16 << 8) + (((z % 16) & 0x0F) << 4) + ((x % 16) & 0x0F);
+			int blockindex = (y % 16 << 8) + (((z % 16) & 0x0F) << 4) + ((x % 16) & 0x0F);
 
-            int typeID = info.data[section * 4096 + blockindex] & 0xFF;
-            if ((info.extraMask & (1 << ysection)) != 0) {
-            	int extrasecton = info.extraSectionToIndexMap[ysection];
+			int typeID = info.data[section * 4096 + blockindex] & 0xFF;
+			if ((info.extraMask & (1 << ysection)) != 0) {
+				int extrasecton = info.extraSectionToIndexMap[ysection];
 				if (blockindex % 2 == 0) {
 					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] & 0x0F << 8;
 				} else {
 					typeID += info.data[info.chunkSectionNumber * 10240 + extrasecton * 2048 + blockindex >> 1] >> 4 & 0x0F << 8;
 				}
-            }
-            return OrebfuscatorConfig.isBlockTransparent(typeID);
-        }
+			}
+			return OrebfuscatorConfig.isBlockTransparent(typeID);
+		}
 
 		if (CalculationsUtil.isChunkLoaded(info.world, x >> 4, z >> 4)) {
 			return OrebfuscatorConfig.isBlockTransparent(info.world.getBlockTypeIdAt(x, y, z));
