@@ -29,23 +29,18 @@ import org.bukkit.plugin.Plugin;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.lishid.orebfuscator.obfuscation.Calculations;
 
 public class ProtocolLibHook {
 
-	private ProtocolManager manager;
-
 	private ExecutorService executors = Executors.newFixedThreadPool(4);
 
 	private HashMap<String, AtomicInteger> suspendcount = new HashMap<String, AtomicInteger>();
 
 	public void register(Plugin plugin) {
-		manager = ProtocolLibrary.getProtocolManager();
-
-		manager.addPacketListener(
+		ProtocolLibrary.getProtocolManager().addPacketListener(
 			new PacketAdapter(
 				PacketAdapter.params(plugin, PacketType.Play.Server.MAP_CHUNK, PacketType.Play.Server.MAP_CHUNK_BULK)
 			) {
