@@ -121,11 +121,11 @@ public class OrebfuscatorConfig {
 		return intsarr;
 	}
 
-	private static List<String> getStringList(String path, List<String> defaultData) {
+	private static HashSet<String> getStringSet(String path, HashSet<String> defaultData) {
 		if (getConfig().get(path) == null) {
-			setData(path, defaultData);
+			setData(path, new ArrayList<String>(defaultData));
 		}
-		return getConfig().getStringList(path);
+		return new HashSet<String>(getConfig().getStringList(path));
 	}
 
 	private static boolean getBoolean(String path, boolean defaultData) {
@@ -172,7 +172,7 @@ public class OrebfuscatorConfig {
 		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
 
 		// Disabled worlds
-		DisabledWorlds = new HashSet<String>(getStringList("Lists.DisabledWorlds", new ArrayList<String>(DisabledWorlds)));
+		DisabledWorlds = getStringSet("Lists.DisabledWorlds", DisabledWorlds);
 	
 		// Read block lists
 		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", 
