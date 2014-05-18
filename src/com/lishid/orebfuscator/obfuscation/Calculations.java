@@ -128,10 +128,6 @@ public class Calculations {
 			}
 		}
 
-		if (info.chunkSectionNumber * 4096 > info.data.length) {
-			return;
-		}
-
 		Obfuscate(info);
 	}
 
