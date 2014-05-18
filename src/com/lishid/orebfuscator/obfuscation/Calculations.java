@@ -132,7 +132,7 @@ public class Calculations {
 	}
 
 	private static void Obfuscate(ChunkInfo info) {
-		boolean isNether = info.world.getEnvironment() == Environment.NETHER;
+		int e1r = info.world.getEnvironment() == Environment.NETHER ? 87 :1;
 
 		int engineMode = OrebfuscatorConfig.EngineMode;
 
@@ -168,7 +168,7 @@ public class Calculations {
 								int newBlockID = 0;
 								if (engineMode == 1) {
 									// Engine mode 1, use stone
-									newBlockID = (isNether ? 87 : 1);
+									newBlockID = e1r;
 								} else if (engineMode == 2) {
 									// Ending mode 2, get random block
 									if (randomBlock >= OrebfuscatorConfig.RandomBlocks.length) {
