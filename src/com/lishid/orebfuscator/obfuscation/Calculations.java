@@ -157,9 +157,9 @@ public class Calculations {
 							int typeID = info.data[currentTypeIndex] & 0xFF;
 							if (usesExtra) {
 								if (currentTypeIndex % 2 == 0) {
-									typeID |= ((info.data[addExtendedIndex + currentExtendedIndex] & 0xF) << 8);
+									typeID |= ((info.data[addExtendedIndex + currentExtendedIndex] << 8) & 0xF00);
 								} else {
-									typeID |= ((info.data[addExtendedIndex + currentExtendedIndex] & 0xF0) << 4);
+									typeID |= ((info.data[addExtendedIndex + currentExtendedIndex] << 4) & 0xF00);
 								}
 							}
 
@@ -240,9 +240,9 @@ public class Calculations {
 			if ((info.extraMask & (1 << ysection)) != 0) {
 				int extrasecton = info.extraSectionToIndexMap[ysection];
 				if (blockindex % 2 == 0) {
-					typeID |= ((info.data[addExtendedIndex + extrasecton * 2048 + blockindex >> 1] & 0x0F) << 8);
+					typeID |= ((info.data[addExtendedIndex + extrasecton * 2048 + blockindex >> 1] << 8) & 0xF00);
 				} else {
-					typeID |= ((info.data[addExtendedIndex + extrasecton * 2048 + blockindex >> 1] & 0xF0) << 4);
+					typeID |= ((info.data[addExtendedIndex + extrasecton * 2048 + blockindex >> 1] << 4) & 0xF00);
 				}
 			}
 			return OrebfuscatorConfig.isBlockTransparent(typeID);
