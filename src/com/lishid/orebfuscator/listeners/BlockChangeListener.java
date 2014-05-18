@@ -79,7 +79,7 @@ public class BlockChangeListener {
 								if (world.isChunkLoaded(chunkX, chunkZ)) {
 									Block block = world.getBlockAt(x, y, z);
 									if (OrebfuscatorConfig.isBlockTransparent(block.getTypeId())) {
-										blocks.add(world.getBlockAt(x, y, z));
+										blocks.add(block);
 									}
 								}
 							}
