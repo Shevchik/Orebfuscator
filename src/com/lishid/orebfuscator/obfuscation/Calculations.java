@@ -137,7 +137,7 @@ public class Calculations {
 		int engineMode = OrebfuscatorConfig.EngineMode;
 
 		int currentTypeIndex = 0;
-		int addExtendedIndex = info.chunkSectionNumber * (info.data.length >= info.chunkSectionNumber * 12288 ? 10240 : 8192);
+		int addExtendedIndex = info.chunkSectionNumber * 10240;//info.chunkSectionNumber * (info.data.length >= info.chunkSectionNumber * 12288 ? 10240 : 8192);
 		int currentExtendedIndex = 0;
 		int startX = info.chunkX << 4;
 		int startZ = info.chunkZ << 4;
@@ -157,9 +157,9 @@ public class Calculations {
 							int typeID = info.data[currentTypeIndex] & 0xFF;
 							if (usesExtra) {
 								if (currentTypeIndex % 2 == 0) {
-									typeID += info.data[addExtendedIndex + currentExtendedIndex] & 0x0F << 8;
+									typeID += ((info.data[addExtendedIndex + currentExtendedIndex] & 0x0F) << 8);
 								} else {
-									typeID += info.data[addExtendedIndex + currentExtendedIndex] >> 4 & 0x0F << 8;
+									typeID += (((info.data[addExtendedIndex + currentExtendedIndex] >> 4) & 0x0F) << 8);
 								}
 							}
 
