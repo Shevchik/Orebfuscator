@@ -27,12 +27,15 @@ public class Packet51 {
 	Packet51MapChunk packet;
 
 	private byte[] inflatedBuffer;
+	private byte[] buildBuffer;
 
 	public void setPacket(Object packet) {
 		if (packet instanceof Packet51MapChunk) {
 			this.packet = (Packet51MapChunk) packet;
 			inflatedBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, "field_73596_g");
 		}
+		buildBuffer = new byte[inflatedBuffer.length];
+		System.arraycopy(inflatedBuffer, 0, buildBuffer, 0, inflatedBuffer.length);
 	}
 
 	public int getX() {
@@ -55,9 +58,13 @@ public class Packet51 {
 		return inflatedBuffer;
 	}
 
+	public byte[] getBuildBuffer() {
+		return buildBuffer;
+	}
+
 	public void compress() {
 		Deflater deflater = new Deflater(Deflater.NO_COMPRESSION);
-		deflater.setInput(inflatedBuffer);
+		deflater.setInput(buildBuffer);
 		deflater.finish();
 
 		byte[] outputBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, "field_73595_f");

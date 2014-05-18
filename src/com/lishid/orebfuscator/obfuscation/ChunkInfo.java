@@ -30,5 +30,7 @@ public class ChunkInfo {
 	public int chunkSectionNumber;
 	public int extraSectionNumber;
 	public byte[] data;
+	public int writeIndex;
+	public byte[] buildBuffer;
 
 }

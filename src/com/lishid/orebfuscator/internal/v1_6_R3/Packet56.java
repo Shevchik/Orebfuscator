@@ -25,12 +25,26 @@ import com.lishid.orebfuscator.utils.ReflectionHelper;
 public class Packet56 {
 	Packet56MapChunkBulk packet;
 
-	byte[][] inflatedBuffers;
+	private byte[][] inflatedBuffers;
+
+	private byte[] buildBuffer;
 
 	public void setPacket(Object packet) {
 		if (packet instanceof Packet56MapChunkBulk) {
 			this.packet = (Packet56MapChunkBulk) packet;
 			inflatedBuffers = (byte[][]) ReflectionHelper.getPrivateField(packet, "field_73584_f");
+		}
+
+		int bufferSize = 0;
+		for (int i = 0; i < inflatedBuffers.length; i++) {
+			bufferSize += inflatedBuffers[i].length;
+		}
+
+		buildBuffer = new byte[bufferSize];
+		bufferSize = 0;
+		for (int i = 0; i < inflatedBuffers.length; i++) {
+			System.arraycopy(inflatedBuffers[i], 0, buildBuffer, bufferSize, inflatedBuffers[i].length);
+			bufferSize += inflatedBuffers[i].length;
 		}
 	}
 
@@ -58,24 +72,16 @@ public class Packet56 {
 		return inflatedBuffers;
 	}
 
+	public byte[] getBuildBuffer() {
+		return buildBuffer;
+	}
+
 	public void compress() {
-		int bufferSize = 0;
-		for (int i = 0; i < inflatedBuffers.length; i++) {
-			bufferSize += inflatedBuffers[i].length;
-		}
-
-		byte[] buildBuffer = new byte[bufferSize];
-		bufferSize = 0;
-		for (int i = 0; i < inflatedBuffers.length; i++) {
-			System.arraycopy(inflatedBuffers[i], 0, buildBuffer, bufferSize, inflatedBuffers[i].length);
-			bufferSize += inflatedBuffers[i].length;
-		}
-
 		Deflater deflater = new Deflater(Deflater.NO_COMPRESSION);
 		deflater.setInput(buildBuffer);
 		deflater.finish();
 
-		byte[] outputBuffer = new byte[bufferSize + 100];
+		byte[] outputBuffer = new byte[buildBuffer.length + 100];
 		ReflectionHelper.setPrivateField(packet, "field_73587_e", outputBuffer);
 		ReflectionHelper.setPrivateField(packet, "field_73585_g", deflater.deflate(outputBuffer));
 	}

@@ -89,6 +89,7 @@ public class Calculations {
 		int[] extraMask = packet.getExtraMask();
 
 		// Create an info objects
+		int writeIndex = 0;
 		for (int chunkNum = 0; chunkNum < packet.getPacketChunkNumber(); chunkNum++) {
 			ChunkInfo info = new ChunkInfo();
 			infos[chunkNum] = info;
@@ -98,6 +99,9 @@ public class Calculations {
 			info.chunkMask = chunkMask[chunkNum];
 			info.extraMask = extraMask[chunkNum];
 			info.data = packet.getInflatedBuffers()[chunkNum];
+			info.buildBuffer = packet.getBuildBuffer();
+			info.writeIndex = writeIndex;
+			writeIndex += packet.getInflatedBuffers()[chunkNum].length;
 		}
 
 		return infos;
@@ -112,6 +116,7 @@ public class Calculations {
 		info.chunkMask = packet.getChunkMask();
 		info.extraMask = packet.getExtraMask();
 		info.data = packet.getInflatedBuffer();
+		info.buildBuffer = packet.getBuildBuffer();
 		return info;
 	}
 
@@ -176,13 +181,13 @@ public class Calculations {
 									}
 									newBlockID = OrebfuscatorConfig.RandomBlocks[randomBlock++];
 								}
-								info.data[currentTypeIndex] = (byte) newBlockID;
+								info.buildBuffer[info.writeIndex + currentTypeIndex] = (byte) newBlockID;
 								if (usesExtra) {
 									byte extra = (byte) (newBlockID >> 8);
 									if (currentTypeIndex % 2 == 0) {
-										info.data[addExtendedIndex + currentExtendedIndex] = extra;
+										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] = extra;
 									} else {
-										info.data[addExtendedIndex + currentExtendedIndex] |= (extra << 4);
+										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] |= (extra << 4);
 									}
 								}
 							}
