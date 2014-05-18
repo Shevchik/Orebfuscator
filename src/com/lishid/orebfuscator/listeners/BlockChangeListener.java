@@ -1,6 +1,6 @@
 package com.lishid.orebfuscator.listeners;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.bukkit.World;
@@ -70,14 +70,12 @@ public class BlockChangeListener {
 						public void run() {
 							Player player = event.getPlayer();
 							World world = player.getWorld();
-							List<Block> blocks = new ArrayList<Block>(30);
+							List<Block> blocks = new LinkedList<Block>();
 							for (int i = 0; i < recordcount; i++) {
-								byte[] locationdata = new byte[2];
-								System.arraycopy(data, i * 4, locationdata, 0, 2);
-								byte zx = locationdata[0];
-								int x = (chunkX << 4) + (zx >> 4) & 0x0F;
-								int z = (chunkZ << 4) + zx & 0x0F;
-								int y = locationdata[1] & 0xFF;
+								byte xz = data[i * 4];
+								int x = (chunkX << 4) + ((xz >> 4) & 0xF);
+								int z = (chunkZ << 4) + (xz & 0xF);
+								int y = data[(i * 4) + 1] & 0xFF;
 								if (world.isChunkLoaded(chunkX, chunkZ)) {
 									Block block = world.getBlockAt(x, y, z);
 									if (OrebfuscatorConfig.isBlockTransparent(block.getTypeId())) {
