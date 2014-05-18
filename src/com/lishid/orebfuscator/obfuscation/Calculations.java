@@ -144,8 +144,6 @@ public class Calculations {
 	
 		int randomBlock = 0;
 
-		byte b1i = 0;
-		byte b1e = 0;
 		// Loop over 16x16x16 chunks in the 16x256x16 column
 		for (int i = 0; i < 16; i++) {
 			if ((info.chunkMask & (1 << i)) != 0) {
@@ -178,18 +176,13 @@ public class Calculations {
 									}
 									newBlockID = OrebfuscatorConfig.RandomBlocks[randomBlock++];
 								}
-								if (currentTypeIndex % 2 == 0) {
-									b1i = (byte) newBlockID;
-								} else {
-									info.data[currentTypeIndex - 1] = b1i;
-									info.data[currentTypeIndex] = (byte) newBlockID;
-								}
+								info.data[currentTypeIndex] = (byte) newBlockID;
 								if (usesExtra) {
 									byte extra = (byte) (newBlockID >> 8);
 									if (currentTypeIndex % 2 == 0) {
-										b1e = extra;
+										info.data[addExtendedIndex + currentExtendedIndex] = extra;
 									} else {
-										info.data[addExtendedIndex + currentExtendedIndex] = (byte) ((extra << 4) | b1e);
+										info.data[addExtendedIndex + currentExtendedIndex] |= (extra << 4);
 									}
 								}
 							}
