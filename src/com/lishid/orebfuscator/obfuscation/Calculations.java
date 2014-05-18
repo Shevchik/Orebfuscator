@@ -137,7 +137,7 @@ public class Calculations {
 		int engineMode = OrebfuscatorConfig.EngineMode;
 
 		int currentTypeIndex = 0;
-		int addExtendedIndex = info.chunkSectionNumber * 10240;//info.chunkSectionNumber * (info.data.length >= info.chunkSectionNumber * 12288 ? 10240 : 8192);
+		int addExtendedIndex = info.chunkSectionNumber * (info.data.length >= info.chunkSectionNumber * 10240 + info.extraSectionNumber * 2048 ? 10240 : 8192);
 		int currentExtendedIndex = 0;
 		int startX = info.chunkX << 4;
 		int startZ = info.chunkZ << 4;
