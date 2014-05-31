@@ -29,12 +29,6 @@ public class AsyncAddArrayList implements List<Packet> {
 		player = null;
 	}
 
-	@Override
-	public void finalize() {
-		executor.shutdown();
-		executor = null;
-	}
-
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	@Override
