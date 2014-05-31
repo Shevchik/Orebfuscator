@@ -24,7 +24,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
-import com.lishid.orebfuscator.hook.ProtocolLibHook;
+import com.lishid.orebfuscator.hook.PlayerHook;
 import com.lishid.orebfuscator.listeners.BlockChangeListener;
 import com.lishid.orebfuscator.listeners.ProcessingThreads;
 
@@ -54,7 +54,9 @@ public class Orebfuscator extends JavaPlugin {
 		new BlockChangeListener().register(this);
 
 		// Hook chunk data packets
-		new ProtocolLibHook().register(this);
+		// new ProtocolLibHook().register(this);
+		// init player inject
+		getServer().getPluginManager().registerEvents(new PlayerHook(), this);
 	}
 
 	@Override

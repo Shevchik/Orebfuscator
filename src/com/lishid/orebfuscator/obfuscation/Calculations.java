@@ -43,7 +43,7 @@ public class Calculations {
 		}
 	}
 
-	private static void Obfuscate(Packet56 packet, Player player) {
+	public static void Obfuscate(Packet56 packet, Player player) {
 		ChunkInfo[] infos = getInfo(packet, player);
 
 		ExecutorService localservice = Executors.newFixedThreadPool(5);
@@ -67,7 +67,7 @@ public class Calculations {
 		packet.compress();
 	}
 
-	private static void Obfuscate(Packet51 packet, Player player) {
+	public static void Obfuscate(Packet51 packet, Player player) {
 		ChunkInfo info = getInfo(packet, player);
 
 		if (info.chunkMask == 0 && info.extraMask == 0) {
