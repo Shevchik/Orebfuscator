@@ -25,6 +25,13 @@ public class AsyncAddArrayList implements List<Packet> {
 		this.list = list;
 	}
 
+	public void stop() {
+		executor.shutdownNow();
+		executor = null;
+		player = null;
+		list = null;
+	}
+
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	@Override
@@ -157,14 +164,6 @@ public class AsyncAddArrayList implements List<Packet> {
 	@Override
 	public List<Packet> subList(int fromIndex, int toIndex) {
 		return list.subList(fromIndex, toIndex);
-	}
-
-	@Override
-	public void finalize() {
-		executor.shutdownNow();
-		executor = null;
-		player = null;
-		list = null;
 	}
 
 }

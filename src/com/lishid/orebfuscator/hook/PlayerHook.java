@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
@@ -26,6 +27,15 @@ public class PlayerHook implements Listener {
 		ReflectionHelper.setPrivateField(nm, getHighPriorityQueueFieldName(), high);
 		List<?> low = new AsyncAddArrayList(player, (List<Packet>) ReflectionHelper.getPrivateField(nm, getLowPriorityQueueFieldName()));
 		ReflectionHelper.setPrivateField(nm, getLowPriorityQueueFieldName(), low);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)	
+	public void onQuit(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+		CraftPlayer cplayer = (CraftPlayer) player;
+		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
+		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, getHighPriorityQueueFieldName())).stop();
+		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, getLowPriorityQueueFieldName())).stop();
 	}
 
 	private static String getHighPriorityQueueFieldName() {
