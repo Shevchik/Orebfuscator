@@ -29,21 +29,14 @@ import com.lishid.orebfuscator.internal.v1_6_R3.BlockAccess;
 
 public class OrebfuscatorConfig {
 
-	// Main engine config
 	public static int EngineMode = 2;
 	public static int UpdateRadius = 2;
 	public static int ProcessingThreads = Runtime.getRuntime().availableProcessors() - 1;
 
-	// Utilities
-	private static boolean[] ObfuscateBlocks = new boolean[4096];
 	public static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
-	private static HashSet<String> DisabledWorlds = new HashSet<String>();
 
-
-	public static BlockAccess blockAccess = new BlockAccess();
 	private static boolean[] TransparentBlocks = new boolean[4096];
 	private static boolean TransparentCached = false;
-
 	public static boolean isBlockTransparent(int i) {
 		if (!TransparentCached) {
 			// Generate TransparentBlocks by reading them from Minecraft
@@ -52,22 +45,23 @@ public class OrebfuscatorConfig {
 
 		return TransparentBlocks[i];
 	}
-
 	private static void generateTransparentBlocks() {
+		BlockAccess blockAccess = new BlockAccess();
 		for (int i = 0; i < TransparentBlocks.length; i++) {
 			TransparentBlocks[i] = blockAccess.isBlockTransparent(i);
 		}
 		TransparentCached = true;
 	}
 
+	private static boolean[] ObfuscateBlocks = new boolean[4096];
 	public static boolean isObfuscated(int id) {
 		return ObfuscateBlocks[id];
 	}
 
+	private static HashSet<String> DisabledWorlds = new HashSet<String>();
 	public static boolean isWorldDisabled(String name) {
 		return DisabledWorlds.contains(name);
 	}
-
 	public static String getDisabledWorlds() {
 		String retval = "";
 		for (String world : DisabledWorlds) {

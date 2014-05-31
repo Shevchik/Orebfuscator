@@ -39,9 +39,8 @@ public class OrebfuscatorCommandExecutor {
 		if (args[0].equalsIgnoreCase("engine") && args.length > 1) {
 			int engine = OrebfuscatorConfig.EngineMode;
 			try {
-				engine = new Integer(args[1]);
-			}
-			catch (NumberFormatException e) {
+				engine = Integer.parseInt(args[1]);
+			} catch (NumberFormatException e) {
 				Orebfuscator.message(sender, args[1] + " is not a number!");
 				return true;
 			}
@@ -59,9 +58,8 @@ public class OrebfuscatorCommandExecutor {
 		else if (args[0].equalsIgnoreCase("updateradius") && args.length > 1) {
 			int radius = OrebfuscatorConfig.UpdateRadius;
 			try {
-				radius = new Integer(args[1]);
-			}
-			catch (NumberFormatException e) {
+				radius = Integer.parseInt(args[1]);
+			} catch (NumberFormatException e) {
 				Orebfuscator.message(sender, args[1] + " is not a number!");
 				return true;
 			}
