@@ -161,11 +161,10 @@ public class AsyncAddArrayList implements List<Packet> {
 
 	@Override
 	public void finalize() {
-		System.out.println("list disposed");
+		executor.shutdownNow();
+		executor = null;
 		player = null;
 		list = null;
-		executor.shutdown();
-		executor = null;
 	}
 
 }
