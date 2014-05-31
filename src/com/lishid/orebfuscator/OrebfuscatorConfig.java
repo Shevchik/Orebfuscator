@@ -161,9 +161,9 @@ public class OrebfuscatorConfig {
 
 		// Disabled worlds
 		DisabledWorlds = getStringSet("Lists.DisabledWorlds", DisabledWorlds);
-	
+
 		// Read block lists
-		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks", 
+		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks",
 			Arrays.asList(
 				new Integer[] {
 					Material.STONE.getId(), Material.GOLD_ORE.getId(), Material.IRON_ORE.getId(), Material.COAL_ORE.getId(),

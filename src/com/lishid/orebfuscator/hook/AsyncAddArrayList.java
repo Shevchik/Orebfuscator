@@ -7,13 +7,13 @@ import java.util.ListIterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import net.minecraft.server.v1_6_R3.Packet;
+
 import org.bukkit.entity.Player;
 
 import com.lishid.orebfuscator.internal.v1_6_R3.Packet51;
 import com.lishid.orebfuscator.internal.v1_6_R3.Packet56;
 import com.lishid.orebfuscator.obfuscation.Calculations;
-
-import net.minecraft.server.v1_6_R3.Packet;
 
 public class AsyncAddArrayList implements List<Packet> {
 
@@ -45,7 +45,7 @@ public class AsyncAddArrayList implements List<Packet> {
 						} else if (packet.n() == 56) {
 							Packet56 wrapper = new Packet56();
 							wrapper.setPacket(packet);
-							Calculations.Obfuscate(wrapper, player);						
+							Calculations.Obfuscate(wrapper, player);
 						}
 					}
 					list.add(packet);

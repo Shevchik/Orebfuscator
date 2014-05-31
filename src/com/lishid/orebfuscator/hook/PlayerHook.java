@@ -29,7 +29,7 @@ public class PlayerHook implements Listener {
 		ReflectionHelper.setPrivateField(nm, getLowPriorityQueueFieldName(), low);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)	
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		CraftPlayer cplayer = (CraftPlayer) player;

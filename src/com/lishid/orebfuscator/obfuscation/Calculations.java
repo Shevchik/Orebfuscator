@@ -146,7 +146,7 @@ public class Calculations {
 		int currentExtendedIndex = 0;
 		int startX = info.chunkX << 4;
 		int startZ = info.chunkZ << 4;
-	
+
 		int randomBlock = 0;
 
 		// Loop over 16x16x16 chunks in the 16x256x16 column
