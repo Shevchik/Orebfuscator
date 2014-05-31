@@ -26,10 +26,9 @@ public class AsyncAddArrayList implements List<Packet> {
 	}
 
 	public void stop() {
-		executor.shutdownNow();
+		executor.shutdown();
 		executor = null;
 		player = null;
-		list = null;
 	}
 
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
