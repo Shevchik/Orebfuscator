@@ -29,9 +29,6 @@ import com.lishid.orebfuscator.internal.v1_6_R3.BlockAccess;
 
 public class OrebfuscatorConfig {
 
-	// Debug
-	public static boolean debug = false;
-
 	// Main engine config
 	public static int EngineMode = 2;
 	public static int UpdateRadius = 2;
@@ -128,13 +125,6 @@ public class OrebfuscatorConfig {
 		return new HashSet<String>(getConfig().getStringList(path));
 	}
 
-	private static boolean getBoolean(String path, boolean defaultData) {
-		if (getConfig().get(path) == null) {
-			setData(path, defaultData);
-		}
-		return getConfig().getBoolean(path);
-	}
-
 	private static void setData(String path, Object data) {
 		try {
 			getConfig().set(path, data);
@@ -159,8 +149,6 @@ public class OrebfuscatorConfig {
 
 	@SuppressWarnings("deprecation")
 	public static void load() {
-
-		debug = getBoolean("Debug", false);
 
 		EngineMode = getInt("Integers.EngineMode", EngineMode);
 		if (EngineMode != 1 && EngineMode != 2) {
