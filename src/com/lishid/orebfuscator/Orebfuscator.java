@@ -27,8 +27,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
 import com.lishid.orebfuscator.hook.PlayerHook;
-import com.lishid.orebfuscator.listeners.BlockChangeListener;
-import com.lishid.orebfuscator.listeners.ProcessingThreads;
 
 /**
  * Orebfuscator Anti X-RAY
@@ -50,13 +48,6 @@ public class Orebfuscator extends JavaPlugin {
 		// Load configurations
 		OrebfuscatorConfig.load();
 
-		// Start block processing Threads
-		ProcessingThreads.initialize();
-		ProcessingThreads.instance.startThreads();
-
-		// Hook block change packet
-		new BlockChangeListener().register(this);
-
 		// Hook packet queue
 		phook = new PlayerHook();
 		getServer().getPluginManager().registerEvents(phook, this);
@@ -69,9 +60,6 @@ public class Orebfuscator extends JavaPlugin {
 	public void onDisable() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			phook.cleanupPlayer(player);
-		}
-		if (ProcessingThreads.instance != null) {
-			ProcessingThreads.instance.stopThreads();
 		}
 	}
 

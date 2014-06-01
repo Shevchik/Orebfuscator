@@ -31,7 +31,6 @@ public class OrebfuscatorConfig {
 
 	public static int EngineMode = 2;
 	public static int UpdateRadius = 2;
-	public static int ProcessingThreads = Runtime.getRuntime().availableProcessors() - 1;
 
 	public static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
 
@@ -151,7 +150,6 @@ public class OrebfuscatorConfig {
 		}
 
 		UpdateRadius = clamp(getInt("Integers.UpdateRadius", UpdateRadius), 1, 5);
-		ProcessingThreads = clamp(getInt("Integers.ProcessingThreads", ProcessingThreads), 1, ProcessingThreads);
 
 		// Disabled worlds
 		DisabledWorlds = getStringSet("Lists.DisabledWorlds", DisabledWorlds);
