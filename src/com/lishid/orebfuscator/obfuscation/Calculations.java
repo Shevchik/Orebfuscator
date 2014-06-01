@@ -16,52 +16,20 @@
 
 package com.lishid.orebfuscator.obfuscation;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.Packet51;
 import com.lishid.orebfuscator.internal.Packet56;
 
 public class Calculations {
 
-	public static void Obfuscate(PacketContainer container, Player player) {
-		if (container.getType().equals(PacketType.Play.Server.MAP_CHUNK)) {
-			Packet51 packet = new Packet51();
-			packet.setPacket(container.getHandle());
-			Calculations.Obfuscate(packet, player);
-		} else if (container.getType().equals(PacketType.Play.Server.MAP_CHUNK_BULK)) {
-			Packet56 packet = new Packet56();
-			packet.setPacket(container.getHandle());
-			Calculations.Obfuscate(packet, player);
-		}
-	}
-
 	public static void Obfuscate(Packet56 packet, Player player) {
 		ChunkInfo[] infos = getInfo(packet, player);
 
-		ExecutorService localservice = Executors.newFixedThreadPool(5);
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
-			final ChunkInfo info = infos[chunkNum];
-			localservice.execute(
-				new Runnable() {
-					@Override
-					public void run() {
-						ComputeChunkInfoAndObfuscate(info);
-					}
-				}
-			);
-		}
-		localservice.shutdown();
-		try {
-			localservice.awaitTermination(20, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
+			ComputeChunkInfoAndObfuscate(infos[chunkNum]);
 		}
 
 		packet.compress();
