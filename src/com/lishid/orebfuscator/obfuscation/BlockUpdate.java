@@ -15,6 +15,8 @@ import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.Notify;
 import com.lishid.orebfuscator.internal.Packet52;
 import com.lishid.orebfuscator.internal.Packet53;
+import com.lishid.orebfuscator.utils.BlockChangeArray;
+import com.lishid.orebfuscator.utils.BlockChangeArray.BlockChange;
 
 public class BlockUpdate {
 
@@ -34,24 +36,19 @@ public class BlockUpdate {
 		scheduleUpdate(updateBlocks);
 	}
 
-	@SuppressWarnings("deprecation")
 	public static void update(Packet52 packet, Player player) {
+		List<Block> blocks = new LinkedList<Block>();
 		int chunkX = packet.getChunkX();
 		int chunkZ = packet.getChunkZ();
-		int recordcount = packet.getRecordsCount();
-		byte[] data = packet.getRecords();
 		World world = player.getWorld();
-		List<Block> blocks = new LinkedList<Block>();
-		for (int i = 0; i < recordcount; i++) {
-			byte xz = data[i * 4];
-			int x = (chunkX << 4) + ((xz >> 4) & 0xF);
-			int z = (chunkZ << 4) + (xz & 0xF);
-			int y = data[(i * 4) + 1] & 0xFF;
-			if (world.isChunkLoaded(chunkX, chunkZ)) {
-				Block block = world.getBlockAt(x, y, z);
-				if (OrebfuscatorConfig.isBlockTransparent(block.getTypeId())) {
-					blocks.add(block);
-				}
+		BlockChangeArray baarray = new BlockChangeArray(packet.getRecords());
+		for (int i = 0; i < baarray.getSize(); i++) {
+			BlockChange bc = baarray.getBlockChange(i);
+			int x = (chunkX << 4) + bc.getRelativeX();
+			int z = (chunkZ << 4) + bc.getRelativeZ();
+			Block block = CalculationsUtil.getBlockAt(world, x, bc.getAbsoluteY(), z);
+			if (block != null && OrebfuscatorConfig.isBlockTransparent(bc.getBlockID())) {
+				blocks.add(block);
 			}
 		}
 		HashSet<Block> updateBlocks = new HashSet<Block>(40);
