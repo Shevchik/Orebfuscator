@@ -30,6 +30,11 @@ import com.lishid.orebfuscator.internal.Packet56;
 public class Calculations {
 
 	public static void Obfuscate(Packet56 packet, Player player) {
+
+		if (OrebfuscatorConfig.isWorldDisabled(player.getWorld().getName())) {
+			return;
+		}
+
 		ChunkInfo[] infos = getInfo(packet, player);
 
 		ExecutorService localservice = Executors.newFixedThreadPool(infos.length);
@@ -54,6 +59,11 @@ public class Calculations {
 	}
 
 	public static void Obfuscate(Packet51 packet, Player player) {
+
+		if (OrebfuscatorConfig.isWorldDisabled(player.getWorld().getName())) {
+			return;
+		}
+
 		ChunkInfo info = getInfo(packet, player);
 
 		if (info.chunkMask == 0 && info.extraMask == 0) {
