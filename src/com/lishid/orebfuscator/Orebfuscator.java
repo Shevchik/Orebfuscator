@@ -18,9 +18,11 @@ package com.lishid.orebfuscator;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
@@ -38,6 +40,8 @@ public class Orebfuscator extends JavaPlugin {
 	public static final Logger logger = Logger.getLogger("Minecraft.OFC");
 	public static Orebfuscator instance;
 
+	private PlayerHook phook;
+
 	@Override
 	public void onEnable() {
 		// Assign static instance
@@ -53,14 +57,19 @@ public class Orebfuscator extends JavaPlugin {
 		// Hook block change packet
 		new BlockChangeListener().register(this);
 
-		// Hook chunk data packets
-		// new ProtocolLibHook().register(this);
-		// init player inject
-		getServer().getPluginManager().registerEvents(new PlayerHook(), this);
+		// Hook packet queue
+		phook = new PlayerHook();
+		getServer().getPluginManager().registerEvents(phook, this);
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			phook.hookPlayer(player);
+		}
 	}
 
 	@Override
 	public void onDisable() {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			phook.cleanupPlayer(player);
+		}
 		if (ProcessingThreads.instance != null) {
 			ProcessingThreads.instance.stopThreads();
 		}

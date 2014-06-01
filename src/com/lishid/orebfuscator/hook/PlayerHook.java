@@ -18,10 +18,13 @@ import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class PlayerHook implements Listener {
 
-	@SuppressWarnings("unchecked")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
+		hookPlayer(event.getPlayer());
+	}
+
+	@SuppressWarnings("unchecked")
+	public void hookPlayer(Player player) {
 		CraftPlayer cplayer = (CraftPlayer) player;
 		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
 		List<?> high = new AsyncAddArrayList(player, (List<Packet>) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName()));
@@ -32,11 +35,14 @@ public class PlayerHook implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
+		cleanupPlayer(event.getPlayer());
+	}
+
+	public void cleanupPlayer(Player player) {
 		CraftPlayer cplayer = (CraftPlayer) player;
 		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
-		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName())).stop();
-		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName())).stop();
+		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName())).cleanup();
+		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName())).cleanup();	
 	}
 
 }

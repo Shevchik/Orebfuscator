@@ -22,10 +22,14 @@ public class AsyncAddArrayList implements List<Packet> {
 
 	public AsyncAddArrayList(Player player, List<Packet> list) {
 		this.player = player;
-		this.list = list;
+		if (list instanceof AsyncAddArrayList) {
+			this.list = ((AsyncAddArrayList) list).list;
+		} else {
+			this.list = list;
+		}
 	}
 
-	public void stop() {
+	public void cleanup() {
 		player = null;
 	}
 
