@@ -12,10 +12,6 @@ public class Fields {
 			return "field_74487_p";
 		}
 
-		public static String getLowPriorityQueueFieldName() {
-			return "field_74486_q";
-		}
-
 	}
 
 	public static class Packet51Fields {
