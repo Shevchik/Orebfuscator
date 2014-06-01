@@ -31,7 +31,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 
-public class BlockUpdate {
+public class BlockUpdateOLD {
 
 	private static ProtocolManager manager;
 	private static ProtocolManager getProtocolManager() {
@@ -46,12 +46,6 @@ public class BlockUpdate {
 		for (Block block : blocks) {
 			updateBlocks.addAll(GetAjacentBlocks(block.getWorld(), new HashSet<Block>(), block, OrebfuscatorConfig.UpdateRadius));
 		}
-
-		sendBlockUpdates(player, updateBlocks);
-	}
-
-	public static void Update(Player player, Block block) {
-		HashSet<Block> updateBlocks = GetAjacentBlocks(block.getWorld(), new HashSet<Block>(20), block, OrebfuscatorConfig.UpdateRadius);
 
 		sendBlockUpdates(player, updateBlocks);
 	}

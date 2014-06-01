@@ -11,7 +11,9 @@ import net.minecraft.server.v1_6_R3.Packet;
 
 import org.bukkit.entity.Player;
 
+import com.lishid.orebfuscator.internal.BlockUpdate;
 import com.lishid.orebfuscator.internal.Packet51;
+import com.lishid.orebfuscator.internal.Packet53;
 import com.lishid.orebfuscator.internal.Packet56;
 import com.lishid.orebfuscator.obfuscation.Calculations;
 
@@ -52,6 +54,9 @@ public class AsyncAddArrayList implements List<Packet> {
 								Packet56 wrapper = new Packet56();
 								wrapper.setPacket(packet);
 								Calculations.Obfuscate(wrapper, player);
+							} else if (packet.n() == 53) {
+								Packet53 wrapper = new Packet53(packet);
+								BlockUpdate.update(wrapper, player);
 							}
 						}
 						list.add(packet);
