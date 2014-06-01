@@ -29,6 +29,8 @@ import com.lishid.orebfuscator.internal.BlockAccess;
 
 public class OrebfuscatorConfig {
 
+	public static boolean Async = true;
+
 	public static int EngineMode = 2;
 	public static int UpdateRadius = 2;
 
@@ -151,6 +153,8 @@ public class OrebfuscatorConfig {
 
 	@SuppressWarnings("deprecation")
 	public static void load() {
+
+		Async = getBoolean("ObfuscateAsync", Async);
 
 		EngineMode = getInt("EngineMode", EngineMode);
 		if (EngineMode != 1 && EngineMode != 2) {

@@ -11,6 +11,7 @@ import net.minecraft.server.v1_6_R3.Packet;
 
 import org.bukkit.entity.Player;
 
+import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.Packet51;
 import com.lishid.orebfuscator.internal.Packet52;
 import com.lishid.orebfuscator.internal.Packet53;
@@ -22,6 +23,8 @@ public class AsyncAddArrayList implements List<Packet> {
 
 	private Player player;
 	private List<Packet> list;
+
+	private boolean async = OrebfuscatorConfig.Async;
 
 	public AsyncAddArrayList(Player player, List<Packet> list) {
 		this.player = player;
@@ -41,32 +44,37 @@ public class AsyncAddArrayList implements List<Packet> {
 
 	@Override
 	public boolean add(final Packet packet) {
-		synchronized (lock) {
-			executor.execute(
-				new Runnable() {
-					@Override
-					public void run() {
-						if (player != null) {
-							if (packet.n() == 51) {
-								Packet51 wrapper = new Packet51();
-								wrapper.setPacket(packet);
-								Calculations.Obfuscate(wrapper, player);
-							} else if (packet.n() == 56) {
-								Packet56 wrapper = new Packet56();
-								wrapper.setPacket(packet);
-								Calculations.Obfuscate(wrapper, player);
-							} else if (packet.n() == 53) {
-								Packet53 wrapper = new Packet53(packet);
-								BlockUpdate.update(wrapper, player);
-							} else if (packet.n() == 52) {
-								Packet52 wrapper = new Packet52(packet);
-								BlockUpdate.update(wrapper, player);
-							}
-						}
-						list.add(packet);
+		Runnable processPacket = new Runnable() {
+			@Override
+			public void run() {
+				if (player != null) {
+					if (packet.n() == 51) {
+						Packet51 wrapper = new Packet51();
+						wrapper.setPacket(packet);
+						Calculations.Obfuscate(wrapper, player);
+					} else if (packet.n() == 56) {
+						Packet56 wrapper = new Packet56();
+						wrapper.setPacket(packet);
+						Calculations.Obfuscate(wrapper, player);
+					} else if (packet.n() == 53) {
+						Packet53 wrapper = new Packet53(packet);
+						BlockUpdate.update(wrapper, player);
+					} else if (packet.n() == 52) {
+						Packet52 wrapper = new Packet52(packet);
+						BlockUpdate.update(wrapper, player);
 					}
 				}
-			);
+				list.add(packet);
+			}
+		};
+		if (async) {
+			synchronized (lock) {
+				executor.execute(
+					processPacket
+				);
+			}
+		} else {
+			processPacket.run();
 		}
 		return true;
 	}
