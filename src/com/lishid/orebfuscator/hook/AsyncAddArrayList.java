@@ -39,11 +39,10 @@ public class AsyncAddArrayList implements List<Packet> {
 		player = null;
 	}
 
-	private Object lock = new Object();
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	@Override
-	public boolean add(final Packet packet) {
+	public synchronized boolean add(final Packet packet) {
 		Runnable processPacket = new Runnable() {
 			@Override
 			public void run() {
@@ -68,11 +67,9 @@ public class AsyncAddArrayList implements List<Packet> {
 			}
 		};
 		if (async) {
-			synchronized (lock) {
-				executor.execute(
-					processPacket
-				);
-			}
+			executor.execute(
+				processPacket
+			);
 		} else {
 			processPacket.run();
 		}
@@ -80,98 +77,98 @@ public class AsyncAddArrayList implements List<Packet> {
 	}
 
 	@Override
-	public int size() {
+	public synchronized int size() {
 		return list.size();
 	}
 
 	@Override
-	public boolean isEmpty() {
+	public synchronized boolean isEmpty() {
 		return list.isEmpty();
 	}
 
 	@Override
-	public boolean contains(Object o) {
+	public synchronized boolean contains(Object o) {
 		return list.contains(o);
 	}
 
 	@Override
-	public Iterator<Packet> iterator() {
-		return list.iterator();
-	}
-
-	@Override
-	public Object[] toArray() {
+	public synchronized Object[] toArray() {
 		return list.toArray();
 	}
 
 	@Override
-	public <T> T[] toArray(T[] a) {
+	public synchronized <T> T[] toArray(T[] a) {
 		return list.toArray(a);
 	}
 
 	@Override
-	public boolean remove(Object o) {
+	public synchronized boolean remove(Object o) {
 		return list.remove(o);
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> c) {
+	public synchronized boolean containsAll(Collection<?> c) {
 		return list.containsAll(c);
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends Packet> c) {
+	public synchronized boolean addAll(Collection<? extends Packet> c) {
 		return list.addAll(c);
 	}
 
 	@Override
-	public boolean addAll(int index, Collection<? extends Packet> c) {
+	public synchronized boolean addAll(int index, Collection<? extends Packet> c) {
 		return list.addAll(list);
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> c) {
+	public synchronized boolean removeAll(Collection<?> c) {
 		return list.removeAll(c);
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> c) {
+	public synchronized boolean retainAll(Collection<?> c) {
 		return list.removeAll(c);
 	}
 
 	@Override
-	public void clear() {
+	public synchronized void clear() {
 		list.clear();
 	}
 
 	@Override
-	public Packet get(int index) {
+	public synchronized Packet get(int index) {
 		return list.get(index);
 	}
 
 	@Override
-	public Packet set(int index, Packet element) {
+	public synchronized Packet set(int index, Packet element) {
 		return list.set(index, element);
 	}
 
 	@Override
-	public void add(int index, Packet element) {
+	public synchronized void add(int index, Packet element) {
 		list.add(index, element);
 	}
 
 	@Override
-	public Packet remove(int index) {
+	public synchronized Packet remove(int index) {
 		return list.remove(index);
 	}
 
 	@Override
-	public int indexOf(Object o) {
+	public synchronized int indexOf(Object o) {
 		return list.indexOf(o);
 	}
 
 	@Override
-	public int lastIndexOf(Object o) {
+	public synchronized int lastIndexOf(Object o) {
 		return list.lastIndexOf(o);
+	}
+
+	@Override
+	public synchronized List<Packet> subList(int fromIndex, int toIndex) {
+		throw new RuntimeException("Not implemented yet");
 	}
 
 	@Override
@@ -185,8 +182,8 @@ public class AsyncAddArrayList implements List<Packet> {
 	}
 
 	@Override
-	public List<Packet> subList(int fromIndex, int toIndex) {
-		return list.subList(fromIndex, toIndex);
+	public Iterator<Packet> iterator() {
+		return list.iterator();
 	}
 
 }
