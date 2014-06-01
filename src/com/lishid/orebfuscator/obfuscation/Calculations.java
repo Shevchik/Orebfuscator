@@ -16,6 +16,10 @@
 
 package com.lishid.orebfuscator.obfuscation;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 
@@ -28,8 +32,22 @@ public class Calculations {
 	public static void Obfuscate(Packet56 packet, Player player) {
 		ChunkInfo[] infos = getInfo(packet, player);
 
+		ExecutorService localservice = Executors.newFixedThreadPool(infos.length);
 		for (int chunkNum = 0; chunkNum < infos.length; chunkNum++) {
-			ComputeChunkInfoAndObfuscate(infos[chunkNum]);
+			final ChunkInfo info = infos[chunkNum];
+			localservice.execute(
+				new Runnable() {
+					@Override
+					public void run() {
+						ComputeChunkInfoAndObfuscate(info);
+					}
+				}
+			);
+		}
+		localservice.shutdown();
+		try {
+			localservice.awaitTermination(20, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
 		}
 
 		packet.compress();
