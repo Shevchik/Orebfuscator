@@ -32,7 +32,7 @@ public class Packet56 {
 	public void setPacket(Object packet) {
 		if (packet instanceof Packet56MapChunkBulk) {
 			this.packet = (Packet56MapChunkBulk) packet;
-			inflatedBuffers = (byte[][]) ReflectionHelper.getPrivateField(packet, "field_73584_f");
+			inflatedBuffers = (byte[][]) ReflectionHelper.getPrivateField(packet, Fields.Packet56Fields.getInflatedBuffersFieldName());
 		}
 
 		int bufferSize = 0;
@@ -53,11 +53,11 @@ public class Packet56 {
 	}
 
 	public int[] getX() {
-		return (int[]) ReflectionHelper.getPrivateField(packet, "field_73589_c");
+		return (int[]) ReflectionHelper.getPrivateField(packet, Fields.Packet56Fields.getChunksXCoordsFieldName());
 	}
 
 	public int[] getZ() {
-		return (int[]) ReflectionHelper.getPrivateField(packet, "field_73586_d");
+		return (int[]) ReflectionHelper.getPrivateField(packet, Fields.Packet56Fields.getChunksZCoordsFieldName());
 	}
 
 	public int[] getChunkMask() {
@@ -82,8 +82,8 @@ public class Packet56 {
 		deflater.finish();
 
 		byte[] outputBuffer = new byte[buildBuffer.length + 100];
-		ReflectionHelper.setPrivateField(packet, "field_73587_e", outputBuffer);
-		ReflectionHelper.setPrivateField(packet, "field_73585_g", deflater.deflate(outputBuffer));
+		ReflectionHelper.setPrivateField(packet, Fields.Packet56Fields.getOutputBufferFieldName(), outputBuffer);
+		ReflectionHelper.setPrivateField(packet, Fields.Packet56Fields.getCompressedSizeFieldName(), deflater.deflate(outputBuffer));
 	}
 
 }

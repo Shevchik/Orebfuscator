@@ -32,7 +32,7 @@ public class Packet51 {
 	public void setPacket(Object packet) {
 		if (packet instanceof Packet51MapChunk) {
 			this.packet = (Packet51MapChunk) packet;
-			inflatedBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, "field_73596_g");
+			inflatedBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, Fields.Packet51Fields.getInflatedBufferFieldName());
 		}
 		buildBuffer = new byte[inflatedBuffer.length];
 		System.arraycopy(inflatedBuffer, 0, buildBuffer, 0, inflatedBuffer.length);
@@ -67,8 +67,8 @@ public class Packet51 {
 		deflater.setInput(buildBuffer);
 		deflater.finish();
 
-		byte[] outputBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, "field_73595_f");
-		ReflectionHelper.setPrivateField(packet, "field_73602_h", deflater.deflate(outputBuffer));
+		byte[] outputBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, Fields.Packet51Fields.getOutputBufferFieldName());
+		ReflectionHelper.setPrivateField(packet, Fields.Packet51Fields.getCompressedSizeFieldName(), deflater.deflate(outputBuffer));
 	}
 
 }

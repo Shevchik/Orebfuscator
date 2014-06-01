@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.lishid.orebfuscator.internal.v1_6_R3.Fields;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class PlayerHook implements Listener {
@@ -23,10 +24,10 @@ public class PlayerHook implements Listener {
 		Player player = event.getPlayer();
 		CraftPlayer cplayer = (CraftPlayer) player;
 		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
-		List<?> high = new AsyncAddArrayList(player, (List<Packet>) ReflectionHelper.getPrivateField(nm, getHighPriorityQueueFieldName()));
-		ReflectionHelper.setPrivateField(nm, getHighPriorityQueueFieldName(), high);
-		List<?> low = new AsyncAddArrayList(player, (List<Packet>) ReflectionHelper.getPrivateField(nm, getLowPriorityQueueFieldName()));
-		ReflectionHelper.setPrivateField(nm, getLowPriorityQueueFieldName(), low);
+		List<?> high = new AsyncAddArrayList(player, (List<Packet>) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName()));
+		ReflectionHelper.setPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName(), high);
+		List<?> low = new AsyncAddArrayList(player, (List<Packet>) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName()));
+		ReflectionHelper.setPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName(), low);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -34,16 +35,8 @@ public class PlayerHook implements Listener {
 		Player player = event.getPlayer();
 		CraftPlayer cplayer = (CraftPlayer) player;
 		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
-		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, getHighPriorityQueueFieldName())).stop();
-		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, getLowPriorityQueueFieldName())).stop();
-	}
-
-	private static String getHighPriorityQueueFieldName() {
-		return "field_74487_p";
-	}
-
-	private static String getLowPriorityQueueFieldName() {
-		return "field_74486_q";
+		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName())).stop();
+		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName())).stop();
 	}
 
 }
