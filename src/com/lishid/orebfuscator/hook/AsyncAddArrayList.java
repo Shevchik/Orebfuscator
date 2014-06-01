@@ -33,29 +33,32 @@ public class AsyncAddArrayList implements List<Packet> {
 		player = null;
 	}
 
+	private Object lock = new Object();
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	@Override
 	public boolean add(final Packet packet) {
-		executor.execute(
-			new Runnable() {
-				@Override
-				public void run() {
-					if (player != null) {
-						if (packet.n() == 51) {
-							Packet51 wrapper = new Packet51();
-							wrapper.setPacket(packet);
-							Calculations.Obfuscate(wrapper, player);
-						} else if (packet.n() == 56) {
-							Packet56 wrapper = new Packet56();
-							wrapper.setPacket(packet);
-							Calculations.Obfuscate(wrapper, player);
+		synchronized (lock) {
+			executor.execute(
+				new Runnable() {
+					@Override
+					public void run() {
+						if (player != null) {
+							if (packet.n() == 51) {
+								Packet51 wrapper = new Packet51();
+								wrapper.setPacket(packet);
+								Calculations.Obfuscate(wrapper, player);
+							} else if (packet.n() == 56) {
+								Packet56 wrapper = new Packet56();
+								wrapper.setPacket(packet);
+								Calculations.Obfuscate(wrapper, player);
+							}
 						}
+						list.add(packet);
 					}
-					list.add(packet);
 				}
-			}
-		);
+			);
+		}
 		return true;
 	}
 
