@@ -11,8 +11,8 @@ import net.minecraft.server.v1_6_R3.Packet;
 
 import org.bukkit.entity.Player;
 
-import com.lishid.orebfuscator.internal.v1_6_R3.Packet51;
-import com.lishid.orebfuscator.internal.v1_6_R3.Packet56;
+import com.lishid.orebfuscator.internal.Packet51;
+import com.lishid.orebfuscator.internal.Packet56;
 import com.lishid.orebfuscator.obfuscation.Calculations;
 
 public class AsyncAddArrayList implements List<Packet> {

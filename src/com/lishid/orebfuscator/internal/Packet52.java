@@ -1,4 +1,4 @@
-package com.lishid.orebfuscator.internal.v1_6_R3;
+package com.lishid.orebfuscator.internal;
 
 import net.minecraft.server.v1_6_R3.Packet52MultiBlockChange;
 

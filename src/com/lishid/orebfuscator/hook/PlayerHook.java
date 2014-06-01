@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.lishid.orebfuscator.internal.v1_6_R3.Fields;
+import com.lishid.orebfuscator.internal.Fields;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class PlayerHook implements Listener {

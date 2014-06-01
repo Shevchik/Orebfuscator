@@ -1,4 +1,4 @@
-package com.lishid.orebfuscator.internal.v1_6_R3;
+package com.lishid.orebfuscator.internal;
 
 public class Fields {
 

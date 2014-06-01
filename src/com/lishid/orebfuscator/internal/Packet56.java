@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.lishid.orebfuscator.internal.v1_6_R3;
+package com.lishid.orebfuscator.internal;
 
 import java.util.zip.Deflater;
 

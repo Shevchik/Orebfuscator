@@ -15,7 +15,7 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.internal.v1_6_R3.Packet52;
+import com.lishid.orebfuscator.internal.Packet52;
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 
 public class BlockChangeListener {

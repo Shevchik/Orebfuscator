@@ -25,7 +25,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.lishid.orebfuscator.internal.v1_6_R3.BlockAccess;
+import com.lishid.orebfuscator.internal.BlockAccess;
 
 public class OrebfuscatorConfig {
 
