@@ -4,6 +4,10 @@ public class Fields {
 
 	public static class NetworkManagerFields {
 
+		public static String getLockFieldName() {
+			return "field_74478_h";
+		}
+
 		public static String getHighPriorityQueueFieldName() {
 			return "field_74487_p";
 		}

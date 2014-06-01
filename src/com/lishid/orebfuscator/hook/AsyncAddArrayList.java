@@ -7,17 +7,20 @@ import java.util.ListIterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import net.minecraft.server.v1_6_R3.NetworkManager;
 import net.minecraft.server.v1_6_R3.Packet;
 
 import org.bukkit.entity.Player;
 
 import com.lishid.orebfuscator.OrebfuscatorConfig;
+import com.lishid.orebfuscator.internal.Fields;
 import com.lishid.orebfuscator.internal.Packet51;
 import com.lishid.orebfuscator.internal.Packet52;
 import com.lishid.orebfuscator.internal.Packet53;
 import com.lishid.orebfuscator.internal.Packet56;
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 import com.lishid.orebfuscator.obfuscation.Calculations;
+import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class AsyncAddArrayList implements List<Packet> {
 
@@ -26,13 +29,16 @@ public class AsyncAddArrayList implements List<Packet> {
 
 	private boolean async = OrebfuscatorConfig.Async;
 
-	public AsyncAddArrayList(Player player, List<Packet> list) {
+	private Object networkManagerLock;
+
+	public AsyncAddArrayList(Player player, NetworkManager nm, List<Packet> list) {
 		this.player = player;
 		if (list instanceof AsyncAddArrayList) {
 			this.list = ((AsyncAddArrayList) list).list;
 		} else {
 			this.list = list;
 		}
+		networkManagerLock = ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getLockFieldName());
 	}
 
 	public void cleanup() {
@@ -63,7 +69,9 @@ public class AsyncAddArrayList implements List<Packet> {
 						BlockUpdate.update(wrapper, player);
 					}
 				}
-				list.add(packet);
+				synchronized (networkManagerLock) {
+					list.add(packet);
+				}
 			}
 		};
 		if (async) {

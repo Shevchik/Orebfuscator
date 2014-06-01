@@ -27,9 +27,9 @@ public class PlayerHook implements Listener {
 	public void hookPlayer(Player player) {
 		CraftPlayer cplayer = (CraftPlayer) player;
 		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
-		List<?> high = new AsyncAddArrayList(player, (List<Packet>) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName()));
+		List<?> high = new AsyncAddArrayList(player, nm, (List<Packet>) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName()));
 		ReflectionHelper.setPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName(), high);
-		List<?> low = new AsyncAddArrayList(player, (List<Packet>) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName()));
+		List<?> low = new AsyncAddArrayList(player, nm, (List<Packet>) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName()));
 		ReflectionHelper.setPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName(), low);
 	}
 
