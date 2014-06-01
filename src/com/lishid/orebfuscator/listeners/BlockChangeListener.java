@@ -15,7 +15,6 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.internal.Packet52;
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 
 public class BlockChangeListener {
@@ -58,12 +57,10 @@ public class BlockChangeListener {
 			) {
 				@Override
 				public void onPacketSending(final PacketEvent event) {
-					Packet52 packet = new Packet52();
-					packet.setPacket(event.getPacket().getHandle());
-					final int chunkX = packet.getChunkX();
-					final int chunkZ = packet.getChunkZ();
-					final int recordcount = packet.getRecordsCount();
-					final byte[] data = packet.getBuffer();
+					final int chunkX = event.getPacket().getIntegers().read(0);
+					final int chunkZ = event.getPacket().getIntegers().read(1);
+					final int recordcount = event.getPacket().getIntegers().read(2);
+					final byte[] data = event.getPacket().getByteArrays().read(0);
 					Runnable updateBlocks = new Runnable() {
 						@SuppressWarnings("deprecation")
 						@Override
