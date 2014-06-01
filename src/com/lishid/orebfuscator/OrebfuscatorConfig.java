@@ -32,6 +32,8 @@ public class OrebfuscatorConfig {
 	public static int EngineMode = 2;
 	public static int UpdateRadius = 2;
 
+	public static boolean UpdateOnDamage = false;
+
 	public static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
 
 	private static boolean[] TransparentBlocks = new boolean[4096];
@@ -86,6 +88,13 @@ public class OrebfuscatorConfig {
 			setData(path, defaultData);
 		}
 		return getConfig().getInt(path, defaultData);
+	}
+
+	private static boolean getBoolean(String path, boolean defaultData) {
+		if (getConfig().get(path) == null) {
+			setData(path, defaultData);
+		}
+		return getConfig().getBoolean(path, defaultData);	
 	}
 
 	private static List<Integer> getIntList(String path, List<Integer> defaultData) {
@@ -143,19 +152,21 @@ public class OrebfuscatorConfig {
 	@SuppressWarnings("deprecation")
 	public static void load() {
 
-		EngineMode = getInt("Integers.EngineMode", EngineMode);
+		EngineMode = getInt("EngineMode", EngineMode);
 		if (EngineMode != 1 && EngineMode != 2) {
 			EngineMode = 2;
 			Orebfuscator.log("EngineMode must be 1 or 2.");
 		}
 
-		UpdateRadius = clamp(getInt("Integers.UpdateRadius", UpdateRadius), 1, 5);
+		UpdateRadius = clamp(getInt("UpdateRadius", UpdateRadius), 1, 5);
+
+		UpdateOnDamage = getBoolean("UpdateBlockOnDamage", UpdateOnDamage);
 
 		// Disabled worlds
-		DisabledWorlds = getStringSet("Lists.DisabledWorlds", DisabledWorlds);
+		DisabledWorlds = getStringSet("DisabledWorlds", DisabledWorlds);
 
 		// Read block lists
-		setBlockValues(ObfuscateBlocks, getIntList("Lists.ObfuscateBlocks",
+		setBlockValues(ObfuscateBlocks, getIntList("ObfuscateBlocks",
 			Arrays.asList(
 				new Integer[] {
 					Material.STONE.getId(), Material.GOLD_ORE.getId(), Material.IRON_ORE.getId(), Material.COAL_ORE.getId(),
@@ -167,7 +178,7 @@ public class OrebfuscatorConfig {
 			)
 		), false);
 
-		RandomBlocks = getIntList2("Lists.RandomBlocks", RandomBlocks);
+		RandomBlocks = getIntList2("RandomBlocks", RandomBlocks);
 		shuffleArray(RandomBlocks);
 
 		// Validate RandomBlocks

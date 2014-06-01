@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
+import com.lishid.orebfuscator.hook.BlockDamageListener;
 import com.lishid.orebfuscator.hook.PlayerHook;
 
 /**
@@ -54,6 +55,9 @@ public class Orebfuscator extends JavaPlugin {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			phook.hookPlayer(player);
 		}
+
+		// Init block damage listener
+		getServer().getPluginManager().registerEvents(new BlockDamageListener(), this);
 	}
 
 	@Override

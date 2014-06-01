@@ -18,6 +18,13 @@ import com.lishid.orebfuscator.internal.Packet53;
 
 public class BlockUpdate {
 
+	public static void update(Block block, Player player) {
+		HashSet<Block> updateBlocks = GetAjacentBlocks(player.getWorld(), new HashSet<Block>(20), block, OrebfuscatorConfig.UpdateRadius);
+		for (Block ublock : updateBlocks) {
+			Notify.notify(ublock);
+		}
+	}
+
 	public static void update(Packet53 packet, Player player) {
 		Block block = player.getWorld().getBlockAt(packet.getBlockX(), packet.getBlockY(), packet.getBlockZ());
 		if (!OrebfuscatorConfig.isBlockTransparent(packet.getNewMaterial())) {
