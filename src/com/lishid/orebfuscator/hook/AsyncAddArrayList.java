@@ -12,7 +12,6 @@ import net.minecraft.server.v1_6_R3.Packet;
 
 import org.bukkit.entity.Player;
 
-import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.Fields;
 import com.lishid.orebfuscator.internal.Packet51;
 import com.lishid.orebfuscator.internal.Packet52;
@@ -26,8 +25,6 @@ public class AsyncAddArrayList implements List<Packet> {
 
 	private Player player;
 	private List<Packet> list;
-
-	private boolean async = OrebfuscatorConfig.Async;
 
 	private Object networkManagerLock;
 
@@ -74,13 +71,9 @@ public class AsyncAddArrayList implements List<Packet> {
 				}
 			}
 		};
-		if (async) {
-			executor.execute(
-				processPacket
-			);
-		} else {
-			processPacket.run();
-		}
+		executor.execute(
+			processPacket
+		);
 		return true;
 	}
 
