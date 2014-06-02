@@ -60,7 +60,7 @@ public class BlockUpdate {
 
 	private static void scheduleUpdate(final Collection<Block> blocks) {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(
-			Orebfuscator.instance, 
+			Orebfuscator.instance,
 			new Runnable() {
 				@Override
 				public void run() {

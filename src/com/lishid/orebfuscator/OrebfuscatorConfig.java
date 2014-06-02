@@ -94,7 +94,7 @@ public class OrebfuscatorConfig {
 		if (getConfig().get(path) == null) {
 			setData(path, defaultData);
 		}
-		return getConfig().getBoolean(path, defaultData);	
+		return getConfig().getBoolean(path, defaultData);
 	}
 
 	private static List<Integer> getIntList(String path, List<Integer> defaultData) {

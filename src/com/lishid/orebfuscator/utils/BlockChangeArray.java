@@ -7,7 +7,7 @@ import java.nio.IntBuffer;
  * Utility class for creating arrays of block changes.
  * <p>
  * See also {@link Packet34MultiBlockChange}.
- * 
+ *
  * @author Kristian
  */
 public class BlockChangeArray {
@@ -15,7 +15,7 @@ public class BlockChangeArray {
 	 * Represents a single block change.
 	 * <p>
 	 * Retrieved by {@link BlockChangeArray#getBlockChange(int)}.
-	 * 
+	 *
 	 * @author Kristian
 	 */
 	public class BlockChange {
@@ -28,7 +28,7 @@ public class BlockChangeArray {
 
 		/**
 		 * Retrieve the relative x-axis position of the current block change.
-		 * 
+		 *
 		 * @return X-axis position of the block change.
 		 */
 		public int getRelativeX() {
@@ -37,7 +37,7 @@ public class BlockChangeArray {
 
 		/**
 		 * Retrieve the relative z-axis position of the current block change.
-		 * 
+		 *
 		 * @return Z-axis position of the block change.
 		 */
 		public byte getRelativeZ() {
@@ -46,7 +46,7 @@ public class BlockChangeArray {
 
 		/**
 		 * Retrieve the absolute y-axis position of the current block change.
-		 * 
+		 *
 		 * @return Y-axis position of the block change.
 		 */
 		public int getAbsoluteY() {
@@ -55,7 +55,7 @@ public class BlockChangeArray {
 
 		/**
 		 * Retrieve the block ID of the current block change.
-		 * 
+		 *
 		 * @return The block ID that the block will change into.
 		 */
 		public int getBlockID() {
@@ -64,7 +64,7 @@ public class BlockChangeArray {
 
 		/**
 		 * Retrieve the index of the current block change.
-		 * 
+		 *
 		 * @return Index of the current block change.
 		 */
 		public int getIndex() {
@@ -88,7 +88,7 @@ public class BlockChangeArray {
 
 	/**
 	 * Construct a new block change array from the copy of a given data array.
-	 * 
+	 *
 	 * @param data
 	 *            - the data array to store internally.
 	 */
@@ -106,20 +106,21 @@ public class BlockChangeArray {
 	 * <p>
 	 * Any modification to this view will be stored in the block change array
 	 * itself.
-	 * 
+	 *
 	 * @param index
 	 *            - index of the block change to retrieve.
 	 * @return A view of the block change entry.
 	 */
 	public BlockChange getBlockChange(int index) {
-		if (index < 0 || index >= getSize())
+		if (index < 0 || index >= getSize()) {
 			throw new IllegalArgumentException("Index is out of bounds.");
+		}
 		return new BlockChange(index);
 	}
 
 	/**
 	 * Retrieve the number of block changes.
-	 * 
+	 *
 	 * @return The number of block changes.
 	 */
 	public int getSize() {
