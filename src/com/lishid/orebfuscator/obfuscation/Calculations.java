@@ -48,10 +48,6 @@ public class Calculations {
 
 		ChunkInfo info = getInfo(packet, player);
 
-		if (info.chunkMask == 0 && info.extraMask == 0) {
-			return;
-		}
-
 		ComputeChunkInfoAndObfuscate(info);
 
 		packet.compress();
