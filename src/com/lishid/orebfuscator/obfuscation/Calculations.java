@@ -215,17 +215,13 @@ public class Calculations {
 
 		int ysection = y >> 4;
 		if ((info.chunkMask & (1 << ysection)) != 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
-			int section = info.chunkSectionToIndexMap[y >> 4];
-
 			int blockindex = (y % 16 << 8) + (((z % 16) & 0x0F) << 4) + ((x % 16) & 0x0F);
-
-			int typeID = info.data[section * 4096 + blockindex] & 0xFF;
+			int typeID = info.data[info.chunkSectionToIndexMap[y >> 4] * 4096 + blockindex] & 0xFF;
 			if ((info.extraMask & (1 << ysection)) != 0) {
-				int extrasecton = info.extraSectionToIndexMap[ysection];
 				if (blockindex % 2 == 0) {
-					typeID |= ((info.data[addExtendedIndex + extrasecton * 2048 + blockindex >> 1] << 8) & 0xF00);
+					typeID |= ((info.data[addExtendedIndex + info.extraSectionToIndexMap[ysection] * 2048 + blockindex >> 1] << 8) & 0xF00);
 				} else {
-					typeID |= ((info.data[addExtendedIndex + extrasecton * 2048 + blockindex >> 1] << 4) & 0xF00);
+					typeID |= ((info.data[addExtendedIndex + info.extraSectionToIndexMap[ysection] * 2048 + blockindex >> 1] << 4) & 0xF00);
 				}
 			}
 			return OrebfuscatorConfig.isBlockTransparent(typeID);
