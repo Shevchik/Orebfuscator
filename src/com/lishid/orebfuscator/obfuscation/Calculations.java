@@ -134,6 +134,9 @@ public class Calculations {
 
 				for (int y = 0; y < 16; y++) {
 					int blockY = (i << 4) + y;
+					if (blockY > OrebfuscatorConfig.MaxObfuscateHeight) {
+						return;
+					}
 					for (int z = 0; z < 16; z++) {
 						for (int x = 0; x < 16; x++) {
 

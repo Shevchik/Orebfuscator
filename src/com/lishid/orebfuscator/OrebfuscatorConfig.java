@@ -32,6 +32,8 @@ public class OrebfuscatorConfig {
 	public static int EngineMode = 2;
 	public static int UpdateRadius = 2;
 
+	public static int MaxObfuscateHeight = 128;
+
 	public static boolean UpdateOnDamage = false;
 
 	public static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
@@ -153,6 +155,8 @@ public class OrebfuscatorConfig {
 		}
 
 		UpdateRadius = clamp(getInt("UpdateRadius", UpdateRadius), 1, 5);
+
+		MaxObfuscateHeight = clamp(getInt("MaxObfuscateHeight", MaxObfuscateHeight), 0, 256);
 
 		UpdateOnDamage = getBoolean("UpdateBlockOnDamage", UpdateOnDamage);
 
