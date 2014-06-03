@@ -37,21 +37,15 @@ public class OrebfuscatorConfig {
 	public static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
 
 	private static boolean[] TransparentBlocks = new boolean[4096];
-	private static boolean TransparentCached = false;
-	public static boolean isBlockTransparent(int i) {
-		if (!TransparentCached) {
-			// Generate TransparentBlocks by reading them from Minecraft
-			generateTransparentBlocks();
-		}
 
-		return TransparentBlocks[i];
-	}
-	private static void generateTransparentBlocks() {
-		BlockAccess blockAccess = new BlockAccess();
+	static {
 		for (int i = 0; i < TransparentBlocks.length; i++) {
-			TransparentBlocks[i] = blockAccess.isBlockTransparent(i);
+			TransparentBlocks[i] = BlockAccess.isBlockTransparent(i);
 		}
-		TransparentCached = true;
+	}
+
+	public static boolean isBlockTransparent(int i) {
+		return TransparentBlocks[i];
 	}
 
 	private static boolean[] ObfuscateBlocks = new boolean[4096];

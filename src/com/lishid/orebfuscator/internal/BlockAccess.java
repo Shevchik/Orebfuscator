@@ -21,7 +21,7 @@ import net.minecraft.server.v1_6_R3.Block;
 
 public class BlockAccess {
 
-	public boolean isBlockTransparent(int id) {
+	public static boolean isBlockTransparent(int id) {
 		return !Block.l(id);
 	}
 
