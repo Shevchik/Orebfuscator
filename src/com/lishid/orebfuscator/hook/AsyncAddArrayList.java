@@ -80,12 +80,14 @@ public class AsyncAddArrayList implements List<Packet> {
 			new Runnable() {
 				@Override
 				public void run() {
-					if (packet.n() == 53) {
-						Packet53 wrapper = new Packet53(packet);
-						BlockUpdate.update(wrapper, player);
-					} else if (packet.n() == 52) {
-						Packet52 wrapper = new Packet52(packet);
-						BlockUpdate.update(wrapper, player);
+					if (player != null) {
+						if (packet.n() == 53) {
+							Packet53 wrapper = new Packet53(packet);
+							BlockUpdate.update(wrapper, player);
+						} else if (packet.n() == 52) {
+							Packet52 wrapper = new Packet52(packet);
+							BlockUpdate.update(wrapper, player);
+						}
 					}
 				}
 			}
