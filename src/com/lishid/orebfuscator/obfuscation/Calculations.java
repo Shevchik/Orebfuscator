@@ -164,19 +164,16 @@ public class Calculations {
 								}
 								info.buildBuffer[info.writeIndex + currentTypeIndex] = (byte) newBlockID;
 								if (usesExtra) {
-									byte extra = (byte) (newBlockID >> 8);
 									if (currentTypeIndex % 2 == 0) {
-										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] = extra;
+										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] = (byte) (newBlockID >> 8);
 									} else {
-										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] |= (extra << 4);
+										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] |= ((newBlockID >> 8) << 4);
 									}
 								}
 							}
 
-							if (usesExtra) {
-								if (currentTypeIndex % 2 == 1) {
-									currentExtendedIndex++;
-								}
+							if (usesExtra && currentTypeIndex % 2 == 1) {
+								currentExtendedIndex++;
 							}
 							currentTypeIndex++;
 						}
