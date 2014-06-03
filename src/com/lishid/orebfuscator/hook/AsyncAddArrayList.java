@@ -43,9 +43,13 @@ public class AsyncAddArrayList implements List<Packet> {
 	}
 
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private ExecutorService blockUpdateExecutor = Executors.newSingleThreadExecutor();
 
 	@Override
 	public boolean add(final Packet packet) {
+		if (packet.n() == 53 || packet.n() == 52) {
+			processBlockUpdate(packet);
+		}
 		Runnable processPacket = new Runnable() {
 			@Override
 			public void run() {
@@ -58,12 +62,6 @@ public class AsyncAddArrayList implements List<Packet> {
 						Packet56 wrapper = new Packet56();
 						wrapper.setPacket(packet);
 						Calculations.Obfuscate(wrapper, player);
-					} else if (packet.n() == 53) {
-						Packet53 wrapper = new Packet53(packet);
-						BlockUpdate.update(wrapper, player);
-					} else if (packet.n() == 52) {
-						Packet52 wrapper = new Packet52(packet);
-						BlockUpdate.update(wrapper, player);
 					}
 				}
 				synchronized (networkManagerLock) {
@@ -75,6 +73,23 @@ public class AsyncAddArrayList implements List<Packet> {
 			processPacket
 		);
 		return true;
+	}
+
+	private void processBlockUpdate(final Packet packet) {
+		blockUpdateExecutor.execute(
+			new Runnable() {
+				@Override
+				public void run() {
+					if (packet.n() == 53) {
+						Packet53 wrapper = new Packet53(packet);
+						BlockUpdate.update(wrapper, player);
+					} else if (packet.n() == 52) {
+						Packet52 wrapper = new Packet52(packet);
+						BlockUpdate.update(wrapper, player);
+					}
+				}
+			}
+		);
 	}
 
 	@Override
