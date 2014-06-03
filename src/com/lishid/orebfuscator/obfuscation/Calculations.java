@@ -184,6 +184,9 @@ public class Calculations {
 	}
 
 	private static boolean areAjacentBlocksTransparent(ChunkInfo info, int addExtendedIndex, int x, int y, int z) {
+		if (y == 0 || y == info.world.getMaxHeight()) {
+			return true;
+		}
 
 		if (isTransparent(info, addExtendedIndex, x + 1, y, z)) {
 			return true;
@@ -209,10 +212,6 @@ public class Calculations {
 
 	@SuppressWarnings("deprecation")
 	private static boolean isTransparent(ChunkInfo info, int addExtendedIndex, int x, int y, int z) {
-		if (y < 0 || y > info.world.getMaxHeight()) {
-			return true;
-		}
-
 		int ysection = y >> 4;
 		if ((info.chunkMask & (1 << ysection)) != 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
 			int blockindex = (y % 16 << 8) + (((z % 16) & 0x0F) << 4) + ((x % 16) & 0x0F);
