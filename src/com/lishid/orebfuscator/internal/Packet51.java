@@ -20,6 +20,7 @@ import java.util.zip.Deflater;
 
 import net.minecraft.server.v1_6_R3.Packet51MapChunk;
 
+import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class Packet51 {
@@ -63,7 +64,7 @@ public class Packet51 {
 	}
 
 	public void compress() {
-		Deflater deflater = new Deflater(Deflater.NO_COMPRESSION);
+		Deflater deflater = new Deflater(OrebfuscatorConfig.CompressionLevel);
 		deflater.setInput(buildBuffer);
 		deflater.finish();
 

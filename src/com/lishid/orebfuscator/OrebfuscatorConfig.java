@@ -34,20 +34,22 @@ public class OrebfuscatorConfig {
 
 	public static int MaxObfuscateHeight = 128;
 
+	public static int CompressionLevel = 3;
+
 	public static boolean UpdateOnDamage = false;
 
 	public static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
 
 	private static boolean[] TransparentBlocks = new boolean[4096];
-
-	static {
-		for (int i = 0; i < TransparentBlocks.length; i++) {
-			TransparentBlocks[i] = BlockAccess.isBlockTransparent(i);
+	private static boolean TransparentCached = false;
+	public static boolean isBlockTransparent(int id) {
+		if (!TransparentCached) {
+			// Generate TransparentBlocks by reading them from Minecraft
+			for (int i = 0; i < TransparentBlocks.length; i++) {
+				TransparentBlocks[i] = BlockAccess.isBlockTransparent(i);
+			}
 		}
-	}
-
-	public static boolean isBlockTransparent(int i) {
-		return TransparentBlocks[i];
+		return TransparentBlocks[id];
 	}
 
 	private static boolean[] ObfuscateBlocks = new boolean[4096];
@@ -157,6 +159,8 @@ public class OrebfuscatorConfig {
 		UpdateRadius = clamp(getInt("UpdateRadius", UpdateRadius), 1, 5);
 
 		MaxObfuscateHeight = clamp(getInt("MaxObfuscateHeight", MaxObfuscateHeight), 0, 256);
+
+		CompressionLevel = clamp(getInt("CompressionLevel", CompressionLevel), 0, 9);
 
 		UpdateOnDamage = getBoolean("UpdateBlockOnDamage", UpdateOnDamage);
 
