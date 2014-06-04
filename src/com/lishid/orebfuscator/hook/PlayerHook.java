@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.server.v1_6_R3.NetworkManager;
 import net.minecraft.server.v1_6_R3.Packet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,14 +14,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.lishid.orebfuscator.Orebfuscator;
 import com.lishid.orebfuscator.internal.Fields;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class PlayerHook implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onJoin(PlayerJoinEvent event) {
-		hookPlayer(event.getPlayer());
+	public void onJoin(final PlayerJoinEvent event) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Orebfuscator.instance, 
+			new Runnable() {
+				@Override
+				public void run() {
+					if (event.getPlayer().isOnline()) {
+						hookPlayer(event.getPlayer());
+					}
+				}
+			}
+		);
 	}
 
 	@SuppressWarnings("unchecked")
