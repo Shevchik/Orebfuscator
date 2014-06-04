@@ -29,8 +29,6 @@ public class PlayerHook implements Listener {
 		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
 		List<?> high = new AsyncAddArrayList(player, nm, (List<Packet>) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName()));
 		ReflectionHelper.setPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName(), high);
-		List<?> low = new AsyncAddArrayList(player, nm, (List<Packet>) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName()));
-		ReflectionHelper.setPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName(), low);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -42,7 +40,6 @@ public class PlayerHook implements Listener {
 		CraftPlayer cplayer = (CraftPlayer) player;
 		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
 		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName())).cleanup();
-		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getLowPriorityQueueFieldName())).cleanup();
 	}
 
 }
