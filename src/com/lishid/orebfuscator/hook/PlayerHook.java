@@ -18,7 +18,7 @@ import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class PlayerHook implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
 		hookPlayer(event.getPlayer());
 	}
