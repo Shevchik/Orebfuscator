@@ -34,7 +34,7 @@ public class OrebfuscatorConfig {
 
 	public static int MaxObfuscateHeight = 128;
 
-	public static int CompressionLevel = 3;
+	public static int CompressionLevel = 5;
 
 	public static boolean UpdateOnDamage = false;
 
