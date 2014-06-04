@@ -48,6 +48,7 @@ public class OrebfuscatorConfig {
 			for (int i = 0; i < TransparentBlocks.length; i++) {
 				TransparentBlocks[i] = BlockAccess.isBlockTransparent(i);
 			}
+			TransparentCached = true;
 		}
 		return TransparentBlocks[id];
 	}
