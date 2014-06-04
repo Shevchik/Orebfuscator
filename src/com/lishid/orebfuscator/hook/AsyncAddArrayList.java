@@ -24,16 +24,16 @@ import com.lishid.orebfuscator.utils.ReflectionHelper;
 public class AsyncAddArrayList implements List<Packet> {
 
 	private Player player;
-	private List<Packet> list;
+	private List<Packet> originalQueue;
 
 	private Object networkManagerLock;
 
 	public AsyncAddArrayList(Player player, NetworkManager nm, List<Packet> list) {
 		this.player = player;
 		if (list instanceof AsyncAddArrayList) {
-			this.list = ((AsyncAddArrayList) list).list;
+			this.originalQueue = ((AsyncAddArrayList) list).originalQueue;
 		} else {
-			this.list = list;
+			this.originalQueue = list;
 		}
 		networkManagerLock = ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getLockFieldName());
 	}
@@ -65,7 +65,7 @@ public class AsyncAddArrayList implements List<Packet> {
 					}
 				}
 				synchronized (networkManagerLock) {
-					list.add(packet);
+					originalQueue.add(packet);
 				}
 			}
 		};
@@ -96,112 +96,112 @@ public class AsyncAddArrayList implements List<Packet> {
 
 	@Override
 	public int size() {
-		return list.size();
+		return originalQueue.size();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return list.isEmpty();
+		return originalQueue.isEmpty();
 	}
 
 	@Override
 	public boolean contains(Object o) {
-		return list.contains(o);
+		return originalQueue.contains(o);
 	}
 
 	@Override
 	public Iterator<Packet> iterator() {
-		return list.iterator();
+		return originalQueue.iterator();
 	}
 
 	@Override
 	public Object[] toArray() {
-		return list.toArray();
+		return originalQueue.toArray();
 	}
 
 	@Override
 	public <T> T[] toArray(T[] a) {
-		return list.toArray(a);
+		return originalQueue.toArray(a);
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		return list.remove(o);
+		return originalQueue.remove(o);
 	}
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		return list.containsAll(c);
+		return originalQueue.containsAll(c);
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends Packet> c) {
-		return list.addAll(c);
+		return originalQueue.addAll(c);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends Packet> c) {
-		return list.addAll(list);
+		return originalQueue.addAll(originalQueue);
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
-		return list.removeAll(c);
+		return originalQueue.removeAll(c);
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		return list.removeAll(c);
+		return originalQueue.removeAll(c);
 	}
 
 	@Override
 	public void clear() {
-		list.clear();
+		originalQueue.clear();
 	}
 
 	@Override
 	public Packet get(int index) {
-		return list.get(index);
+		return originalQueue.get(index);
 	}
 
 	@Override
 	public Packet set(int index, Packet element) {
-		return list.set(index, element);
+		return originalQueue.set(index, element);
 	}
 
 	@Override
 	public void add(int index, Packet element) {
-		list.add(index, element);
+		originalQueue.add(index, element);
 	}
 
 	@Override
 	public Packet remove(int index) {
-		return list.remove(index);
+		return originalQueue.remove(index);
 	}
 
 	@Override
 	public int indexOf(Object o) {
-		return list.indexOf(o);
+		return originalQueue.indexOf(o);
 	}
 
 	@Override
 	public int lastIndexOf(Object o) {
-		return list.lastIndexOf(o);
+		return originalQueue.lastIndexOf(o);
 	}
 
 	@Override
 	public ListIterator<Packet> listIterator() {
-		return list.listIterator();
+		return originalQueue.listIterator();
 	}
 
 	@Override
 	public ListIterator<Packet> listIterator(int index) {
-		return list.listIterator(index);
+		return originalQueue.listIterator(index);
 	}
 
 	@Override
 	public List<Packet> subList(int fromIndex, int toIndex) {
-		return list.subList(fromIndex, toIndex);
+		return originalQueue.subList(fromIndex, toIndex);
 	}
 
 }
