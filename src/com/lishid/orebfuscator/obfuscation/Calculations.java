@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2014 lishid.  All rights reserved.
+` * Copyright (C) 2011-2014 lishid.  All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,7 +138,7 @@ public class Calculations {
 
 							int typeID = info.data[currentTypeIndex] & 0xFF;
 							if (usesExtra) {
-								if (currentTypeIndex % 2 == 0) {
+								if ((currentTypeIndex & 1) == 0) {
 									typeID |= ((info.data[addExtendedIndex + currentExtendedIndex] << 8) & 0xF00);
 								} else {
 									typeID |= ((info.data[addExtendedIndex + currentExtendedIndex] << 4) & 0xF00);
@@ -160,7 +160,7 @@ public class Calculations {
 								}
 								info.buildBuffer[info.writeIndex + currentTypeIndex] = (byte) newBlockID;
 								if (usesExtra) {
-									if (currentTypeIndex % 2 == 0) {
+									if ((currentTypeIndex & 1) == 0) {
 										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] = (byte) (newBlockID >> 8);
 									} else {
 										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] |= ((newBlockID >> 8) << 4);
@@ -168,7 +168,7 @@ public class Calculations {
 								}
 							}
 
-							if (usesExtra && currentTypeIndex % 2 == 1) {
+							if (usesExtra && (currentTypeIndex & 1) == 1) {
 								currentExtendedIndex++;
 							}
 							currentTypeIndex++;
