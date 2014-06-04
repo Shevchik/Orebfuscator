@@ -210,10 +210,10 @@ public class Calculations {
 	private static boolean isTransparent(ChunkInfo info, int addExtendedIndex, int x, int y, int z) {
 		int ysection = y >> 4;
 		if ((info.chunkMask & (1 << ysection)) != 0 && x >> 4 == info.chunkX && z >> 4 == info.chunkZ) {
-			int blockindex = (y % 16 << 8) + (((z % 16) & 0x0F) << 4) + ((x % 16) & 0x0F);
+			int blockindex = ((y & 0xF) << 8) + ((z & 0xF) << 4) + (x & 0xF);
 			int typeID = info.data[info.chunkSectionToIndexMap[y >> 4] * 4096 + blockindex] & 0xFF;
 			if ((info.extraMask & (1 << ysection)) != 0) {
-				if (blockindex % 2 == 0) {
+				if ((blockindex & 1) == 0) {
 					typeID |= ((info.data[addExtendedIndex + info.extraSectionToIndexMap[ysection] * 2048 + blockindex >> 1] << 8) & 0xF00);
 				} else {
 					typeID |= ((info.data[addExtendedIndex + info.extraSectionToIndexMap[ysection] * 2048 + blockindex >> 1] << 4) & 0xF00);
