@@ -63,11 +63,13 @@ public class BlockUpdate {
 					BlockChangeArray baarray = new BlockChangeArray(packet.getRecords());
 					for (int i = 0; i < baarray.getSize(); i++) {
 						BlockChange bc = baarray.getBlockChange(i);
-						int x = (chunkX << 4) + bc.getRelativeX();
-						int z = (chunkZ << 4) + bc.getRelativeZ();
-						Block block = CalculationsUtil.getBlockAt(world, x, bc.getAbsoluteY(), z);
-						if (block != null && OrebfuscatorConfig.isBlockTransparent(bc.getBlockID())) {
-							blocks.add(block);
+							if (OrebfuscatorConfig.isBlockTransparent(bc.getBlockID())) {
+							int x = (chunkX << 4) + bc.getRelativeX();
+							int z = (chunkZ << 4) + bc.getRelativeZ();
+							Block block = CalculationsUtil.getBlockAt(world, x, bc.getAbsoluteY(), z);
+							if (block != null) {
+								blocks.add(block);
+							}
 						}
 					}
 					HashSet<Block> updateBlocks = new HashSet<Block>(blocks.size() * 3);
