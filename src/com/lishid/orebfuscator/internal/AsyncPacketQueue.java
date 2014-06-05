@@ -38,12 +38,17 @@ public class AsyncPacketQueue implements List<Packet> {
 	}
 
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
-	private ExecutorService blockUpdateExecutor = Executors.newSingleThreadExecutor();
 
 	@Override
 	public boolean add(final Packet packet) {
-		if (packet.n() == 53 || packet.n() == 52) {
-			processBlockUpdate(packet);
+		if (player != null) {
+			if (packet.n() == 53) {
+				Packet53 wrapper = new Packet53(packet);
+				BlockUpdate.update(wrapper, player);
+			} else if (packet.n() == 52) {
+				Packet52 wrapper = new Packet52(packet);
+				BlockUpdate.update(wrapper, player);
+			}
 		}
 		Runnable processPacket = new Runnable() {
 			@Override
@@ -66,25 +71,6 @@ public class AsyncPacketQueue implements List<Packet> {
 			processPacket
 		);
 		return true;
-	}
-
-	private void processBlockUpdate(final Packet packet) {
-		blockUpdateExecutor.execute(
-			new Runnable() {
-				@Override
-				public void run() {
-					if (player != null) {
-						if (packet.n() == 53) {
-							Packet53 wrapper = new Packet53(packet);
-							BlockUpdate.update(wrapper, player);
-						} else if (packet.n() == 52) {
-							Packet52 wrapper = new Packet52(packet);
-							BlockUpdate.update(wrapper, player);
-						}
-					}
-				}
-			}
-		);
 	}
 
 	@Override

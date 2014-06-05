@@ -29,6 +29,7 @@ import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
 import com.lishid.orebfuscator.hook.BlockDamageListener;
 import com.lishid.orebfuscator.hook.PlayerHook;
 import com.lishid.orebfuscator.internal.PlayerInjector;
+import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 
 /**
  * Orebfuscator Anti X-RAY
@@ -47,6 +48,9 @@ public class Orebfuscator extends JavaPlugin {
 
 		// Load configurations
 		OrebfuscatorConfig.load();
+
+		// Init block update executor
+		BlockUpdate.initExecutor();
 
 		// Hook packet queue
 		getServer().getPluginManager().registerEvents(new PlayerHook(), this);

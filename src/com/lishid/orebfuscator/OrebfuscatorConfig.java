@@ -38,6 +38,8 @@ public class OrebfuscatorConfig {
 
 	public static boolean UpdateOnDamage = false;
 
+	public static int blockUpdateThreads = Runtime.getRuntime().availableProcessors();
+
 	public static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
 
 	private static boolean[] TransparentBlocks = new boolean[4096];
@@ -164,6 +166,8 @@ public class OrebfuscatorConfig {
 		CompressionLevel = clamp(getInt("CompressionLevel", CompressionLevel), 0, 9);
 
 		UpdateOnDamage = getBoolean("UpdateBlockOnDamage", UpdateOnDamage);
+
+		blockUpdateThreads = getInt("BlockUpdateProcesingThreads", blockUpdateThreads);
 
 		// Disabled worlds
 		DisabledWorlds = getStringSet("DisabledWorlds", DisabledWorlds);
