@@ -1,4 +1,4 @@
-package com.lishid.orebfuscator.hook;
+package com.lishid.orebfuscator.internal;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -12,26 +12,21 @@ import net.minecraft.server.v1_6_R3.Packet;
 
 import org.bukkit.entity.Player;
 
-import com.lishid.orebfuscator.internal.Fields;
-import com.lishid.orebfuscator.internal.Packet51;
-import com.lishid.orebfuscator.internal.Packet52;
-import com.lishid.orebfuscator.internal.Packet53;
-import com.lishid.orebfuscator.internal.Packet56;
 import com.lishid.orebfuscator.obfuscation.BlockUpdate;
 import com.lishid.orebfuscator.obfuscation.Calculations;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
-public class AsyncAddArrayList implements List<Packet> {
+public class AsyncPacketQueue implements List<Packet> {
 
 	private Player player;
 	private List<Packet> originalQueue;
 
 	private Object networkManagerLock;
 
-	public AsyncAddArrayList(Player player, NetworkManager nm, List<Packet> list) {
+	public AsyncPacketQueue(Player player, NetworkManager nm, List<Packet> list) {
 		this.player = player;
-		if (list instanceof AsyncAddArrayList) {
-			this.originalQueue = ((AsyncAddArrayList) list).originalQueue;
+		if (list instanceof AsyncPacketQueue) {
+			this.originalQueue = ((AsyncPacketQueue) list).originalQueue;
 		} else {
 			this.originalQueue = list;
 		}

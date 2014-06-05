@@ -28,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lishid.orebfuscator.commands.OrebfuscatorCommandExecutor;
 import com.lishid.orebfuscator.hook.BlockDamageListener;
 import com.lishid.orebfuscator.hook.PlayerHook;
+import com.lishid.orebfuscator.internal.PlayerInjector;
 
 /**
  * Orebfuscator Anti X-RAY
@@ -39,8 +40,6 @@ public class Orebfuscator extends JavaPlugin {
 	public static final Logger logger = Logger.getLogger("Minecraft.OFC");
 	public static Orebfuscator instance;
 
-	private PlayerHook phook;
-
 	@Override
 	public void onEnable() {
 		// Assign static instance
@@ -50,10 +49,9 @@ public class Orebfuscator extends JavaPlugin {
 		OrebfuscatorConfig.load();
 
 		// Hook packet queue
-		phook = new PlayerHook();
-		getServer().getPluginManager().registerEvents(phook, this);
+		getServer().getPluginManager().registerEvents(new PlayerHook(), this);
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			phook.hookPlayer(player);
+			PlayerInjector.hookPlayer(player);
 		}
 
 		// Init block damage listener
@@ -63,7 +61,7 @@ public class Orebfuscator extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			phook.cleanupPlayer(player);
+			PlayerInjector.cleanupPlayer(player);
 		}
 	}
 

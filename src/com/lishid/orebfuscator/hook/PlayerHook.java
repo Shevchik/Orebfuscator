@@ -1,13 +1,6 @@
 package com.lishid.orebfuscator.hook;
 
-import java.util.List;
-
-import net.minecraft.server.v1_6_R3.NetworkManager;
-import net.minecraft.server.v1_6_R3.Packet;
-
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -15,8 +8,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.lishid.orebfuscator.Orebfuscator;
-import com.lishid.orebfuscator.internal.Fields;
-import com.lishid.orebfuscator.utils.ReflectionHelper;
+import com.lishid.orebfuscator.internal.PlayerInjector;
 
 public class PlayerHook implements Listener {
 
@@ -27,30 +19,16 @@ public class PlayerHook implements Listener {
 				@Override
 				public void run() {
 					if (event.getPlayer().isOnline()) {
-						hookPlayer(event.getPlayer());
+						PlayerInjector.hookPlayer(event.getPlayer());
 					}
 				}
 			}
 		);
 	}
 
-	@SuppressWarnings("unchecked")
-	public void hookPlayer(Player player) {
-		CraftPlayer cplayer = (CraftPlayer) player;
-		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
-		List<?> high = new AsyncAddArrayList(player, nm, (List<Packet>) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName()));
-		ReflectionHelper.setPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName(), high);
-	}
-
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent event) {
-		cleanupPlayer(event.getPlayer());
-	}
-
-	public void cleanupPlayer(Player player) {
-		CraftPlayer cplayer = (CraftPlayer) player;
-		NetworkManager nm = (NetworkManager) cplayer.getHandle().playerConnection.networkManager;
-		((AsyncAddArrayList) ReflectionHelper.getPrivateField(nm, Fields.NetworkManagerFields.getHighPriorityQueueFieldName())).cleanup();
+		PlayerInjector.cleanupPlayer(event.getPlayer());
 	}
 
 }

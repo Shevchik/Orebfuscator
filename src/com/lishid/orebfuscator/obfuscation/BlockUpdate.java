@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.lishid.orebfuscator.Orebfuscator;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.internal.Notify;
+import com.lishid.orebfuscator.internal.WorldServer;
 import com.lishid.orebfuscator.internal.Packet52;
 import com.lishid.orebfuscator.internal.Packet53;
 import com.lishid.orebfuscator.utils.BlockChangeArray;
@@ -23,7 +23,7 @@ public class BlockUpdate {
 	public static void update(Block block, Player player) {
 		HashSet<Block> updateBlocks = GetAjacentBlocks(player.getWorld(), new HashSet<Block>(20), block, OrebfuscatorConfig.UpdateRadius);
 		for (Block ublock : updateBlocks) {
-			Notify.notify(ublock);
+			WorldServer.notify(ublock);
 		}
 	}
 
@@ -65,7 +65,7 @@ public class BlockUpdate {
 				@Override
 				public void run() {
 					for (Block ublock : blocks) {
-						Notify.notify(ublock);
+						WorldServer.notify(ublock);
 					}
 				}
 			}
