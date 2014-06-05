@@ -40,10 +40,10 @@ public class BlockUpdate {
 			new Runnable() {
 				@Override
 				public void run() {
-					Block block = player.getWorld().getBlockAt(packet.getBlockX(), packet.getBlockY(), packet.getBlockZ());
 					if (!OrebfuscatorConfig.isBlockTransparent(packet.getNewMaterial())) {
 						return;
 					}
+					Block block = CalculationsUtil.getBlockAt(player.getWorld(), packet.getBlockX(), packet.getBlockY(), packet.getBlockZ());
 					HashSet<Block> updateBlocks = GetAjacentBlocks(player.getWorld(), new HashSet<Block>(20), block, OrebfuscatorConfig.UpdateRadius);
 					scheduleSyncUpdate(updateBlocks);
 				}
