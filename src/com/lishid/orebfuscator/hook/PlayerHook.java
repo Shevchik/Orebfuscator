@@ -14,7 +14,7 @@ public class PlayerHook implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(final PlayerJoinEvent event) {
-		Bukkit.getScheduler().scheduleSyncDelayedTask(Orebfuscator.instance, 
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Orebfuscator.instance,
 			new Runnable() {
 				@Override
 				public void run() {

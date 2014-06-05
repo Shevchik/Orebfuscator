@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
 
 import com.lishid.orebfuscator.Orebfuscator;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
-import com.lishid.orebfuscator.internal.WorldServer;
 import com.lishid.orebfuscator.internal.Packet52;
 import com.lishid.orebfuscator.internal.Packet53;
+import com.lishid.orebfuscator.internal.WorldServer;
 import com.lishid.orebfuscator.utils.BlockChangeArray;
 import com.lishid.orebfuscator.utils.BlockChangeArray.BlockChange;
 
