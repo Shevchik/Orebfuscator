@@ -18,24 +18,22 @@ package com.lishid.orebfuscator.internal;
 
 import java.util.zip.Deflater;
 
+import net.minecraft.server.v1_6_R3.Packet;
 import net.minecraft.server.v1_6_R3.Packet56MapChunkBulk;
 
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class Packet56 {
-	Packet56MapChunkBulk packet;
+	private Packet56MapChunkBulk packet;
 
 	private byte[][] inflatedBuffers;
 
 	private byte[] buildBuffer;
 
-	public void setPacket(Object packet) {
-		if (packet instanceof Packet56MapChunkBulk) {
-			this.packet = (Packet56MapChunkBulk) packet;
-			inflatedBuffers = (byte[][]) ReflectionHelper.getPrivateField(packet, Fields.Packet56Fields.getInflatedBuffersFieldName());
-		}
-
+	public Packet56(Packet packet) {
+		this.packet = (Packet56MapChunkBulk) packet;
+		inflatedBuffers = (byte[][]) ReflectionHelper.getPrivateField(packet, Fields.Packet56Fields.getInflatedBuffersFieldName());
 		int bufferSize = 0;
 		for (int i = 0; i < inflatedBuffers.length; i++) {
 			bufferSize += inflatedBuffers[i].length;

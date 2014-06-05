@@ -16,27 +16,26 @@
 
 package com.lishid.orebfuscator.internal;
 
+import java.util.Arrays;
 import java.util.zip.Deflater;
 
+import net.minecraft.server.v1_6_R3.Packet;
 import net.minecraft.server.v1_6_R3.Packet51MapChunk;
 
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.utils.ReflectionHelper;
 
 public class Packet51 {
-
-	Packet51MapChunk packet;
+	private Packet51MapChunk packet;
 
 	private byte[] inflatedBuffer;
+
 	private byte[] buildBuffer;
 
-	public void setPacket(Object packet) {
-		if (packet instanceof Packet51MapChunk) {
-			this.packet = (Packet51MapChunk) packet;
-			inflatedBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, Fields.Packet51Fields.getInflatedBufferFieldName());
-		}
-		buildBuffer = new byte[inflatedBuffer.length];
-		System.arraycopy(inflatedBuffer, 0, buildBuffer, 0, inflatedBuffer.length);
+	public Packet51(Packet packet) {
+		this.packet = (Packet51MapChunk) packet;
+		inflatedBuffer = (byte[]) ReflectionHelper.getPrivateField(packet, Fields.Packet51Fields.getInflatedBufferFieldName());
+		buildBuffer = Arrays.copyOf(inflatedBuffer, inflatedBuffer.length);
 	}
 
 	public int getX() {

@@ -50,12 +50,10 @@ public class AsyncPacketQueue implements List<Packet> {
 			public void run() {
 				if (player != null) {
 					if (packet.n() == 51) {
-						Packet51 wrapper = new Packet51();
-						wrapper.setPacket(packet);
+						Packet51 wrapper = new Packet51(packet);
 						Calculations.Obfuscate(wrapper, player);
 					} else if (packet.n() == 56) {
-						Packet56 wrapper = new Packet56();
-						wrapper.setPacket(packet);
+						Packet56 wrapper = new Packet56(packet);
 						Calculations.Obfuscate(wrapper, player);
 					}
 				}

@@ -4,7 +4,7 @@ import net.minecraft.server.v1_6_R3.Packet;
 import net.minecraft.server.v1_6_R3.Packet53BlockChange;
 
 public class Packet53 {
-	Packet53BlockChange packet;
+	private Packet53BlockChange packet;
 
 	public Packet53(Packet packet) {
 		this.packet = (Packet53BlockChange) packet;
