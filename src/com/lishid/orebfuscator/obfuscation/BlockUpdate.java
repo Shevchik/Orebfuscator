@@ -51,7 +51,7 @@ public class BlockUpdate {
 				blocks.add(block);
 			}
 		}
-		HashSet<Block> updateBlocks = new HashSet<Block>(40);
+		HashSet<Block> updateBlocks = new HashSet<Block>(blocks.size() * 3);
 		for (Block block : blocks) {
 			updateBlocks.addAll(GetAjacentBlocks(block.getWorld(), new HashSet<Block>(), block, OrebfuscatorConfig.UpdateRadius));
 		}
