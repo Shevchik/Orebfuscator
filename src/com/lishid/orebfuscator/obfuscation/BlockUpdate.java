@@ -32,7 +32,7 @@ public class BlockUpdate {
 
 	private static ExecutorService blockUpdateExecutor;
 	public static void initExecutor() {
-		blockUpdateExecutor = Executors.newFixedThreadPool(OrebfuscatorConfig.blockUpdateThreads); 
+		blockUpdateExecutor = Executors.newFixedThreadPool(OrebfuscatorConfig.blockUpdateThreads);
 	}
 
 	public static void update(final Packet53 packet, final Player player) {
