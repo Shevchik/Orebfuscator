@@ -40,7 +40,7 @@ public class OrebfuscatorConfig {
 
 	public static int blockUpdateThreads = Runtime.getRuntime().availableProcessors();
 
-	public static int[] RandomBlocks = new int[] { 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
+	public static int[] RandomBlocks = new int[] { 0, 1, 4, 5, 14, 15, 16, 21, 46, 48, 49, 56, 73, 82, 129, 154 };
 
 	private static boolean[] TransparentBlocks = new boolean[4096];
 	private static boolean TransparentCached = false;
