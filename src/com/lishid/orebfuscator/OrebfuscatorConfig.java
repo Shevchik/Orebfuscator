@@ -72,18 +72,6 @@ public class OrebfuscatorConfig {
 		return retval.length() > 1 ? retval.substring(0, retval.length() - 2) : retval;
 	}
 
-	// Set
-
-	public static void setEngineMode(int data) {
-		setData("Integers.EngineMode", data);
-		EngineMode = data;
-	}
-
-	public static void setUpdateRadius(int data) {
-		setData("Integers.UpdateRadius", data);
-		UpdateRadius = data;
-	}
-
 	private static int getInt(String path, int defaultData) {
 		if (getConfig().get(path) == null) {
 			setData(path, defaultData);
@@ -138,13 +126,12 @@ public class OrebfuscatorConfig {
 		}
 	}
 
-	private static void setBlockValues(boolean[] boolArray, List<Integer> blocks, boolean transparent) {
+	private static void setBlockValues(boolean[] boolArray, List<Integer> blocks) {
 		for (int i = 0; i < boolArray.length; i++) {
 			boolArray[i] = blocks.contains(i);
 
-			// If block is transparent while we don't want them to, or the other way around
-			if (transparent != isBlockTransparent((short) i)) {
-				// Remove it
+			// If block is transparent - Remove it
+			if (isBlockTransparent(i)) {
 				boolArray[i] = false;
 			}
 		}
@@ -152,6 +139,8 @@ public class OrebfuscatorConfig {
 
 	@SuppressWarnings("deprecation")
 	public static void load() {
+
+		Orebfuscator.instance.reloadConfig();
 
 		EngineMode = getInt("EngineMode", EngineMode);
 		if (EngineMode != 1 && EngineMode != 2) {
@@ -173,17 +162,20 @@ public class OrebfuscatorConfig {
 		DisabledWorlds = getStringSet("DisabledWorlds", DisabledWorlds);
 
 		// Read block lists
-		setBlockValues(ObfuscateBlocks, getIntList("ObfuscateBlocks",
-			Arrays.asList(
-				new Integer[] {
-					Material.STONE.getId(), Material.GOLD_ORE.getId(), Material.IRON_ORE.getId(), Material.COAL_ORE.getId(),
-					Material.LAPIS_ORE.getId(), Material.DIAMOND_ORE.getId(), Material.REDSTONE_ORE.getId(),
-					Material.GLOWING_REDSTONE_ORE.getId(), Material.EMERALD_ORE.getId(),
-					Material.NETHERRACK.getId(), Material.QUARTZ_ORE.getId(),
-					Material.ENDER_STONE.getId()
-				}
+		setBlockValues(
+			ObfuscateBlocks, 
+			getIntList("ObfuscateBlocks",
+				Arrays.asList(
+					new Integer[] {
+						Material.STONE.getId(), Material.GOLD_ORE.getId(), Material.IRON_ORE.getId(), Material.COAL_ORE.getId(),
+						Material.LAPIS_ORE.getId(), Material.DIAMOND_ORE.getId(), Material.REDSTONE_ORE.getId(),
+						Material.GLOWING_REDSTONE_ORE.getId(), Material.EMERALD_ORE.getId(),
+						Material.NETHERRACK.getId(), Material.QUARTZ_ORE.getId(),
+						Material.ENDER_STONE.getId()
+					}
+				)
 			)
-		), false);
+		);
 
 		RandomBlocks = getIntList2("RandomBlocks", RandomBlocks);
 		shuffleArray(RandomBlocks);

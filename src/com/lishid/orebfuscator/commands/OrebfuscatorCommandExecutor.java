@@ -36,36 +36,8 @@ public class OrebfuscatorCommandExecutor {
 			return false;
 		}
 
-		if (args[0].equalsIgnoreCase("engine") && args.length > 1) {
-			int engine = OrebfuscatorConfig.EngineMode;
-			try {
-				engine = Integer.parseInt(args[1]);
-			} catch (NumberFormatException e) {
-				Orebfuscator.message(sender, args[1] + " is not a number!");
-				return true;
-			}
-			if (engine != 1 && engine != 2) {
-				Orebfuscator.message(sender, args[1] + " is not a valid EngineMode!");
-				return true;
-			}
-			else {
-				OrebfuscatorConfig.setEngineMode(engine);
-				Orebfuscator.message(sender, "Engine set to: " + engine);
-				return true;
-			}
-		}
-
-		else if (args[0].equalsIgnoreCase("updateradius") && args.length > 1) {
-			int radius = OrebfuscatorConfig.UpdateRadius;
-			try {
-				radius = Integer.parseInt(args[1]);
-			} catch (NumberFormatException e) {
-				Orebfuscator.message(sender, args[1] + " is not a number!");
-				return true;
-			}
-			OrebfuscatorConfig.setUpdateRadius(radius);
-			Orebfuscator.message(sender, "UpdateRadius set to: " + OrebfuscatorConfig.UpdateRadius);
-			return true;
+		if (args[0].equalsIgnoreCase("reload") && args.length == 1) {
+			OrebfuscatorConfig.load();
 		}
 
 		else if (args[0].equalsIgnoreCase("status")) {
