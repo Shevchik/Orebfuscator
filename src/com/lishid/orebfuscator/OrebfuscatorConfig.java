@@ -188,14 +188,6 @@ public class OrebfuscatorConfig {
 		RandomBlocks = getIntList2("RandomBlocks", RandomBlocks);
 		shuffleArray(RandomBlocks);
 
-		// Validate RandomBlocks
-		for (int i = 0; i < RandomBlocks.length; i++) {
-			// Don't want people to put chests and other stuff that lags the hell out of players.
-			if (RandomBlocks[i] == 0 || OrebfuscatorConfig.isBlockTransparent(RandomBlocks[i])) {
-				RandomBlocks[i] = 1;
-			}
-		}
-
 		save();
 	}
 
