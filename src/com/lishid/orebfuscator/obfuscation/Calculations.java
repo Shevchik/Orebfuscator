@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import com.lishid.orebfuscator.OrebfuscatorConfig;
 import com.lishid.orebfuscator.internal.Packet51;
 import com.lishid.orebfuscator.internal.Packet56;
+import com.lishid.orebfuscator.internal.WorldServer;
 
 public class Calculations {
 
@@ -116,7 +117,8 @@ public class Calculations {
 		int engineMode = OrebfuscatorConfig.EngineMode;
 
 		int currentTypeIndex = 0;
-		int addExtendedIndex = info.chunkSectionNumber * (info.data.length >= info.chunkSectionNumber * 10240 + info.extraSectionNumber * 2048 ? 10240 : 8192);
+		//add array can start at index 10240 or at index 8192, it is based on if we have light data or not
+		int addExtendedIndex = info.chunkSectionNumber * (WorldServer.hasLight(info.world) ? 10240 : 8192);
 		int currentExtendedIndex = 0;
 		int startX = info.chunkX << 4;
 		int startZ = info.chunkZ << 4;
