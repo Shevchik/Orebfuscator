@@ -184,6 +184,7 @@ public class OrebfuscatorConfig {
 		RandomBlocks = getIntList2("RandomBlocks", RandomBlocks);
 		shuffleArray(RandomBlocks);
 
+		TransparentCached = false;
 		forcedTransparentBlocks.addAll(getIntList("TransparentBlocks", new ArrayList<Integer>()));
 
 		save();
