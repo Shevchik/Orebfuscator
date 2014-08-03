@@ -167,7 +167,7 @@ public class OrebfuscatorConfig {
 
 		// Read block lists
 		setBlockValues(
-			ObfuscateBlocks, 
+			ObfuscateBlocks,
 			getIntList("ObfuscateBlocks",
 				Arrays.asList(
 					new Integer[] {
