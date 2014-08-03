@@ -22,7 +22,8 @@ import net.minecraft.server.v1_6_R3.Block;
 public class BlockAccess {
 
 	public static boolean isBlockTransparent(int id) {
-		return !Block.l(id);
+		Block block = Block.byId[id];
+		return block == null || !block.b() || !block.material.isSolid();
 	}
 
 }
