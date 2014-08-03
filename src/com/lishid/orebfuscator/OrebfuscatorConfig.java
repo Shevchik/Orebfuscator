@@ -42,6 +42,7 @@ public class OrebfuscatorConfig {
 
 	public static int[] RandomBlocks = new int[] { 0, 1, 4, 5, 14, 15, 16, 21, 48, 49, 56, 73, 82, 129 };
 
+	private static HashSet<Integer> forcedTransparentBlocks = new HashSet<Integer>();
 	private static boolean[] TransparentBlocks = new boolean[4096];
 	private static boolean TransparentCached = false;
 	public static boolean isBlockTransparent(int id) {
@@ -49,6 +50,9 @@ public class OrebfuscatorConfig {
 			// Generate TransparentBlocks by reading them from Minecraft
 			for (int i = 0; i < TransparentBlocks.length; i++) {
 				TransparentBlocks[i] = BlockAccess.isBlockTransparent(i);
+				if (forcedTransparentBlocks.contains(i)) {
+					TransparentBlocks[i] = true;
+				}
 			}
 			TransparentCached = true;
 		}
@@ -179,6 +183,8 @@ public class OrebfuscatorConfig {
 
 		RandomBlocks = getIntList2("RandomBlocks", RandomBlocks);
 		shuffleArray(RandomBlocks);
+
+		forcedTransparentBlocks.addAll(getIntList("TransparentBlocks", new ArrayList<Integer>()));
 
 		save();
 	}
