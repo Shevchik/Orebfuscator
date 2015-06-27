@@ -163,9 +163,11 @@ public class Calculations {
 								info.buildBuffer[info.writeIndex + currentTypeIndex] = (byte) newBlockID;
 								if (usesExtra) {
 									if ((currentTypeIndex & 1) == 0) {
-										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] = (byte) (newBlockID >> 8);
+										int otherHalf = (info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] & 0xF0);
+										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] = (byte) (otherHalf | (newBlockID >> 8));
 									} else {
-										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] |= ((newBlockID >> 8) << 4);
+										int otherHalf = (info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] & 0x0F);
+										info.buildBuffer[info.writeIndex + addExtendedIndex + currentExtendedIndex] = (byte) (otherHalf | ((newBlockID >> 8) << 4));
 									}
 								}
 							}
